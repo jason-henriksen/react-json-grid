@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles.css';
 import Dimensions from 'react-dimensions'
 import VirtualList from 'react-tiny-virtual-list';
 import { observable,action } from 'mobx';
@@ -12,7 +11,7 @@ import autoBind from 'react-autobind';
   constructor(props) { super(props); autoBind(this); }
 
   @observable scrollBarWide = 0;
-  @action setScrollBarWide(var) { this.scrollBarWide = var; console.log(var); }
+  @action setScrollBarWide(exp) { this.scrollBarWide = exp; console.log(exp); }
 
   render() {
   	const {title} = this.props;
