@@ -13,10 +13,23 @@ class GridRow extends React.Component {
 
   render() {
 
+    var selRow=false;
+    if(3===this.props.index){
+      selRow=true;
+    }
+
     if (this.props.index<this.props.data.length){
       var cellArray = [];
       var marginOffset = 0;
       for (var ctr = 0; ctr < this.props.keyNames.length; ctr++) {
+        var borderColor='black';
+        var zIndex=0;
+        var outline='';
+        if(ctr===3 && selCol){
+          borderColor = 'blue';
+          zIndex = 5;
+          outline='1px green dashed';
+        }
         cellArray.push(<div key={this.props.index+'-'+ctr}
           style={{  width: this.props.autoColWidth, 
             borderStyle: 'solid',
@@ -25,10 +38,11 @@ class GridRow extends React.Component {
             borderTop: '0px',
             height: this.props.rowHeight,
             display: 'inline-block', 
+            outline: outline,
             marginLeft: marginOffset }}>
           {this.props.data[this.props.index][this.props.keyNames[ctr]]}
         </div>);
-        marginOffset = -1 * this.props.borderWidth;
+        marginOffset = Math.floor(-1 * this.props.borderWidth);
       }
       
       return(

@@ -32,8 +32,18 @@ import GridRow from './GridRow';
     var fixedRowCount = this.props.rowCount;
     var keyNames=[];
 
+    var rowHeight = this.props.rowHeight;
+    if(-1===rowHeight){rowHeight=23;}
+
+    var rowHeaderHeight = this.props.rowHeaderHeight;
+    if (-1 === rowHeaderHeight) { rowHeaderHeight = 23; }
+    
     var gridHeightLocal = this.props.gridHeight || this.props.height || 300;
-    console.log(gridHeightLocal);
+    if (gridHeightLocal === -1) {
+      gridHeightLocal = this.props.height || 300;
+    }
+
+    var showBottomGridLine=true;
 
     if(this.props.data && this.props.data.length>0){
       keyNames = Object.keys(this.props.data[0]);
@@ -45,6 +55,13 @@ import GridRow from './GridRow';
         borderWidthLocal
       ) / keyNames.length);
       autoColWidth -= (borderWidthLocal);
+
+      // check wether to show the bottom line
+      var actualDisplayHigh = (this.props.data.length*rowHeight)+rowHeaderHeight;
+      if(actualDisplayHigh < gridHeightLocal){
+        showBottomGridLine=false;
+      }
+
     }
     else if(this.props.getRowData){
       autoColWidth=
@@ -69,11 +86,12 @@ import GridRow from './GridRow';
                         borderStyle: 'solid',
                         borderColor: 'black',
                         borderWidth:borderWidthLocal,
-                                display:'inline-block', marginLeft:marginOffset,height:this.props.rowHeaderHeight+'px'}}>
+                                display:'inline-block', marginLeft:marginOffset,height:rowHeaderHeight+'px'}}>
                         {keyNames[ctr]}
                     </div> );
       marginOffset=-1*borderWidthLocal;
     }
+
 
     return (
         <div style={{height:gridHeightLocal}}>
@@ -84,21 +102,26 @@ import GridRow from './GridRow';
           <div>{header}</div>
           <VirtualList
             width='100%'            
-            height={gridHeightLocal - this.props.rowHeaderHeight -(borderWidthLocal*3) }
+            height={gridHeightLocal - rowHeaderHeight -(borderWidthLocal*3) }
             itemCount={fixedRowCount}
-            itemSize={this.props.rowHeight+borderWidthLocal}
+            itemSize={rowHeight+borderWidthLocal}
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
-                <GridRow {...this.props} index={index} borderWidth={borderWidthLocal} rowWide={rowWide} autoColWidth={autoColWidth} keyNames={keyNames} />
+                <GridRow rowHeight={rowHeight}
+                         rowHeaderHeight={rowHeaderHeight}
+                         data={this.props.data}
+                         index={index} borderWidth={borderWidthLocal} rowWide={rowWide} autoColWidth={autoColWidth} keyNames={keyNames} />
               </div>
             }
           />                    
-          <div style={{ width: (rowWide-1)+'px',
+{showBottomGridLine &&
+        <div style={{ width: (rowWide-1)+'px',
                       borderTopStyle: 'solid',
                       borderTopColor: 'black',
                       borderTopWidth: borderWidthLocal,
                       height:'0px'}}/>
-        </div>
+}
+      </div>
     );
   }
 }
