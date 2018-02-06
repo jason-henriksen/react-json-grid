@@ -22,8 +22,11 @@ import GridRow from './GridRow';
     return res;
   }
 
+
+
   render() {
     const {title} = this.props;
+    console.log(this.props.GridStore);
 
     var borderWidthLocal = this.makeValidInt(this.props.borderWidth,1);
 
@@ -94,7 +97,7 @@ import GridRow from './GridRow';
 
 
     return (
-        <div style={{height:gridHeightLocal}}>
+        <div style={{height:gridHeightLocal}} onKeyPress={this.onKeyPress}>
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
@@ -110,6 +113,7 @@ import GridRow from './GridRow';
                 <GridRow rowHeight={rowHeight}
                          rowHeaderHeight={rowHeaderHeight}
                          data={this.props.data}
+                         GridStore={this.props.GridStore}
                          index={index} borderWidth={borderWidthLocal} rowWide={rowWide} autoColWidth={autoColWidth} keyNames={keyNames} />
               </div>
             }
