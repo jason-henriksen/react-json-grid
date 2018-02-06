@@ -15,7 +15,7 @@ storiesOf('Button', module)
     <div style={{border:'1px dashed green',width:'50%'}}>
     <Grid rowCount={500} 
           rowHeight={22} 
-          rowHeaderHeight={35} 
+          colHeaderHeight={35} 
           gridHeight={300}
           borderWidth={1}
           data={DataNoiseMed}
@@ -27,7 +27,7 @@ storiesOf('Button', module)
       <div style={{border:'1px dashed green',width:'50%'}}>
       <Grid rowCount={500} 
             rowHeight={22} 
-            rowHeaderHeight={35} 
+            colHeaderHeight={35} 
             gridHeight={300}
             borderWidth={5}
             data={DataNoiseMed}
@@ -39,7 +39,7 @@ storiesOf('Button', module)
       <div style={{border:'1px dashed green',width:'50%'}}>
       <Grid rowCount={500} 
             rowHeight={22} 
-            rowHeaderHeight={35} 
+            colHeaderHeight={35} 
             gridHeight={300}
             borderWidth={1}
             data={DataNoiseMed}
@@ -52,7 +52,7 @@ storiesOf('Button', module)
     <div style={{ border: '1px dashed white', width: '50%' }}>
       <Grid rowCount={500}
         rowHeight={22}
-        rowHeaderHeight={35}
+        colHeaderHeight={35}
         gridHeight={300}
         borderWidth={1}
         data={DataNoiseSmall}
@@ -65,7 +65,7 @@ storiesOf('Button', module)
     <div style={{ border: '1px dashed green', width: '50%' }}>
       <Grid rowCount={500}
         rowHeight={22}
-        rowHeaderHeight={35}
+        colHeaderHeight={35}
         gridHeight={300}
         borderWidth={1}
         data={[]}

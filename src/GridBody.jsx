@@ -10,10 +10,33 @@ import GridRow from './GridRow';
 
 
 @observer class GridBody extends React.Component {
-  constructor(props) { super(props); autoBind(this); }
+  constructor(props) { 
+    super(props); 
+    autoBind(this); 
+    this.componentWillReceiveProps(props);
+  }
 
   @observable scrollBarWide = 0;
   @action setScrollBarWide(exp) { this.scrollBarWide = exp.scrollbarWidth+2; } // account for rounding error
+
+
+  componentWillReceiveProps(nextProps)
+  {
+    console.log("componentWillReceiveProps");
+    if (this.props.GridStore) {
+      var keyNames = [];
+      var wide=0;
+      var high=0;
+
+      if (this.props.data && this.props.data.length > 0) {
+        wide = Object.keys(this.props.data[0]).length;
+        high = this.props.data.length;
+      }
+      if (this.props.GridStore.cursor.maxX !== wide-1 || this.props.GridStore.cursor.maxY!==high-1){
+        this.props.GridStore.prepSelectionField(wide,high);
+      }
+    }
+  }
 
   makeValidInt(inputVal,defaultVal){
     var res = (inputVal||defaultVal);
@@ -26,7 +49,6 @@ import GridRow from './GridRow';
 
   render() {
     const {title} = this.props;
-    console.log(this.props.GridStore);
 
     var borderWidthLocal = this.makeValidInt(this.props.borderWidth,1);
 
@@ -38,8 +60,9 @@ import GridRow from './GridRow';
     var rowHeight = this.props.rowHeight;
     if(-1===rowHeight){rowHeight=23;}
 
-    var rowHeaderHeight = this.props.rowHeaderHeight;
-    if (-1 === rowHeaderHeight) { rowHeaderHeight = 23; }
+    var colHeaderHeight = this.props.colHeaderHeight;
+    if (-1 === colHeaderHeight) { colHeaderHeight = 23; }
+    if (this.props.colHeaderHide) { colHeaderHeight = 0; }
     
     var gridHeightLocal = this.props.gridHeight || this.props.height || 300;
     if (gridHeightLocal === -1) {
@@ -60,7 +83,7 @@ import GridRow from './GridRow';
       autoColWidth -= (borderWidthLocal);
 
       // check wether to show the bottom line
-      var actualDisplayHigh = (this.props.data.length*rowHeight)+rowHeaderHeight;
+      var actualDisplayHigh = (this.props.data.length*rowHeight)+colHeaderHeight;
       if(actualDisplayHigh < gridHeightLocal){
         showBottomGridLine=false;
       }
@@ -83,16 +106,27 @@ import GridRow from './GridRow';
 
     var header=[];
     var marginOffset=0;
-    for(var ctr=0;ctr<keyNames.length;ctr++){
-      header.push(  <div key={ctr} 
-                        style={{width:autoColWidth,
-                        borderStyle: 'solid',
-                        borderColor: 'black',
-                        borderWidth:borderWidthLocal,
-                                display:'inline-block', marginLeft:marginOffset,height:rowHeaderHeight+'px'}}>
-                        {keyNames[ctr]}
-                    </div> );
-      marginOffset=-1*borderWidthLocal;
+    if (!this.props.colHeaderHide) {    
+      for(var ctr=0;ctr<keyNames.length;ctr++){
+        header.push(  <div key={ctr} 
+                          style={{width:autoColWidth,
+                          borderStyle: 'solid',
+                          borderColor: 'black',
+                          borderWidth:borderWidthLocal,
+                                  display:'inline-block', marginLeft:marginOffset,height:colHeaderHeight+'px'}}>
+                          {keyNames[ctr]}
+                      </div> );
+        marginOffset=-1*borderWidthLocal;
+      }
+    }
+    else{
+      header.push(<div style={{
+        width: (rowWide - 1) + 'px',
+        borderTopStyle: 'solid',
+        borderTopColor: 'black',
+        borderTopWidth: borderWidthLocal,
+        height: '0px'
+      }} />);
     }
 
 
@@ -105,13 +139,14 @@ import GridRow from './GridRow';
           <div>{header}</div>
           <VirtualList
             width='100%'            
-            height={gridHeightLocal - rowHeaderHeight -(borderWidthLocal*3) }
+            height={gridHeightLocal - colHeaderHeight -(borderWidthLocal*3) }
             itemCount={fixedRowCount}
             itemSize={rowHeight+borderWidthLocal}
+            scrollToIndex={this.props.GridStore.cursor.y-5}
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
                 <GridRow rowHeight={rowHeight}
-                         rowHeaderHeight={rowHeaderHeight}
+                         colHeaderHeight={colHeaderHeight}
                          data={this.props.data}
                          GridStore={this.props.GridStore}
                          index={index} borderWidth={borderWidthLocal} rowWide={rowWide} autoColWidth={autoColWidth} keyNames={keyNames} />

@@ -14,34 +14,23 @@ import GridCell from './GridCell';
 
   render() {
 
-    console.log(this.props.GridStore);
-
     var selRow=false;
     if(this.props.GridStore.cursor.y===this.props.index){
       selRow=true;
     }
 
-    if (this.props.index<this.props.data.length){
       var cellArray = [];
       var marginOffset = 0;
-      var cellBackColor='white'; // CSSNOTE!
       for (var ctr = 0; ctr < this.props.keyNames.length; ctr++) {
         var borderColor='black';
         var zIndex=0;
         var outline='';
-        cellBackColor = 'white';// CSSNOTE!
-        if(ctr===this.props.GridStore.cursor.x && selRow){
-          cellBackColor = 'lightblue';// CSSNOTE!
-          zIndex = 5;
-        }
         cellArray.push(
         <GridCell 
           key={this.props.index+'-'+ctr} 
           id={this.props.index+'-'+ctr}
           x={ctr}
           y={this.props.index}
-          maxX={this.props.keyNames.length}
-          maxY={this.props.data.length}
           style={{  width: this.props.autoColWidth, 
             borderStyle: 'solid',
             borderColor: 'black',
@@ -50,7 +39,6 @@ import GridCell from './GridCell';
             height: this.props.rowHeight,
             display: 'inline-block', 
             outline: outline,
-            backgroundColor: cellBackColor,
             marginLeft: marginOffset }}
             GridStore={this.props.GridStore}
             cellData={this.props.data[this.props.index][this.props.keyNames[ctr]]}
@@ -66,16 +54,6 @@ import GridCell from './GridCell';
           {cellArray}
         </div>
       );
-    }
-    else{
-      return (
-        <div style={{
-          width: this.props.rowWide,
-          height: this.props.rowHeight
-        }}>
-        </div>
-      );
-    }
     
   }
 }

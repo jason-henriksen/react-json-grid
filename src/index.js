@@ -15,7 +15,6 @@ class Grid extends React.Component {
     super(props); 
     autoBind(this);
     this.GridStore = new GridStore();
-    console.log(this.GridStore);
   }  
 
   render(){
@@ -32,7 +31,8 @@ Grid.propTypes = {
   title: PropTypes.string.isRequired,
   rowCount: PropTypes.number,
   rowHeight: PropTypes.number,
-  rowHeaderHeight: PropTypes.number,
+  colHeaderHeight: PropTypes.number,
+  colHeaderHide: PropTypes.bool,
   gridHeight: PropTypes.number,
 };
 

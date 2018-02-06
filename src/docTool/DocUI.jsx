@@ -30,6 +30,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable propRowHeaderHigh = -1;
   @action setRowHeaderHigh(val) { this.propRowHeaderHigh = val; }
+
+  @observable colHeaderHide = false;
+  @action toggleColHeaderHide() { this.colHeaderHide = !this.colHeaderHide; }
   
 
   @observable data = DataNoiseSmall;
@@ -80,10 +83,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <div style={{width:'30%',display:'inline-block',padding:'5px',verticalAlign:'top'}}>
           <h3>Parameter UI</h3>
           <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
+          <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
           <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
           <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHeight' help='over-ride default grid height' />
           <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHeight' help='over-ride default row height' />
-          <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='rowHeaderHeight' help='over-ride row header height' />
+          <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHeight' help='over-ride row header height' />
           <hr/>
               
 
@@ -92,7 +96,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <h3>Example Code</h3>
 &lt;Grid <br/>
 {this.propRowHigh > -1 && <span>rowHeight=&#123;{this.propRowHigh}&#125; <br /></span>}
-{this.propRowHeaderHigh > -1 && <span>rowHeaderHeight=&#123;{this.propRowHeaderHigh}&#125; <br /></span>}
+{this.propRowHeaderHigh > -1 && <span>colHeaderHeight=&#123;{this.propRowHeaderHigh}&#125; <br /></span>}
 {this.propGridHigh > -1 && <span>gridHeight=&#123;{this.propGridHigh}&#125;<br /></span>}
 {this.propBorderWide > -1 && <span>borderWidth=&#123;{this.propBorderWide}&#125;<br/></span>}
   data=&#123;this.data&#125; <br/>
@@ -109,7 +113,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 <div style={{width:'50%',height:'300px',outline:this.outlineCSS}}>
       <Grid 
         rowHeight={this.propRowHigh}
-        rowHeaderHeight={this.propRowHeaderHigh}
+        colHeaderHeight={this.propRowHeaderHigh}
+        colHeaderHide={this.colHeaderHide}
         borderWidth={this.propBorderWide}
         gridHeight={this.propGridHigh}
         data={this.dataAsObject.cleanData}

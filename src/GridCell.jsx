@@ -12,42 +12,39 @@ import { ContainerDimensions } from 'react-container-dimensions';
   constructor(props) { super(props); autoBind(this); }
 
   @action onClick(evt){
-    console.log(' click '+this.props.id);
     this.props.GridStore.cursor.x = this.props.x;
     this.props.GridStore.cursor.y = this.props.y;
   }
   @action onKeyDown(e){
-    if (e.keyCode == '38') {
-      // up arrow
-      this.props.GridStore.cursor.y--;
-      if(this.props.GridStore.cursor.y<0) this.props.GridStore.cursor.y=0;
-    }
-    else if (e.keyCode == '40') {
-        // down arrow
-        this.props.GridStore.cursor.y++;
-        if(this.props.GridStore.cursor.y>=this.props.maxY) this.props.GridStore.cursor.y = maxY-1;
-      }
-    else if (e.keyCode == '37') {
-      // left arrow
-      this.props.GridStore.cursor.x--;
-      if(this.props.GridStore.cursor.x<0) this.props.GridStore.cursor.x=0;
-    }
-    else if (e.keyCode == '39') {
-      // right arrow
-        this.props.GridStore.cursor.x++;
-        if(this.props.GridStore.cursor.x>=this.props.maxX) this.props.GridStore.cursor.x = maxX-1;
-    }
+    this.props.GridStore.cellMoveKey(e);
   }  
 
   render() {
+
+    var style={...this.props.style};
+    if (this.props.GridStore.selectionBounds.l <= this.props.x &&
+        this.props.GridStore.selectionBounds.r >= this.props.x &&
+        this.props.GridStore.selectionBounds.t <= this.props.y &&
+        this.props.GridStore.selectionBounds.b >= this.props.y 
+    ) {
+      // CSSNOTE!
+      style.backgroundColor = 'lightblue';
+      style.zIndex = 5;
+    }
+    else{
+      style.backgroundColor = 'white';
+    }
+
+
+
     return(
       <div id={this.props.id}
-          style={this.props.style}
+          style={style}
           onClick={this.onClick}
           onKeyDown={this.onKeyDown}
           tabIndex='0'
           >
-          {this.props.CellData}
+          {this.props.cellData}
         </div>);
     
   }
