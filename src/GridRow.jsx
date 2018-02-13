@@ -19,41 +19,42 @@ import GridCell from './GridCell';
       selRow=true;
     }
 
-      var cellArray = [];
-      var marginOffset = 0;
-      for (var ctr = 0; ctr < this.props.keyNames.length; ctr++) {
-        var borderColor='black';
-        var zIndex=0;
-        var outline='';
-        cellArray.push(
-        <GridCell 
-          key={this.props.index+'-'+ctr} 
-          id={this.props.index+'-'+ctr}
-          x={ctr}
-          y={this.props.index}
-          style={{  width: this.props.autoColWidth, 
-            borderStyle: 'solid',
-            borderColor: 'black',
-            borderWidth: this.props.borderWidth, 
-            borderTop: '0px',
-            height: this.props.rowHeight,
-            display: 'inline-block', 
-            outline: outline,
-            marginLeft: marginOffset }}
-            GridStore={this.props.GridStore}
-            cellData={this.props.data[this.props.index][this.props.keyNames[ctr]]}
-          />            
-          
-        );
-        marginOffset = Math.floor(-1 * this.props.borderWidth);
-      }
-      
-      return(
-        <div style={{ width:this.props.rowWide,
-                      height:this.props.rowHeight}}>
-          {cellArray}
-        </div>
+    var cellArray = [];
+    var marginOffset = 0;
+    for (var ctr = 0; ctr < this.props.keyNames.length; ctr++) {
+      var borderColor='black';
+      var zIndex=0;
+      var outline='';
+      cellArray.push(
+      <GridCell 
+        key={this.props.index+'-'+ctr} 
+        id={this.props.index+'-'+ctr}
+        x={ctr}
+        y={this.props.index}
+        style={{  width: this.props.autoColWidth, 
+          borderStyle: 'solid',
+          borderColor: 'black',
+          borderWidth: this.props.borderWidth, 
+          padding: (this.props.padding||0)+'px', 
+          borderTop: '0px',
+          height: this.props.cellHeight,
+          display: 'inline-block', 
+          outline: outline,
+          marginLeft: marginOffset }}
+          GridStore={this.props.GridStore}
+          cellData={this.props.data[this.props.index][this.props.keyNames[ctr]]}
+        />            
+        
       );
+      marginOffset = Math.floor(-1 * this.props.borderWidth);
+    }
+    
+    return(
+      <div style={{ width: this.props.rowWide,
+                    height:this.props.rowHeight}}>
+        {cellArray}
+      </div>
+    );
     
   }
 }

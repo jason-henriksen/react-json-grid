@@ -8,9 +8,11 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable cursor = {x:0,y:0,
                         maxX:0,maxY:0,
                         selectToX:-1,selectToY:-1,
+                        editX:-1,editY:-1,
                         shiftSelInProgress:false
                        };
   @observable selectedCells = [];
+  @observable curEditingValue='';
 
   @action prepSelectionField(wide,high){
     console.log('prep selection');
@@ -31,7 +33,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @action cellMoveKey(e)
   {
     // only worry about arrow keys:
-    //if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '38' ) {
       if(e.shiftKey){
         // was it already down?  if no, start a selection
         // note: google sheets does not allow 2 separate shift-cell-selections at a time.  It's one block+click collection , but not 2 blocks.
@@ -64,7 +65,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
       }
       e.stopPropagation();
       e.preventDefault();    
-    //}
   }
 
   @computed get selectionBounds(){

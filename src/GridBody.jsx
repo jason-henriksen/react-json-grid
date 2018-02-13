@@ -42,7 +42,7 @@ import GridRow from './GridRow';
     var res = (inputVal||defaultVal);
     if(inputVal===0){res=inputVal;}
     if(res<0){ res = defaultVal; }
-    return res;
+    return Number(res);
   }
 
 
@@ -51,17 +51,24 @@ import GridRow from './GridRow';
     const {title} = this.props;
 
     var borderWidthLocal = this.makeValidInt(this.props.borderWidth,1);
+    var padWidthLocal = this.makeValidInt(this.props.padWidth, 3);
 
     var rowWide = this.props.width - this.scrollBarWide;
     var autoColWidth = 0; // width of the default filled column, before weights
     var fixedRowCount = this.props.rowCount;
     var keyNames=[];
 
-    var rowHeight = this.props.rowHeight;
-    if(-1===rowHeight){rowHeight=23;}
+    // requested height does NOT include padding.  Should It?
+    var rowHighNoPadLocal = this.makeValidInt(this.props.rowHeight, 18);
+    if (-1 === rowHighNoPadLocal) { rowHighNoPadLocal=23;}
+    var rowHighWithPadLocal = this.makeValidInt(rowHighNoPadLocal, 18);
+    rowHighWithPadLocal += padWidthLocal;
+    rowHighWithPadLocal += padWidthLocal;
 
     var colHeaderHeight = this.props.colHeaderHeight;
-    if (-1 === colHeaderHeight) { colHeaderHeight = 23; }
+    if (-1 === colHeaderHeight) { colHeaderHeight = 18; }
+    //colHeaderHeight += padWidthLocal;
+    //colHeaderHeight += padWidthLocal;
     if (this.props.colHeaderHide) { colHeaderHeight = 0; }
     
     var gridHeightLocal = this.props.gridHeight || this.props.height || 300;
@@ -72,18 +79,26 @@ import GridRow from './GridRow';
     var showBottomGridLine=true;
 
     if(this.props.data && this.props.data.length>0){
+      // we have rows of objects to display
+
       keyNames = Object.keys(this.props.data[0]);
       if(this.props.rowCount!=this.props.data.length){
         fixedRowCount = this.props.data.length;
       }
-      autoColWidth = Math.floor((this.props.width -
-        this.scrollBarWide -
-        borderWidthLocal
-      ) / keyNames.length);
-      autoColWidth -= (borderWidthLocal);
+
+      autoColWidth = Math.floor(
+        ( this.props.width -  // total width
+          borderWidthLocal -  // minus left most border bar
+          padWidthLocal -     // minus left most pad bar
+          this.scrollBarWide  // minus scroll bar
+        ) / keyNames.length); // div number of items
+      autoColWidth -= (borderWidthLocal);   // each column minus right border amount
+      autoColWidth -= (padWidthLocal);      // each column minus left pad amount
+      autoColWidth -= (padWidthLocal);      // each column minus right pad amount
+      console.log('acw '+autoColWidth);
 
       // check wether to show the bottom line
-      var actualDisplayHigh = (this.props.data.length*rowHeight)+colHeaderHeight;
+      var actualDisplayHigh = (this.props.data.length*rowHighWithPadLocal)+colHeaderHeight;
       if(actualDisplayHigh < gridHeightLocal){
         showBottomGridLine=false;
       }
@@ -113,7 +128,8 @@ import GridRow from './GridRow';
                           borderStyle: 'solid',
                           borderColor: 'black',
                           borderWidth:borderWidthLocal,
-                                  display:'inline-block', marginLeft:marginOffset,height:colHeaderHeight+'px'}}>
+                          padding: padWidthLocal+'px',
+                          display:'inline-block', marginLeft:marginOffset,height:colHeaderHeight+'px'}}>
                           {keyNames[ctr]}
                       </div> );
         marginOffset=-1*borderWidthLocal;
@@ -129,6 +145,7 @@ import GridRow from './GridRow';
       }} />);
     }
 
+    console.log(rowHighWithPadLocal);
 
     return (
         <div style={{height:gridHeightLocal}} onKeyPress={this.onKeyPress}>
@@ -141,15 +158,19 @@ import GridRow from './GridRow';
             width='100%'            
             height={gridHeightLocal - colHeaderHeight -(borderWidthLocal*3) }
             itemCount={fixedRowCount}
-            itemSize={rowHeight+borderWidthLocal}
-            scrollToIndex={this.props.GridStore.cursor.y-5}
+            itemSize={rowHighWithPadLocal+borderWidthLocal}            
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
-                <GridRow rowHeight={rowHeight}
-                         colHeaderHeight={colHeaderHeight}
-                         data={this.props.data}
-                         GridStore={this.props.GridStore}
-                         index={index} borderWidth={borderWidthLocal} rowWide={rowWide} autoColWidth={autoColWidth} keyNames={keyNames} />
+                <GridRow  cellHeight={rowHighNoPadLocal}
+                          colHeaderHeight={colHeaderHeight}
+                          data={this.props.data}
+                          GridStore={this.props.GridStore}
+                          index={index} 
+                          borderWidth={borderWidthLocal} 
+                          padding={padWidthLocal} 
+                          rowWide={rowWide} 
+                          autoColWidth={autoColWidth} 
+                          keyNames={keyNames} />
               </div>
             }
           />                    

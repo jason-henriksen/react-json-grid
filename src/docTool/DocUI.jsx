@@ -22,6 +22,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable propBorderWide = -1;
   @action setBorderWidth(val) { this.propBorderWide = val; }
 
+  @observable propPadWide = -1;
+  @action setPadWidth(val) { this.propPadWide = val; }
+  
   @observable propGridHigh = -1;
   @action setGridHigh(val) { this.propGridHigh = val; }
 
@@ -85,6 +88,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
           <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
           <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
+          <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
           <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHeight' help='over-ride default grid height' />
           <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHeight' help='over-ride default row height' />
           <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHeight' help='over-ride row header height' />
@@ -99,6 +103,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 {this.propRowHeaderHigh > -1 && <span>colHeaderHeight=&#123;{this.propRowHeaderHigh}&#125; <br /></span>}
 {this.propGridHigh > -1 && <span>gridHeight=&#123;{this.propGridHigh}&#125;<br /></span>}
 {this.propBorderWide > -1 && <span>borderWidth=&#123;{this.propBorderWide}&#125;<br/></span>}
+{this.propPadWide > -1 && <span>padWidth=&#123;{this.propPadWide}&#125;<br /></span>}
   data=&#123;this.data&#125; <br/>
 /&gt;
         </div>          
@@ -116,6 +121,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         colHeaderHeight={this.propRowHeaderHigh}
         colHeaderHide={this.colHeaderHide}
         borderWidth={this.propBorderWide}
+        padWidth={this.propPadWide}
         gridHeight={this.propGridHigh}
         data={this.dataAsObject.cleanData}
       />
