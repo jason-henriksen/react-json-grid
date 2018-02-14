@@ -47,7 +47,10 @@ import { ContainerDimensions } from 'react-container-dimensions';
     this.props.GridStore.curEditingValue = evt.target.value;
   }
 
-  @action endEdit(){
+  @action endEdit()
+  {
+    this.props.GridStore.onChange(this.props.x,this.props.y,this.props.objKey,this.props.GridStore.curEditingValue);
+    
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
     this.props.GridStore.curEditingValue = '';

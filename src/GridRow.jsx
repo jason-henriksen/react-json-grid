@@ -56,6 +56,7 @@ import GridCell from './GridCell';
         id={this.props.index+'-'+ctr}
         x={ctr}
         y={this.props.index}
+        objKey={this.props.keyNames[ctr]}
         inputStyle={inputStyleLocal}
         cellStyle={cellStyleLocal}
         borderWidth={this.props.borderWidth}

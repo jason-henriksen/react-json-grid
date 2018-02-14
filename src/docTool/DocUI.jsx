@@ -52,21 +52,35 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   
 
   @observable data = DataNoiseSmall;
-  @action updateData(evt) { this.data = evt.target.value; console.log(this.data); }
+  @action updateData(evt) { this.data = evt.target.value;}
   @action makeS() { 
     var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<5;ctr++){res+='{"r":'+(5-ctr)+',"a":5,"b":6,"c":8,"d":90},';}
-    res = res.substring(0, res.length-1);res+=']';this.data=res;
+    for(var ctr=0;ctr<5;ctr++){res+='{r:'+(5-ctr)+',a:5,b:6,c:8,d:90},';}
+    res = res.substring(0, res.length-1);res+=']';
+    this.data=res;
   }
   @action makeM() { 
     var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<500;ctr++){res+='{"r":'+(500-ctr)+',"a":5,"b":6,"c":8,"d":90},';}
-    res = res.substring(0, res.length-1);res+=']';this.data=res;
+    for(var ctr=0;ctr<150;ctr++){res+='{r:'+(150-ctr)+',a:5,b:6,c:8,d:90},';}
+    res = res.substring(0, res.length-1);res+=']';
+    this.data=res;
   }
   @action makeL() { 
     var res = "[";  // faster to generate strings
     for(var ctr=0;ctr<50000;ctr++){res+='{"r":'+(50000-ctr)+',"a":5,"b":6,"c":8,"d":90},';}
-    res = res.substring(0, res.length-1);res+=']';this.data=res;
+    res = res.substring(0, res.length-1);res+=']';
+    this.data=res;
+  }
+
+  @action setValue(x,y,objKey,newValue)
+  {
+    console.log(x,y,objKey,newValue);
+    console.log(this.data[y]);
+    // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
+    // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
+    var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));    
+    cleanData[y][objKey]=newValue;
+    this.data = JSON.stringify(cleanData);
   }
 
 
@@ -77,11 +91,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     res.cleanData=[];
     res.dataErr="";
     try {
-        res.cleanData = JSON.parse(this.data);
-        if (res.cleanData && typeof res.cleanData === "object") { res.dataErr="";}
-        else{res.cleanData=[];res.dataErr="Invalid JSON."}
+      res.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));          
+      if (res.cleanData && typeof res.cleanData === "object") { res.dataErr="";}
+      else{res.cleanData=[];res.dataErr="Invalid JSON."}
     }
-    catch (e) { res.dataErr="Invalid JSON.  Keys and values need to be in quotes.";  console.log(e);}
+    catch (e) { 
+      try{
+      res.cleanData = JSON.parse(this.data);          
+      }
+      catch(e2){
+        res.dataErr="Invalid JSON.  Keys and values need to be in quotes.";  console.log(e);
+      }
+    }
+
     return res;
   };  
 
@@ -163,7 +185,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         </div>          
         <div style={{width:'30%',display:'inline-block',verticalAlign:'top'}}>
           <h3>Example Data (this.data)</h3>
-          <button onClick={this.makeS}>5 rows</button><button onClick={this.makeM}>500 rows</button><button onClick={this.makeL}>50K rows (slow build, fast render)</button>
+          <button onClick={this.makeS}>5 rows</button><button onClick={this.makeM}>150 rows</button><button onClick={this.makeL}>50K rows (slow build, fast render)</button>
           <span style={{color:'red'}}>{this.dataAsObject.dataErr}</span><br/>
           <textarea style={{width:'99%',height:'150px'}} onChange={this.updateData} value={this.data}/>
         </div>
@@ -181,6 +203,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         padWidth={this.propPadWide}
         gridHeight={this.propGridHigh}
         data={this.dataAsObject.cleanData}
+        onChange={this.setValue}
       />
     </div>
 

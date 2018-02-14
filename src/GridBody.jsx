@@ -35,6 +35,8 @@ import GridRow from './GridRow';
         console.log('update grid size');
         this.props.GridStore.prepSelectionField(wide,high);
       }
+
+      this.props.GridStore.onChange = this.props.onChange;
     }
   }
 
