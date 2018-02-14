@@ -80,10 +80,6 @@ import { ContainerDimensions } from 'react-container-dimensions';
       style.marginLeft=-1*this.props.borderWidth;
       //style.marginTop=-1*this.props.padWidth;
     }
-
-    console.log(JSON.stringify(style));
-    
-
     // render data standard
     var renderPlan = <div>this.props.cellData</div>;
     var isFocusNeeded = this.props.GridStore.autoFocus && this.props.x === this.props.GridStore.cursor.x && this.props.y === this.props.GridStore.cursor.y;

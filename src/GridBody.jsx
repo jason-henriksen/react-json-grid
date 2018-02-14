@@ -98,7 +98,6 @@ import GridRow from './GridRow';
       autoColWidth = Math.floor(
         ( this.props.width -  // total width
           borderWidthLocal -  // minus left most border bar
-          padWidthLocal -     // minus left most pad bar
           this.scrollBarWide  // minus scroll bar
         ) / keyNames.length); // div number of items
       autoColWidth -= (borderWidthLocal);   // each column minus right border amount
@@ -148,9 +147,9 @@ import GridRow from './GridRow';
     }
     else{
       header.push(<div style={{
-        width: (rowWide - 1) + 'px',
+        ...this.props.headerStyle,
+        width: (borderWidthLocal + (keyNames.length*(autoColWidth+borderWidthLocal+padWidthLocal+padWidthLocal)) + 'px'),
         borderTopStyle: 'solid',
-        borderTopColor: 'black',
         borderTopWidth: borderWidthLocal,
         height: '0px'
       }} />);
@@ -190,9 +189,9 @@ import GridRow from './GridRow';
             }
           />                    
       {showBottomGridLine &&
-        <div style={{ width: (rowWide-1)+'px',
-                      borderTopStyle: 'solid',
-                      borderTopColor: 'black',
+        <div style={{ ...this.props.headerStyle,
+                      width: (borderWidthLocal + (keyNames.length*(autoColWidth+borderWidthLocal+padWidthLocal+padWidthLocal)) + 'px'),
+                      borderTopStyle: 'solid',                      
                       borderTopWidth: borderWidthLocal,
                       height:'0px'}}/>
 }
