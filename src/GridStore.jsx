@@ -5,14 +5,16 @@ class GridStore {           // Just a class.  Nothing fancy here.
     console.log('here');
   }
 
-  @observable cursor = {x:0,y:0,
-                        maxX:0,maxY:0,
-                        selectToX:-1,selectToY:-1,
-                        editX:-1,editY:-1,
-                        shiftSelInProgress:false
+  @observable cursor = {x:0,y:0,                    // cursor x and y values
+                        maxX:0,maxY:0,              // max legal x and y values.
+                        selectToX:-1,selectToY:-1,  // selection box for shift selection
+                        editX:-1,editY:-1,          // cell being edited
+                        shiftSelInProgress:false    // for shift arrow selecting cells
                        };
-  @observable selectedCells = [];
-  @observable curEditingValue='';
+  @observable selectedCells = [];                 // for control clicking cells.
+  @observable curEditingValue='';                 // value being edited before it is applied.
+
+  @observable autoFocus=false;                    // if true, rendering a selected cell will cause that cell to take focus
 
   @action prepSelectionField(wide,high){
     console.log('prep selection');

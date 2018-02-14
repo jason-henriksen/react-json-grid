@@ -11,8 +11,9 @@ import { ContainerDimensions } from 'react-container-dimensions';
 @observer class GridCell extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
-  @action onClick(evt){
-
+  @action onClick(evt)
+  {
+    this.props.GridStore.autoFocus=true;
     if (this.props.x === this.props.GridStore.cursor.x &&
         this.props.y === this.props.GridStore.cursor.y) {
       this.props.GridStore.cursor.editX = this.props.x;
@@ -25,16 +26,16 @@ import { ContainerDimensions } from 'react-container-dimensions';
     }
   }
 
-  @action onKeyDown(e){
+  @action onKeyDown(e)
+  {
+    this.props.GridStore.autoFocus=true;
     if (this.props.x !== this.props.GridStore.cursor.editX ||
-      this.props.y !== this.props.GridStore.cursor.editY) {
+        this.props.y !== this.props.GridStore.cursor.editY) {
       if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40' ) {
-        console.log('move');
         this.props.GridStore.cellMoveKey(e);
       }
       else{
         // cell edit
-        console.log('edit');
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
         this.props.GridStore.curEditingValue = this.props.cellData;
@@ -43,7 +44,6 @@ import { ContainerDimensions } from 'react-container-dimensions';
   }  
 
   @action valChange(evt){
-    console.log(evt);
     this.props.GridStore.curEditingValue = evt.target.value;
   }
 
@@ -65,7 +65,7 @@ import { ContainerDimensions } from 'react-container-dimensions';
 
   render() {
 
-    var style={...this.props.style};
+    var style={...this.props.cellStyle};
     if (this.props.GridStore.selectionBounds.l <= this.props.x &&
         this.props.GridStore.selectionBounds.r >= this.props.x &&
         this.props.GridStore.selectionBounds.t <= this.props.y &&
@@ -75,48 +75,48 @@ import { ContainerDimensions } from 'react-container-dimensions';
       style.backgroundColor = 'lightblue';
       style.zIndex = 5;
     }
-    else{
-      style.backgroundColor = 'white';
+    
+    if(this.props.x>0){
+      style.marginLeft=-1*this.props.borderWidth;
+      //style.marginTop=-1*this.props.padWidth;
     }
 
+    console.log(JSON.stringify(style));
+    
+
     // render data standard
-    var renderPlan = this.props.cellData;
+    var renderPlan = <div>this.props.cellData</div>;
+    var isFocusNeeded = this.props.GridStore.autoFocus && this.props.x === this.props.GridStore.cursor.x && this.props.y === this.props.GridStore.cursor.y;
 
     if(this.props.x === this.props.GridStore.cursor.x &&
-       this.props.y === this.props.GridStore.cursor.y )
-    {
-      if (this.props.x === this.props.GridStore.cursor.editX &&
-         this.props.y === this.props.GridStore.cursor.editY){
-        console.log('input');
+       this.props.y === this.props.GridStore.cursor.y &&
+       this.props.x === this.props.GridStore.cursor.editX &&
+       this.props.y === this.props.GridStore.cursor.editY){
+
+        var styleIn={...this.props.inputStyle};
+        
+        if(this.props.x>0){
+          styleIn.marginLeft=-1*this.props.borderWidth;
+          //style.marginTop=-1*this.props.padWidth;
+        }
+        
+        
         renderPlan = 
-          <input value={this.props.GridStore.curEditingValue} onChange={this.valChange} 
-                  style={{backgroundColor:'yellow',width:'100%',height:'100%',border:'0px',padding:'0px',margin:'0px'}}
+          <input value={this.props.GridStore.curEditingValue} onChange={this.valChange}                   
+                  id={this.props.id} style={styleIn}
                   ref={input => input && input.focus()}
                   onBlur={this.endEdit}
             />
-      }
-      else{
-        renderPlan = <div tabIndex='0'
-          onClick={this.onClick}
-          style={{ width: '100%', height: '100%' }}
-          ref={div => div && div.focus()}
-          onKeyDown={this.onKeyDown}>{this.props.cellData}</div>;
-      }
     } 
     else{
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 
-                        style={{ width: '100%', height: '100%'}}
+                        id={this.props.id} style={style}                        
+                        ref={div => div && isFocusNeeded && div.focus()}
                         onKeyDown={this.onKeyDown}>{this.props.cellData}</div>;
     }
-
-
-    return(
-      <div id={this.props.id}
-          style={style}
-      >
-          {renderPlan}
-      </div>);
+    
+    return(renderPlan);
     
   }
 }

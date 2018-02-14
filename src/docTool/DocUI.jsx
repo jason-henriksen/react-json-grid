@@ -3,10 +3,12 @@ import { observable,action,computed } from 'mobx';
 import { observer } from 'mobx-react';
 import autoBind from 'react-autobind';
 import Grid from '../index';
+import rrjsTool from 'really-relaxed-json';
 
 
 import Toggle from './Toggle';
 import NumWheel from './NumWheel';
+import TextParam from './TextParam';
 
 import DataNoiseMed from '../../stories/dataNoiseMedium.js'
 import DataNoiseSmall from '../../stories/dataNoiseSmall.js'
@@ -14,7 +16,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
 
 @observer class DocUI extends React.Component {
-  constructor(props) { super(props); autoBind(this); }
+  constructor(props) { 
+    super(props); autoBind(this); 
+    this.rrjs = rrjsTool.createParser();
+    this.printer = new rrjsTool.PrettyPrinter( rrjsTool.PrettyPrinter.Options.Companion.JsonPretty);
+  }
 
   @observable showOutline = false;
   @action toggleOutline() { this.showOutline = !this.showOutline; }
@@ -36,6 +42,13 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable colHeaderHide = false;
   @action toggleColHeaderHide() { this.colHeaderHide = !this.colHeaderHide; }
+
+  @observable headerStyle = '';
+  @action setHeaderStyle(evt) { this.headerStyle = evt.target.value; }
+  @observable cellStyle = '';
+  @action setCellStyle(evt) { this.cellStyle = evt.target.value; }
+  @observable inputStyle = '';
+  @action setInputStyle(evt) { this.inputStyle = evt.target.value; }
   
 
   @observable data = DataNoiseSmall;
@@ -77,10 +90,44 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     else{return '';}
   }
 
+  @computed get jsonHeaderStyleObject(){
+    var res={}
+    if(!this.headerStyle){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.headerStyle));
+    } catch(e) {
+      res={backgroundColor:'red',err:'invalid JSX Style'};
+    }
+    return res;
+  }
+  @computed get jsonInputStyleObject(){
+    var res={}
+    if(!this.inputStyle){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.inputStyle));
+    } catch(e) {
+      res={backgroundColor:'red',err:'invalid JSX Style'};
+    }
+    return res;
+  }
+  @computed get jsonCellStyleObject(){
+    var res={}
+    if(!this.cellStyle){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.cellStyle));
+    } catch(e) {
+      res={backgroundColor:'red',err:'invalid JSX Style'};
+    }
+    return res;
+  }
+
 
 
 
   render() {
+
+    console.log(this.jsonHeaderStyleObject);
+
     return (
         <div>
           <div style={{width:'30%',display:'inline-block',padding:'5px',verticalAlign:'top'}}>
@@ -92,6 +139,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHeight' help='over-ride default grid height' />
           <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHeight' help='over-ride default row height' />
           <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHeight' help='over-ride row header height' />
+
+          <TextParam action={this.setHeaderStyle} curValue={this.headerStyle} label='headerStyle' help='style for header cells.  cannot control border or padding.' />
+          <TextParam action={this.setInputStyle} curValue={this.inputStyle} label='inputStyle' help='style for default cells.  cannot control border or padding.' />
+          <TextParam action={this.setCellStyle} curValue={this.cellStyle} label='cellStyle' help='style for default input cells.  cannot control border or padding.' />
           <hr/>
               
 
@@ -104,6 +155,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 {this.propGridHigh > -1 && <span>gridHeight=&#123;{this.propGridHigh}&#125;<br /></span>}
 {this.propBorderWide > -1 && <span>borderWidth=&#123;{this.propBorderWide}&#125;<br/></span>}
 {this.propPadWide > -1 && <span>padWidth=&#123;{this.propPadWide}&#125;<br /></span>}
+{this.headerStyle && <span>headerStyle=&#123;{this.headerStyle}&#125;<br /></span>}
+{this.inputStyle && <span>inputStyle=&#123;{this.inputStyle}&#125;<br /></span>}
+{this.cellStyle && <span>cellStyle=&#123;{this.cellStyle}&#125;<br /></span>}
   data=&#123;this.data&#125; <br/>
 /&gt;
         </div>          
@@ -117,6 +171,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         This Grid is contained in a div with a width of 50% and a height set to 300px.  
 <div style={{width:'50%',height:'300px',outline:this.outlineCSS}}>
       <Grid 
+        headerStyle={this.jsonHeaderStyleObject}
+        inputStyle={this.jsonInputStyleObject}
+        cellStyle={this.jsonCellStyleObject}        
         rowHeight={this.propRowHigh}
         colHeaderHeight={this.propRowHeaderHigh}
         colHeaderHide={this.colHeaderHide}

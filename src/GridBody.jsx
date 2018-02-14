@@ -13,7 +13,7 @@ import GridRow from './GridRow';
   constructor(props) { 
     super(props); 
     autoBind(this); 
-    this.componentWillReceiveProps(props);
+    this.componentWillReceiveProps(props);    
   }
 
   @observable scrollBarWide = 0;
@@ -22,7 +22,6 @@ import GridRow from './GridRow';
 
   componentWillReceiveProps(nextProps)
   {
-    console.log("componentWillReceiveProps");
     if (this.props.GridStore) {
       var keyNames = [];
       var wide=0;
@@ -33,6 +32,7 @@ import GridRow from './GridRow';
         high = this.props.data.length;
       }
       if (this.props.GridStore.cursor.maxX !== wide-1 || this.props.GridStore.cursor.maxY!==high-1){
+        console.log('update grid size');
         this.props.GridStore.prepSelectionField(wide,high);
       }
     }
@@ -46,6 +46,15 @@ import GridRow from './GridRow';
   }
 
 
+
+  @action blurControl(evt){
+    // brain dead LUCK is the only thing making this work.
+    // when moving focus in the cell, it sets autoFocus true.
+    // then it renders all the cells and on of them takes focus, focusing the new cell and bluring the old one.
+    // the blur even comes here and tell us to not steal focus any more.
+    // Now we can type into other things all day.  But only if we click into a cell will the focus move with us.  Lucky!
+    this.props.GridStore.autoFocus=false;
+  }
 
   render() {
     const {title} = this.props;
@@ -124,12 +133,14 @@ import GridRow from './GridRow';
     if (!this.props.colHeaderHide) {    
       for(var ctr=0;ctr<keyNames.length;ctr++){
         header.push(  <div key={ctr} 
-                          style={{width:autoColWidth,
-                          borderStyle: 'solid',
-                          borderColor: 'black',
-                          borderWidth:borderWidthLocal,
-                          padding: padWidthLocal+'px',
-                          display:'inline-block', marginLeft:marginOffset,height:colHeaderHeight+'px'}}>
+                          style={{...this.props.headerStyle,
+                            width:autoColWidth,
+                            borderStyle: 'solid',
+                            borderWidth:borderWidthLocal,
+                            padding: padWidthLocal+'px',
+                            display:'inline-block', 
+                            marginLeft:marginOffset,
+                            height:colHeaderHeight+'px'}}>
                           {keyNames[ctr]}
                       </div> );
         marginOffset=-1*borderWidthLocal;
@@ -145,10 +156,10 @@ import GridRow from './GridRow';
       }} />);
     }
 
-    console.log(rowHighWithPadLocal);
+
 
     return (
-        <div style={{height:gridHeightLocal}} onKeyPress={this.onKeyPress}>
+        <div style={{height:gridHeightLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
@@ -159,6 +170,7 @@ import GridRow from './GridRow';
             height={gridHeightLocal - colHeaderHeight -(borderWidthLocal*3) }
             itemCount={fixedRowCount}
             itemSize={rowHighWithPadLocal+borderWidthLocal}            
+
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
                 <GridRow  cellHeight={rowHighNoPadLocal}
@@ -167,14 +179,17 @@ import GridRow from './GridRow';
                           GridStore={this.props.GridStore}
                           index={index} 
                           borderWidth={borderWidthLocal} 
-                          padding={padWidthLocal} 
+                          padWidth={padWidthLocal} 
                           rowWide={rowWide} 
                           autoColWidth={autoColWidth} 
-                          keyNames={keyNames} />
+                          keyNames={keyNames} 
+                          inputStyle={this.props.inputStyle}
+                          cellStyle={this.props.cellStyle}
+                />
               </div>
             }
           />                    
-{showBottomGridLine &&
+      {showBottomGridLine &&
         <div style={{ width: (rowWide-1)+'px',
                       borderTopStyle: 'solid',
                       borderTopColor: 'black',
