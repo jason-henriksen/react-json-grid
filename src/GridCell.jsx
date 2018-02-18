@@ -23,10 +23,11 @@ import { ContainerDimensions } from 'react-container-dimensions';
     else{
       this.props.GridStore.cursor.x = this.props.x;
       this.props.GridStore.cursor.y = this.props.y;
+      if (this.props.GridStore.cursor.x < 0) { this.props.GridStore.cursor.x=0; } // can't edit row headers
     }
   }
 
-  @action onKeyDown(e)
+  @action onKeyDownWhenViewing(e)
   {
     this.props.GridStore.autoFocus=true;
     if (this.props.x !== this.props.GridStore.cursor.editX ||
@@ -34,14 +35,92 @@ import { ContainerDimensions } from 'react-container-dimensions';
       if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40' ) {
         this.props.GridStore.cellMoveKey(e);
       }
+      else if (e.keyCode == '13') {
+        this.props.GridStore.cursor.y++;
+        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+          this.props.GridStore.cursor.y = 0;
+        }
+      }
+      else if (e.keyCode == '9') { // tab
+        this.props.GridStore.cursor.x++;
+        if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
+          this.props.GridStore.cursor.x = 0;
+          this.props.GridStore.cursor.y++;
+          console.log(JSON.stringify(this.props.GridStore.cursor));
+        }
+        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+          this.props.GridStore.cursor.y = 0;
+        }
+      }
       else{
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.curEditingValue = this.props.cellData;
+        this.props.GridStore.curEditingValue = '';
       }
     }
+    e.stopPropagation();
+    e.preventDefault();        
   }  
+
+  @action onKeyDownWhenEditing(e) {
+    this.props.GridStore.autoFocus = true;
+
+      if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40') {
+        this.props.GridStore.cellMoveKey(e);
+      }
+      else if (e.keyCode == '13') {
+        // commit this one
+        // start editing the next one
+        if (this.props.GridStore.pivotOn) {
+          this.props.GridStore.onChange(this.props.y, this.props.x, this.props.objKey, this.props.GridStore.curEditingValue);
+        }
+        else {
+          this.props.GridStore.onChange(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
+        }
+        this.props.GridStore.cursor.y++;
+        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+          this.props.GridStore.cursor.y = 0;
+        }
+        this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
+        this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
+        this.props.GridStore.curEditingValue = '';
+      }
+      else if (e.keyCode == '9') { // tab
+        // commit this one
+        // start editing the next one
+        if (this.props.GridStore.pivotOn) {
+          this.props.GridStore.onChange(this.props.y, this.props.x, this.props.objKey, this.props.GridStore.curEditingValue);
+        }
+        else {
+          this.props.GridStore.onChange(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
+        }
+        this.props.GridStore.cursor.x++;
+        if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
+          this.props.GridStore.cursor.x = 0;
+          this.props.GridStore.cursor.y++;
+        }
+        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+          this.props.GridStore.cursor.y = 0;
+        }
+        this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
+        this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
+        this.props.GridStore.curEditingValue = '';
+      }
+      else if (e.keyCode == '27') {
+        // cell edit abort
+        this.props.GridStore.cursor.editX = -1;
+        this.props.GridStore.cursor.editY = -1;
+        this.props.GridStore.curEditingValue = '';
+      }
+      else {
+        // cell edit
+        this.props.GridStore.cursor.editX = this.props.x;
+        this.props.GridStore.cursor.editY = this.props.y;
+        this.props.GridStore.curEditingValue = '';
+      }
+  }  
+  
 
   @action valChange(evt){
     this.props.GridStore.curEditingValue = evt.target.value;
@@ -49,26 +128,72 @@ import { ContainerDimensions } from 'react-container-dimensions';
 
   @action endEdit()
   {
-    this.props.GridStore.onChange(this.props.x,this.props.y,this.props.objKey,this.props.GridStore.curEditingValue);
+    if (this.props.GridStore.pivotOn) {
+      this.props.GridStore.onChange(this.props.y, this.props.x, this.props.objKey, this.props.GridStore.curEditingValue);
+    }
+    else {
+      this.props.GridStore.onChange(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
+    }
     
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
     this.props.GridStore.curEditingValue = '';
+  }
 
-    this.props.GridStore.cursor.x++;
-    if (this.props.GridStore.cursor.x>this.props.maxX){
-      this.props.GridStore.cursor.x=0;
+  @action onEnter(e) {
+    if (e.keyCode == '13') {    
+      if (this.props.GridStore.pivotOn) {
+        this.props.GridStore.onChange(this.props.y, this.props.x, this.props.objKey, this.props.GridStore.curEditingValue);
+      }
+      else {
+        this.props.GridStore.onChange(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
+      }
+
       this.props.GridStore.cursor.y++;
+      if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+        this.props.GridStore.cursor.y = 0;
+      }
+
+      this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
+      this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
+      this.props.GridStore.curEditingValue = '';
     }
-    if (this.props.GridStore.cursor.y > this.props.maxY) {
-      this.props.GridStore.cursor.y=0;
+    else if (e.keyCode == '9') { // tab
+      // commit this one
+      // start editing the next one
+      if (this.props.GridStore.pivotOn) {
+        this.props.GridStore.onChange(this.props.y, this.props.x, this.props.objKey, this.props.GridStore.curEditingValue);
+      }
+      else {
+        this.props.GridStore.onChange(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
+      }
+      this.props.GridStore.cursor.x++;
+      if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
+        this.props.GridStore.cursor.x = 0;
+        this.props.GridStore.cursor.y++;
+      }
+      if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+        this.props.GridStore.cursor.y = 0;
+      }
+      this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
+      this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
+      this.props.GridStore.curEditingValue = '';
+      this.props.GridStore.autoFocus=true;
+      e.stopPropagation();
+      e.preventDefault();        
+    }
+    else if (e.keyCode == '27') {
+      // cell edit abort
+      this.props.GridStore.cursor.editX = -1;
+      this.props.GridStore.cursor.editY = -1;
+      this.props.GridStore.curEditingValue = '';
     }
     
-  }
+  }  
 
   render() {
 
-    var style={...this.props.cellStyle};
+    var style={...this.props.styleCell};
     if (this.props.GridStore.selectionBounds.l <= this.props.x &&
         this.props.GridStore.selectionBounds.r >= this.props.x &&
         this.props.GridStore.selectionBounds.t <= this.props.y &&
@@ -80,8 +205,7 @@ import { ContainerDimensions } from 'react-container-dimensions';
     }
     
     if(this.props.x>0){
-      style.marginLeft=-1*this.props.borderWidth;
-      //style.marginTop=-1*this.props.padWidth;
+      style.marginLeft=-1*this.props.borderWide;
     }
     // render data standard
     var renderPlan = <div>this.props.cellData</div>;
@@ -92,16 +216,18 @@ import { ContainerDimensions } from 'react-container-dimensions';
        this.props.x === this.props.GridStore.cursor.editX &&
        this.props.y === this.props.GridStore.cursor.editY){
 
-        var styleIn={...this.props.inputStyle};
+        var styleIn={...this.props.styleInput};
         
         if(this.props.x>0){
-          styleIn.marginLeft=-1*this.props.borderWidth;
-          //style.marginTop=-1*this.props.padWidth;
+          styleIn.marginLeft=-1*this.props.borderWide;
         }
+        styleIn.verticalAlign='top';
         
         
         renderPlan = 
-          <input value={this.props.GridStore.curEditingValue} onChange={this.valChange}                   
+          <input  value={this.props.GridStore.curEditingValue} 
+                  onChange={this.valChange}                   
+                  onKeyDown={this.onEnter}
                   id={this.props.id} style={styleIn}
                   ref={input => input && input.focus()}
                   onBlur={this.endEdit}
@@ -112,7 +238,7 @@ import { ContainerDimensions } from 'react-container-dimensions';
                         onClick={this.onClick} 
                         id={this.props.id} style={style}                        
                         ref={div => div && isFocusNeeded && div.focus()}
-                        onKeyDown={this.onKeyDown}>{this.props.cellData}</div>;
+                        onKeyDown={this.onKeyDownWhenViewing}>{''+this.props.cellData}</div>;
     }
     
     return(renderPlan);

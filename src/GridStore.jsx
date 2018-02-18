@@ -1,4 +1,5 @@
 import { observable, computed, action } from 'mobx';
+import EasyBool from './easyTools/EasyBool';
 
 class GridStore {           // Just a class.  Nothing fancy here.
   constructor() { 
@@ -6,7 +7,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   }
 
   @observable cursor = {x:0,y:0,                    // cursor x and y values
-                        maxX:0,maxY:0,              // max legal x and y values.
+                        maxX:-1,maxY:-1,              // max legal x and y values.
                         selectToX:-1,selectToY:-1,  // selection box for shift selection
                         editX:-1,editY:-1,          // cell being edited
                         shiftSelInProgress:false    // for shift arrow selecting cells
@@ -15,16 +16,60 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable curEditingValue='';                 // value being edited before it is applied.
 
   @observable autoFocus=false;                    // if true, rendering a selected cell will cause that cell to take focus
+  @observable inst = '';                          // if true, rendering a selected cell will cause that cell to take focus
+  @observable pivotOn = '';                       // from props.  Here for easy cell access.
 
-  @action prepSelectionField(wide,high){
-    console.log('prep selection');
+  @observable colDefList = {};
 
-    this.selectedCells = [high];
-    for(var ctr=0;ctr<high;ctr++){
-      this.selectedCells[ctr] = observable([wide]);
+
+
+  // javascript sucks at math
+  makeValidInt(inputVal, defaultVal) {
+    var res = (inputVal || defaultVal);
+    if (inputVal === 0) { res = inputVal; }
+    if (res < 0) { res = defaultVal; }
+    return Number(res);
+  }
+
+  @action logNoChangeHandlerMessage() {console.log('no change handler supplied.');}
+
+  @action prepSelectionField(props)
+  {
+    var dataWide = 0;
+    var dataHigh = 0;
+    if (props.data && props.data.length > 0) {
+      if (props.pivotOn) {  // pivot the data using this key as the col header
+        //---- PIVOTED FLOW
+        dataWide = props.data.length;
+        dataHigh = Object.keys(props.data[0]).length;
+      }
+      else {
+        //---- NORMAL FLOW
+        dataWide = Object.keys(props.data[0]).length;
+        dataHigh = props.data.length;
+      }
     }
-    this.cursor.maxX = wide-1;
-    this.cursor.maxY = high-1;
+    if (this.cursor.maxX !== dataWide - 1 || this.cursor.maxY !== dataHigh - 1) {
+      this.cursor.maxX = dataWide-1;
+      this.cursor.maxY = dataHigh-1;
+    }
+    this.onChange = (props.onChange || this.logNoChangeHandlerMessage ); // easy availability to cells
+    this.pivotOn = props.pivotOn;    // easy availability to cells
+
+    if (props.columnList){
+      this.colDefList = {};
+      // make a map of keys to objects for easy access later.
+      for(var clctr=0;clctr<props.columnList.length;clctr++){
+        if (props.columnList[clctr].easyBool) {
+          console.log('eb1');
+          props.columnList[clctr].compCell = <EasyBool/>
+        }
+        this.colDefList[props.columnList[clctr].key] = props.columnList[clctr];
+      }
+    }
+    else{
+      this.colDefList = {};
+    }
   }
 
 

@@ -40,10 +40,9 @@ class NumWheel extends React.Component {
       res = <div>
         <div style={{ width: '30%', display: 'inline-block' }}>{this.props.label}</div>
         <button onClick={this.defVal}>X</button>
-        <button onClick={this.less5}>-5</button>
         <button onClick={this.less1}>-</button>
         <button onClick={this.more1}>+</button>
-        <button onClick={this.more5}>+5</button>&nbsp;{displayVal}
+        &nbsp;{displayVal}
       </div>
     }
 

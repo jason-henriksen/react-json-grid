@@ -20,58 +20,150 @@ import GridCell from './GridCell';
     }
 
     var cellArray = [];
-    var marginOffset = 0;
+    var marginOffset = Math.floor(-1 * this.props.borderWide);
 
-    var sharedBaseStyle1={  width: this.props.autoColWidth, 
+    var sharedBaseStyleLeftCol = {
+      ...this.props.styleHeader,
+      width: this.props.autoColWide,
       borderStyle: 'solid',
       borderColor: 'black',
-      borderWidth: this.props.borderWidth, 
-      padding: (this.props.padWidth||0)+'px', 
+      borderWidth: this.props.borderWide,
+      padding: (this.props.padWide || 0) + 'px',
       borderTop: '0px',
-      height: this.props.cellHeight,
-      display: 'inline-block', 
+      height: this.props.cellHigh,
+      display: 'inline-block',
       outline: outline,
-      marginLeft: marginOffset };
-    var sharedBaseStyle2={  width: this.props.autoColWidth, 
+      overflow:'hidden',
+    };
+    var sharedBaseStyleLeftColIn = {
+      width: this.props.autoColWide,
       borderStyle: 'solid',
       borderColor: 'black',
-      borderWidth: this.props.borderWidth, 
-      padding: (this.props.padWidth||0)+'px', 
+      backgroundColor: '#fffef4',
+      borderWidth: this.props.borderWide,
+      padding: (this.props.padWide || 0) + 'px',
       borderTop: '0px',
-      height: this.props.cellHeight,
+      height: this.props.cellHigh,
+      display: 'inline-block',
+      outline: outline,
+      overflow: 'hidden',
+    };
+
+    if (this.props.rowHeaderList && this.props.rowHeaderList.length>0){ // if pivoted or rowHeadered, make the row headers have header style
+      sharedBaseStyleLeftCol.backgroundColor= '#F3F3F3';
+      sharedBaseStyleLeftCol.textAlign = 'center';
+    }
+
+    
+    var sharedBaseStyleInput={  width: this.props.autoColWide, 
+      borderStyle: 'solid',
+      borderColor: 'black',
+      borderWidth: this.props.borderWide, 
+      backgroundColor: '#fffef4',
+      padding: (this.props.padWide||0)+'px', 
+      borderTop: '0px',
+      height: this.props.cellHigh,
       display: 'inline-block', 
       outline: outline,
-      marginLeft: marginOffset };
+      marginLeft: marginOffset ,
+      overflow: 'hidden',
+    };
+    var sharedBaseStyle2={  width: this.props.autoColWide, 
+      borderStyle: 'solid',
+      borderColor: 'black',
+      borderWidth: this.props.borderWide, 
+      padding: (this.props.padWide||0)+'px', 
+      borderTop: '0px',
+      height: this.props.cellHigh,
+      display: 'inline-block', 
+      outline: outline,
+      marginLeft: marginOffset ,
+      overflow: 'hidden',
+    };
   
-    var inputStyleLocal=Object.assign(sharedBaseStyle1, this.props.inputStyle);
-    var cellStyleLocal=Object.assign(sharedBaseStyle2, this.props.cellStyle);
+    var cellStyleFirst = Object.assign(sharedBaseStyleLeftCol, (this.props.styleCell||{}));      
+    var cellStyleLocal = Object.assign(sharedBaseStyle2, (this.props.styleCell || {}));
 
-    for (var ctr = 0; ctr < this.props.keyNames.length; ctr++) {
+    var inputStyleFirst = Object.assign(sharedBaseStyleLeftColIn, (this.props.styleInput || {}));
+    var inputStyleLocal = Object.assign(sharedBaseStyleInput, (this.props.styleInput || {}));
+    inputStyleFirst.marginTop='-4';
+    inputStyleLocal.marginTop = '-4';
+    
+
+    var forceObjKey = null;  // used for pivoted data only
+
+    var columnCount = this.props.GridStore.cursor.maxX+1;
+    if (this.props.pivotOn){
+      columnCount = this.props.data.length;
+    }
+    var isFirst=true;
+    for (var ctr = -1; ctr < columnCount; ctr++) {
       var borderColor='black';
       var zIndex=0;
       var outline='';
-      cellArray.push(
-      <GridCell 
-        key={this.props.index+'-'+ctr} 
-        id={this.props.index+'-'+ctr}
-        x={ctr}
-        y={this.props.index}
-        objKey={this.props.keyNames[ctr]}
-        inputStyle={inputStyleLocal}
-        cellStyle={cellStyleLocal}
-        borderWidth={this.props.borderWidth}
-        padWidth={this.props.padWidth}
-        GridStore={this.props.GridStore}
-        cellData={this.props.data[this.props.index][this.props.keyNames[ctr]]}
-      />            
-        
-    );
-    marginOffset = Math.floor(-1 * this.props.borderWidth);
+
+      cellStyleLocal.marginLeft=marginOffset+'px';
+
+      // row header / pivot work
+      if(ctr===-1){
+        if(this.props.rowHeaderList && this.props.rowHeaderList.length > this.props.index) {
+          forceObjKey = this.props.rowHeaderList[this.props.index];          
+
+          var titleText = this.props.rowHeaderList[this.props.index]; // what key am I on?
+          if (this.props.GridStore.colDefList[titleText]) { // is there a colDef that uses this key?
+            titleText = this.props.GridStore.colDefList[titleText].title || titleText; // if there is a title for the colDef use it, or just stick with thekey
+          }
+          
+          cellArray.push(
+            <GridCell
+              key={this.props.index + '-RH'}
+              id={this.props.index + '-RH'}
+              x={ctr}
+              y={this.props.index}
+              forceNoEdit={true}
+              styleInput={inputStyleFirst}
+              styleCell={cellStyleFirst}
+              borderWide={this.props.borderWide}
+              padWide={this.props.padWide}
+              GridStore={this.props.GridStore}
+              cellData={titleText}
+            />);
+          isFirst=false;
+        }
+      }
+      else{
+
+        var cellData = '';
+        if(this.props.pivotOn){
+          cellData = this.props.data[ctr][forceObjKey];
+        }
+        else{
+          cellData = this.props.data[this.props.index][this.props.keyNames[ctr]];
+        }
+
+        cellArray.push(
+        <GridCell 
+          key={this.props.index+'-'+ctr} 
+          id={this.props.index+'-'+ctr}
+          x={ctr}
+          y={this.props.index}
+          objKey={forceObjKey||this.props.keyNames[ctr]}
+          styleInput={isFirst ? inputStyleFirst : inputStyleLocal}
+          styleCell={isFirst ? cellStyleFirst : cellStyleLocal}
+          borderWide={this.props.borderWide}
+          padWide={this.props.padWide}
+          GridStore={this.props.GridStore}
+          cellData={cellData}
+        />            
+        );
+        isFirst = false;
+
+      }        
   }
     
     return(
       <div style={{ width: this.props.rowWide,
-                    height:this.props.rowHeight}}>
+                    height:this.props.rowHigh}}>
         {cellArray}
       </div>
     );

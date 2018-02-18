@@ -30,10 +30,10 @@ class Grid extends React.Component {
 Grid.propTypes = {
   title: PropTypes.string.isRequired,
   rowCount: PropTypes.number,
-  rowHeight: PropTypes.number,
-  colHeaderHeight: PropTypes.number,
+  rowHigh: PropTypes.number,
+  colHeaderHigh: PropTypes.number,
   colHeaderHide: PropTypes.bool,
-  gridHeight: PropTypes.number,
+  gridHigh: PropTypes.number,
 };
 
 // Default proptypes
