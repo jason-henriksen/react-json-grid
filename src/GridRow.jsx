@@ -127,6 +127,7 @@ import GridCell from './GridCell';
               padWide={this.props.padWide}
               GridStore={this.props.GridStore}
               cellData={titleText}
+              onChange={this.props.onChange}
             />);
           isFirst=false;
         }
@@ -154,6 +155,7 @@ import GridCell from './GridCell';
           padWide={this.props.padWide}
           GridStore={this.props.GridStore}
           cellData={cellData}
+            onChange={this.props.onChange}
         />            
         );
         isFirst = false;

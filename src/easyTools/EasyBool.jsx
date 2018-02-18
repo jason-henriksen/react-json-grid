@@ -8,6 +8,7 @@ class EasyBool extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
   toggle(){
+    console.log('eb toggle');
     if(this.props.cellData){
       this.props.onChange( this.props.x, this.props.y, this.props.objKey, false);
     }

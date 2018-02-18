@@ -32,6 +32,26 @@ class GridStore {           // Just a class.  Nothing fancy here.
 
   @action logNoChangeHandlerMessage() {console.log('no change handler supplied.');}
 
+  // don't call the user supplied on change directly.  
+  // call this to ensure that the pivot variables get swizzled correctly.
+  onChangePivotWrapper(x,y,objKey,val){
+    console.log('OCW '+ this.onChange.name);
+
+    /*
+    if (this.pivotOn) {
+      console.log('P');
+      this.onChange(y, x, objKey, val);
+    }
+    else {
+      console.log('NP');
+      this.onChange(x, y, objKey, val);
+    }
+    */
+    console.log('END');
+
+    
+  }
+
   @action prepSelectionField(props)
   {
     var dataWide = 0;
@@ -52,7 +72,10 @@ class GridStore {           // Just a class.  Nothing fancy here.
       this.cursor.maxX = dataWide-1;
       this.cursor.maxY = dataHigh-1;
     }
+
     this.onChange = (props.onChange || this.logNoChangeHandlerMessage ); // easy availability to cells
+    console.log('>>OCN>> '+this.onChange.name);
+
     this.pivotOn = props.pivotOn;    // easy availability to cells
 
     if (props.columnList){

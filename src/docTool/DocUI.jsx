@@ -66,12 +66,12 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         {  
           key: 'a', 
           title:'col A',
-          mayEdit: '',
+        editDisabled: '',
 
           widePct: '',
           widePx: '',
 
-          easyBool:'',
+          easyBool:true,
           easyInt: '',
           easyMoney: '',
           easyDate: '',
@@ -87,11 +87,20 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         {
           key: 'b', 
           title: 'col B',
-          mayEdit: '',
-          wide: '',
+          editDisabled: '',
+
+          widePct: '',
+          widePx: '',
+
+          easyBool: '',
+          easyInt: '',
+          easyMoney: '',
+          easyDate: '',
+
           styleHeader: '',
           styleInput: '',
           styleCell: '',
+
           compHeader: '',
           compInput: '',
           compCell: '',
@@ -99,11 +108,20 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         {
           key: 'c',
           title: 'col C',
-          mayEdit: '',
-          wide: '',
+          editDisabled: '',
+
+          widePct: '',
+          widePx: '',
+
+          easyBool: '',
+          easyInt: '',
+          easyMoney: '',
+          easyDate: '',
+
           styleHeader: '',
           styleInput: '',
           styleCell: '',
+
           compHeader: '',
           compInput: '',
           compCell: '',
@@ -111,11 +129,20 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         {
           key: 'd',
           title: 'col D',
-          mayEdit: '',
-          wide: '',
+          editDisabled: '',
+
+          widePct: '',
+          widePx: '',
+
+          easyBool: '',
+          easyInt: '',
+          easyMoney: '',
+          easyDate: '',
+
           styleHeader: '',
           styleInput: '',
           styleCell: '',
+
           compHeader: '',
           compInput: '',
           compCell: '',
@@ -123,11 +150,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     
                       ]
   @action setColDefValue(x, y, objKey, newValue) {
+    console.log('changing def '+objKey+' ' +newValue);
     this.colDef[y][objKey] = newValue;
-
-    console.log(">P> "+this.printer);
-    var temp = {data: toJS(this.colDef)};
-    console.log(">P> " + JSON.stringify(temp,(k,v)=>{return v?v:undefined} ,2));
   }
   
   

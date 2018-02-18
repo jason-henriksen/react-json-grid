@@ -32,7 +32,7 @@ import EasyBool from './easyTools/EasyBool';
         for (var clctr = 0; clctr < nextProps.columnList.length; clctr++) {
           if (nextProps.columnList[clctr].easyBool) {
             console.log('eb1');
-            nextProps.columnList[clctr].compCell = <EasyBool />
+            nextProps.columnList[clctr].compCell = <EasyBool falseText='nope' trueText='yep' />
           }
         }
       }
@@ -213,6 +213,7 @@ import EasyBool from './easyTools/EasyBool';
                           styleCell={this.props.styleCell}
                           rowHeaderList={rowHeaderList}
                           pivotOn={this.props.pivotOn}
+                          onChange={this.props.onChange}
                 />
               </div>
             }
