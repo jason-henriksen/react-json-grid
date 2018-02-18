@@ -1,5 +1,4 @@
 import { observable, computed, action } from 'mobx';
-import EasyBool from './easyTools/EasyBool';
 
 class GridStore {           // Just a class.  Nothing fancy here.
   constructor() { 
@@ -60,10 +59,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
       this.colDefList = {};
       // make a map of keys to objects for easy access later.
       for(var clctr=0;clctr<props.columnList.length;clctr++){
-        if (props.columnList[clctr].easyBool) {
-          console.log('eb1');
-          props.columnList[clctr].compCell = <EasyBool/>
-        }
         this.colDefList[props.columnList[clctr].key] = props.columnList[clctr];
       }
     }

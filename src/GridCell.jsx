@@ -234,11 +234,14 @@ import { ContainerDimensions } from 'react-container-dimensions';
             />
     } 
     else{
+      
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 
                         id={this.props.id} style={style}                        
                         ref={div => div && isFocusNeeded && div.focus()}
-                        onKeyDown={this.onKeyDownWhenViewing}>{''+this.props.cellData}</div>;
+                        onKeyDown={this.onKeyDownWhenViewing}>
+            {''+this.props.cellData}
+      </div>;
     }
     
     return(renderPlan);

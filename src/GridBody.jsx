@@ -8,6 +8,8 @@ import autoBind from 'react-autobind';
 import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
 
+import EasyBool from './easyTools/EasyBool';
+
 // Wrapper for the grid
 // This grid allows deep styling via style objects, 
 // but retains control of border and padding to ensure that the grid lines up.
@@ -25,6 +27,17 @@ import GridRow from './GridRow';
   componentWillReceiveProps(nextProps)
   {
     if (this.props.GridStore) {
+
+      if (nextProps.columnList) {
+        for (var clctr = 0; clctr < nextProps.columnList.length; clctr++) {
+          if (nextProps.columnList[clctr].easyBool) {
+            console.log('eb1');
+            nextProps.columnList[clctr].compCell = <EasyBool />
+          }
+        }
+      }
+
+
       this.props.GridStore.prepSelectionField(nextProps);
     }
     else{
