@@ -26,6 +26,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable showOutline = false;
   @action toggleOutline() { this.showOutline = !this.showOutline; }
   
+  @observable showTools = false;
+  @action toggleTools() { this.showTools = !this.showTools; }
+
   @observable propBorderWide = -1;
   @action setBorderWidth(val) { this.propBorderWide = val; }
 
@@ -187,14 +190,29 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @action setValue(x,y,objKey,newValue)
   {
-    console.log(x,y,objKey,newValue);
-    console.log(this.data[y]);
     // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
     // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
+    console.log(x,y,objKey,newValue);
     var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));    
     cleanData[y][objKey]=newValue;
     this.data = JSON.stringify(cleanData);
   }
+
+  @action setToolAction(x, y, objKey, tool) {
+    // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
+    // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
+    console.log(x, y, objKey, tool);
+    var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
+    if("ADDROW"===tool){
+      cleanData.splice(y+1, 0, {});
+    }
+    if ("CUTROW" === tool) {
+      cleanData.splice(y, 1);
+    }
+    
+    this.data = JSON.stringify(cleanData);
+  }
+  
 
 
   @observable curParamHelp = "";
@@ -276,6 +294,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
           <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
           <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
+          <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showTools' help='show button bar, validations, add/remove rows' />
           <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
           <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
           <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
@@ -325,8 +344,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         gridHigh={this.propGridHigh}
         data={this.dataAsObject.cleanData}
         onChange={this.setValue}
+        onToolAction={this.setToolAction}
         pivotOn={ this.pivotOn?'b':null}
         columnList={ this.columnList?this.colDef:null }
+        showTools={this.showTools}
       />
       <br/>
 
@@ -337,14 +358,18 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.propGridHigh > -1 && <span>gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propBorderWide > -1 && <span>borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
           {this.pivotOn && <span>pivotOn='b'&nbsp;&nbsp;</span>}
+          {this.showTools && <span>showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
           {this.propPadWide > -1 && <span>padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
           {this.colHeaderHide && <span>colHeaderHide=&#123;{this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
           {this.styleHeader && <span><br />styleHeader=&#123;{this.styleHeader}&#125;</span>}
           {this.styleInput && <span><br />styleInput=&#123;{this.styleInput}&#125;</span>}
           {this.styleCell && <span><br />styleCell=&#123;{this.styleCell}&#125;</span>}
           {this.columnList && <span><br />columnList=&#123;[{colListAsText}]&#125;</span>}          
-          <br/>data=&#123;this.data&#125; <br />
-/&gt;
+          <br/>data=&#123;this.data&#125;
+          <br/>onChange=&#123;(x,y,objKey,value)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;
+          {this.showTools && <span><br />onToolAction=&#123;(x,y,objKey,toolName)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;</span>}
+          <br />/&gt;
+
 
           <h3>Example Data (this.data)</h3>
           <button onClick={this.makeS}>5 rows</button>

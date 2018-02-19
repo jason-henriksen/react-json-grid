@@ -51,6 +51,18 @@ import EasyBool from './easyTools/EasyBool';
     this.props.GridStore.autoFocus=false;
   }
 
+  @action addRow(){
+    // JJHNOTE: pivot suppor
+    console.log(this.props);
+    this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y, 
+      this.props.GridStore.keyList[this.props.GridStore.cursor.x],'ADDROW');
+  }
+  @action cutRow() {
+    // JJHNOTE: pivot suppor
+    this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y,
+      this.props.GridStore.keyList[this.props.GridStore.cursor.x],'CUTROW');
+  }
+
   render() {
 
     var borderWideLocal = this.makeValidInt(this.props.borderWide,1);
@@ -172,7 +184,6 @@ import EasyBool from './easyTools/EasyBool';
       }} />);
     }
 
-    console.log(fixedRowCount, gridHighLocal , (colHeaderHigh||0) , (borderWideLocal * 3));
     return (
         <div style={{height:gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           <ScrollbarSize
@@ -213,7 +224,12 @@ import EasyBool from './easyTools/EasyBool';
                       borderTopStyle: 'solid',                      
                       borderTopWidth: borderWideLocal,
                       height:'0px'}}/>
-}
+      }
+        {this.props.showTools &&
+          <div>
+          <button onClick={this.addRow}>Add Row</button><button onClick={this.cutRow}>Cut Row</button>
+          </div>
+        }
       </div>
     );
   }

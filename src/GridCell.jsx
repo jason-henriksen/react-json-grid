@@ -258,7 +258,7 @@ import EasyBool from './easyTools/EasyBool';
     else{
 
 
-      var renderVal = '' + this.props.cellData;
+      var renderVal = '' + (this.props.cellData||'');
       if (this.props.GridStore.colDefList && 
           this.props.GridStore.colDefList[this.props.objKey]
       ){

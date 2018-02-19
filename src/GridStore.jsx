@@ -18,7 +18,8 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable inst = '';                          // if true, rendering a selected cell will cause that cell to take focus
   @observable pivotOn = '';                       // from props.  Here for easy cell access.
 
-  @observable colDefList = {};
+  @observable colDefList = {};                    // column definition meta data
+  @observable keyList=[]                          // list of the keys in the given data object.
 
 
 
@@ -51,6 +52,9 @@ class GridStore {           // Just a class.  Nothing fancy here.
     var dataWide = 0;
     var dataHigh = 0;
     if (props.data && props.data.length > 0) {
+
+      this.keyList = Object.keys(props.data[0]);
+
       if (props.pivotOn) {  // pivot the data using this key as the col header
         //---- PIVOTED FLOW
         dataWide = props.data.length;
