@@ -265,7 +265,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
     var colListAsText=[];
     for(var cctr=0;cctr<this.colDef.length;cctr++){
-      colListAsText.push(<CompactObjView target={this.colDef[cctr]} key={JSON.stringify(this.colDef[cctr])}/>);
+      colListAsText.push(<CompactObjView target={this.colDef[cctr]} key={JSON.stringify(this.colDef[cctr])+cctr}/>);
     }
 
     return (

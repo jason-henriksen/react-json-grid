@@ -7,6 +7,12 @@ import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
 import { ContainerDimensions } from 'react-container-dimensions';
 
+import moment from 'moment';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+
 import EasyBool from './easyTools/EasyBool';
 
 
@@ -69,6 +75,11 @@ import EasyBool from './easyTools/EasyBool';
   @action valChange(evt){
     this.props.GridStore.curEditingValue = evt.target.value;
   }
+
+  @action valChangeDate(value) {
+    this.props.GridStore.curEditingValue = value;
+  }
+  
 
   @action endEdit()
   {
@@ -165,53 +176,84 @@ import EasyBool from './easyTools/EasyBool';
     }
 
     if (assumeEditOk && 
-       this.props.x === this.props.GridStore.cursor.x &&
-       this.props.y === this.props.GridStore.cursor.y &&
-       this.props.x === this.props.GridStore.cursor.editX &&
-       this.props.y === this.props.GridStore.cursor.editY){
+          this.props.x === this.props.GridStore.cursor.x &&
+          this.props.y === this.props.GridStore.cursor.y &&
+          this.props.x === this.props.GridStore.cursor.editX &&
+          this.props.y === this.props.GridStore.cursor.editY)
+    {
+      var styleIn={...this.props.styleInput};
+      
+      if(this.props.x>0){
+        styleIn.marginLeft=-1*this.props.borderWide;
+      }
+      styleIn.verticalAlign='top';
 
-        var styleIn={...this.props.styleInput};
-        
-        if(this.props.x>0){
-          styleIn.marginLeft=-1*this.props.borderWide;
-        }
-        styleIn.verticalAlign='top';
+      // check for easy column tools
+      if(this.props.GridStore.colDefList &&
+          this.props.GridStore.colDefList[this.props.objKey]){
 
-        // check for easy column tools
-        if(this.props.GridStore.colDefList &&
-           this.props.GridStore.colDefList[this.props.objKey]){
-
-          // check validation
-          if (
-             (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
-             (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-             (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.curEditIsValidFor.isValidFloat)
-            ){
-            styleIn.outline="5px red dashed";
-          }
-
-          // check right alignment
-          if (
-            (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
-            (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
-            (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
-          ) {
-            styleIn.textAlign = "right";
-          }          
+        // check validation
+        if (
+            (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
+            (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
+            (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+          ){
+          styleIn.outline="5px red dashed";
         }
 
+        // check right alignment
+        if (
+          (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
+          (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
+          (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
+        ) {
+          styleIn.textAlign = "right";
+        }          
+      }
 
       var curDisplayVal = this.props.GridStore.curEditingValue;
       if(null === curDisplayVal){ curDisplayVal = this.props.cellData;}
-        
+
+      // check for easy Date
+      if (this.props.GridStore.colDefList &&
+          this.props.GridStore.colDefList[this.props.objKey] &&
+          this.props.GridStore.colDefList[this.props.objKey].easyDate){
+        renderPlan=
+        <div tabIndex='0' id={this.props.id} style={style}>
+          <DatePicker
+            selected={moment(curDisplayVal)}
+            onChange={this.valChangeDate}
+            id={this.props.id}
+            onBlur={this.endEdit}            
+          />      
+        </div >        
+
+      }
+      else if (this.props.GridStore.colDefList &&
+        this.props.GridStore.colDefList[this.props.objKey] &&
+        this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
+        renderPlan =
+          <DatePicker
+            customInput={<span style={styleIn}>{'' + curDisplayVal}</span>}
+            selected={moment(curDisplayVal)}
+            onChange={this.valChangeDate}
+            showTimeSelect
+            dateFormat="LLL"  
+            id={this.props.id}
+            onBlur={this.endEdit}
+          />
+      }      
+      else{
+        // use the normal text input editor
         renderPlan = 
           <input value={curDisplayVal} 
-                  onChange={this.valChange}                   
+                  onChange={this.valChange}
                   onKeyDown={this.onEnter}
                   id={this.props.id} style={styleIn}
                   ref={input => input && input.focus()}
                   onBlur={this.endEdit}
             />
+      }
     } 
     else{
 
