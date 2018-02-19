@@ -58,59 +58,11 @@ import EasyBool from './easyTools/EasyBool';
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.curEditingValue = '';
+        this.props.GridStore.curEditingValue = null;
       }
     }
     e.stopPropagation();
     e.preventDefault();        
-  }  
-
-  @action onKeyDownWhenEditing(e) {
-    this.props.GridStore.autoFocus = true;
-
-      if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40') {
-        this.props.GridStore.cellMoveKey(e);
-      }
-      else if (e.keyCode == '13') {
-        // commit this one
-        // start editing the next one
-        this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
-        this.props.GridStore.cursor.y++;
-        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
-          this.props.GridStore.cursor.y = 0;
-        }
-        this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
-        this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-        this.props.GridStore.curEditingValue = '';
-      }
-      else if (e.keyCode == '9') { // tab
-        // commit this one
-        // start editing the next one
-        this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
-        this.props.GridStore.cursor.x++;
-        if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
-          this.props.GridStore.cursor.x = 0;
-          this.props.GridStore.cursor.y++;
-        }
-        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
-          this.props.GridStore.cursor.y = 0;
-        }
-        this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
-        this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-        this.props.GridStore.curEditingValue = '';
-      }
-      else if (e.keyCode == '27') {
-        // cell edit abort
-        this.props.GridStore.cursor.editX = -1;
-        this.props.GridStore.cursor.editY = -1;
-        this.props.GridStore.curEditingValue = '';
-      }
-      else {
-        // cell edit
-        this.props.GridStore.cursor.editX = this.props.x;
-        this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.curEditingValue = '';
-      }
   }  
   
 
@@ -120,17 +72,31 @@ import EasyBool from './easyTools/EasyBool';
 
   @action endEdit()
   {
+    if (this.props.GridStore.colDefList &&
+      this.props.GridStore.colDefList[this.props.objKey]) {
+      if (
+        (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
+        (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
+        (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+      ) {
+        // value is not valid for the field definition.  Do not make the change.
+        this.props.GridStore.cursor.editX = -1;
+        this.props.GridStore.cursor.editY = -1;
+        this.props.GridStore.curEditingValue = null;
+        return;
+      }
+    }
+    
     this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
     
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
-    this.props.GridStore.curEditingValue = '';
+    this.props.GridStore.curEditingValue = null;
   }
 
   @action onEnter(e) {
-    if (e.keyCode == '13') {    
-      this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
-
+    if (e.keyCode == '13') {  
+      this.endEdit(); 
       this.props.GridStore.cursor.y++;
       if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
         this.props.GridStore.cursor.y = 0;
@@ -138,12 +104,12 @@ import EasyBool from './easyTools/EasyBool';
 
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-      this.props.GridStore.curEditingValue = '';
+      this.props.GridStore.curEditingValue = null;
     }
     else if (e.keyCode == '9') { // tab
       // commit this one
       // start editing the next one
-      this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
+      this.endEdit(); 
       this.props.GridStore.cursor.x++;
       if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
         this.props.GridStore.cursor.x = 0;
@@ -154,7 +120,7 @@ import EasyBool from './easyTools/EasyBool';
       }
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-      this.props.GridStore.curEditingValue = '';
+      this.props.GridStore.curEditingValue = null;
       this.props.GridStore.autoFocus=true;
       e.stopPropagation();
       e.preventDefault();        
@@ -163,7 +129,7 @@ import EasyBool from './easyTools/EasyBool';
       // cell edit abort
       this.props.GridStore.cursor.editX = -1;
       this.props.GridStore.cursor.editY = -1;
-      this.props.GridStore.curEditingValue = '';
+      this.props.GridStore.curEditingValue = null;
     }
     
   }  
@@ -188,17 +154,17 @@ import EasyBool from './easyTools/EasyBool';
     var renderPlan = '';
     var isFocusNeeded = this.props.GridStore.autoFocus && this.props.x === this.props.GridStore.cursor.x && this.props.y === this.props.GridStore.cursor.y;
 
-    /*
+    
     var assumeEditOk=true;
     if (this.props.GridStore.colDefList && 
       this.props.GridStore.colDefList[this.props.objKey] && 
-      this.props.GridStore.colDefList[this.props.objKey].editDisabled){
+      (this.props.GridStore.colDefList[this.props.objKey].editDisabled ||  // turn off the auto editor
+       this.props.GridStore.colDefList[this.props.objKey].easyBool)        // boolean doesn't need the editor
+      ){
       assumeEditOk = false;
     }
-    console.log("aek " + assumeEditOk);
-    */
 
-    if (//assumeEditOk && 
+    if (assumeEditOk && 
        this.props.x === this.props.GridStore.cursor.x &&
        this.props.y === this.props.GridStore.cursor.y &&
        this.props.x === this.props.GridStore.cursor.editX &&
@@ -210,10 +176,36 @@ import EasyBool from './easyTools/EasyBool';
           styleIn.marginLeft=-1*this.props.borderWide;
         }
         styleIn.verticalAlign='top';
-        
+
+        // check for easy column tools
+        if(this.props.GridStore.colDefList &&
+           this.props.GridStore.colDefList[this.props.objKey]){
+
+          // check validation
+          if (
+             (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
+             (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
+             (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+            ){
+            styleIn.outline="5px red dashed";
+          }
+
+          // check right alignment
+          if (
+            (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
+            (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
+            (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
+          ) {
+            styleIn.textAlign = "right";
+          }          
+        }
+
+
+      var curDisplayVal = this.props.GridStore.curEditingValue;
+      if(null === curDisplayVal){ curDisplayVal = this.props.cellData;}
         
         renderPlan = 
-          <input  value={this.props.GridStore.curEditingValue} 
+          <input value={curDisplayVal} 
                   onChange={this.valChange}                   
                   onKeyDown={this.onEnter}
                   id={this.props.id} style={styleIn}
@@ -226,25 +218,48 @@ import EasyBool from './easyTools/EasyBool';
 
       var renderVal = '' + this.props.cellData;
       if (this.props.GridStore.colDefList && 
-          this.props.GridStore.colDefList[this.props.objKey] &&
-          this.props.GridStore.colDefList[this.props.objKey].compCell
+          this.props.GridStore.colDefList[this.props.objKey]
       ){
         // we have a custom view component.  Render it.
         // it may want to change values directly, so give it everything it needs
-        renderVal = <span>{
-          React.cloneElement(
-            this.props.GridStore.colDefList[this.props.objKey].compCell,
-            {
-              x: this.props.GridStore.pivotOn ? this.props.y : this.props.x,
-              y: this.props.GridStore.pivotOn ? this.props.x : this.props.x,
-              objKey: this.props.objKey,
-              cellData: this.props.cellData,
-              id: this.props.id+'-comp',
-              onChange: this.props.onChange ,
-             }
-          )
-        }</span>;
-      }
+
+        // check right alignment
+        if (
+          (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
+          (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
+          (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
+        ) {
+          style.textAlign = "right";
+        }
+        
+        // check for custom renders
+        if (this.props.GridStore.colDefList[this.props.objKey].compCell){
+          renderVal = <span>{
+            React.cloneElement(
+                this.props.GridStore.colDefList[this.props.objKey].compCell,
+                {
+                  x: this.props.GridStore.pivotOn ? this.props.y : this.props.x,
+                  y: this.props.GridStore.pivotOn ? this.props.x : this.props.x,
+                  objKey: this.props.objKey,
+                  cellData: this.props.cellData,
+                  id: this.props.id+'-comp',
+                  onChange: this.props.onChange ,
+                }
+              )
+            }</span>;
+        }
+
+        // handle easyBool
+        if (this.props.GridStore.colDefList[this.props.objKey].easyBool) {
+          renderVal = <span><EasyBool 
+                  x={this.props.GridStore.pivotOn ? this.props.y : this.props.x} 
+                  y={this.props.GridStore.pivotOn ? this.props.x : this.props.y} 
+                  objKey={this.props.objKey}
+                  cellData={this.props.cellData}
+                  id={this.props.id+'-comp'}
+                  onChange={this.props.GridStore.onChange}/></span>
+        }
+      }  
 
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 

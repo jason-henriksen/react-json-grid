@@ -32,7 +32,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable propPadWide = -1;
   @action setPadWidth(val) { this.propPadWide = val; }
   
-  @observable propGridHigh = -1;
+  @observable propGridHigh = 300;
   @action setGridHigh(val) { this.propGridHigh = val; }
 
   @observable propRowHigh = -1;
@@ -71,10 +71,12 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           widePct: '',
           widePx: '',
 
-          easyBool:true,
+          easyBool:'',
           easyInt: '',
+          easyFloat: '',
           easyMoney: '',
           easyDate: '',
+          easyAltText: '',
 
           styleHeader: '',
           styleInput: '',          
@@ -94,8 +96,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
           easyBool: '',
           easyInt: '',
+          easyFloat: '',
           easyMoney: '',
           easyDate: '',
+          easyAltText: '',
 
           styleHeader: '',
           styleInput: '',
@@ -115,8 +119,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
           easyBool: '',
           easyInt: '',
+          easyFloat: '',
           easyMoney: '',
           easyDate: '',
+          easyAltText: '',
 
           styleHeader: '',
           styleInput: '',
@@ -136,8 +142,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
           easyBool: '',
           easyInt: '',
+          easyFloat: '',
           easyMoney: '',
           easyDate: '',
+          easyAltText: '',
 
           styleHeader: '',
           styleInput: '',
@@ -283,9 +291,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <h3>Column Rules</h3>
           <Grid 
             data={this.colDef} 
-            columnList={[ { key:'mayEdit',easyBool:true}]}
+              columnList={[
+                { key: 'editDisabled', easyBool: true }, 
+                { key: 'easyBool', easyBool: true },
+                { key: 'easyInt', easyBool: true },
+                { key: 'easyFloat', easyBool: true },
+                { key: 'easyMoney', easyBool: true },
+                { key: 'easyDate', easyBool: true },
+                { key: 'easyMenu', easyBool: true },
+                { key: 'easyAltText'  },
+              ]}
             pivotOn='title' 
             onChange={this.setColDefValue}
+            gridHigh={300}
           />
           </div>
           }

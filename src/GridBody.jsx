@@ -27,17 +27,6 @@ import EasyBool from './easyTools/EasyBool';
   componentWillReceiveProps(nextProps)
   {
     if (this.props.GridStore) {
-
-      if (nextProps.columnList) {
-        for (var clctr = 0; clctr < nextProps.columnList.length; clctr++) {
-          if (nextProps.columnList[clctr].easyBool) {
-            console.log('eb1');
-            nextProps.columnList[clctr].compCell = <EasyBool falseText='nope' trueText='yep' />
-          }
-        }
-      }
-
-
       this.props.GridStore.prepSelectionField(nextProps);
     }
     else{

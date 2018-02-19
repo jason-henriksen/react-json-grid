@@ -35,20 +35,14 @@ class GridStore {           // Just a class.  Nothing fancy here.
   // don't call the user supplied on change directly.  
   // call this to ensure that the pivot variables get swizzled correctly.
   onChangePivotWrapper(x,y,objKey,val){
-    console.log('OCW '+ this.onChange.name);
+    if(val===null) return; // cannot set null via the UI.  prevents unintended changes.
 
-    /*
     if (this.pivotOn) {
-      console.log('P');
       this.onChange(y, x, objKey, val);
     }
     else {
-      console.log('NP');
       this.onChange(x, y, objKey, val);
     }
-    */
-    console.log('END');
-
     
   }
 
@@ -74,7 +68,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
 
     this.onChange = (props.onChange || this.logNoChangeHandlerMessage ); // easy availability to cells
-    console.log('>>OCN>> '+this.onChange.name);
 
     this.pivotOn = props.pivotOn;    // easy availability to cells
 
@@ -147,6 +140,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
     // click selection
 
+    return res;
+  }
+
+  @computed get curEditIsValidFor() {
+    var res={};
+    res.isValidInt = (!isNaN(this.curEditingValue) && (function (x) { return (x | 0) === x; })(parseFloat(this.curEditingValue)));
+    res.isValidFloat = !isNaN(this.curEditingValue);
     return res;
   }
 
