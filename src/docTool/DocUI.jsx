@@ -187,6 +187,24 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     res = res.substring(0, res.length-1);res+=']';
     this.data=res;
   }
+  @action makeSA() { 
+    var res = "[";  // faster to generate strings
+    for(var ctr=0;ctr<5;ctr++){res+='[1'+ctr+','+(2*ctr)+',3,4,5],';}
+    res = res.substring(0, res.length-1);res+=']';
+    this.data=res;
+  }  
+  @action makeMA() { 
+    var res = "[";  // faster to generate strings
+    for(var ctr=0;ctr<150;ctr++){res+='[1'+ctr+','+(2*ctr)+',3,4,5],';}
+    res = res.substring(0, res.length-1);res+=']';
+    this.data=res;
+  }  
+  @action makeLA() { 
+    var res = "[";  // faster to generate strings
+    for(var ctr=0;ctr<50000;ctr++){res+='[1'+ctr+','+(2*ctr)+',3,4,5],';}
+    res = res.substring(0, res.length-1);res+=']';
+    this.data=res;
+  }  
 
   @action setValue(x,y,objKey,newValue)
   {
@@ -335,9 +353,13 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           </div>
           }
           <br/><br/><br/>Example Data (this.data)<br/>
-          <button onClick={this.makeS}>5 rows</button>
-          <button onClick={this.makeM}>150 rows</button>
-          <button onClick={this.makeL}>50K rows (slow build, fast render)</button>
+          <button style={{width:'90px'}} onClick={this.makeS}>5 objects</button>
+          <button style={{width:'90px'}} onClick={this.makeM}>150 objects</button>
+          <button style={{width:'300px'}} onClick={this.makeL}>50K objects (slow data build, fast render)</button>
+          <br/>
+          <button style={{width:'90px'}} onClick={this.makeSA}>5 arrays</button>
+          <button style={{width:'90px'}} onClick={this.makeMA}>150 arrays</button>
+          <button style={{width:'300px'}} onClick={this.makeLA}>50K arrays (slow data build, fast render)</button>
           <span style={{ color: 'red' }}>{this.dataAsObject.dataErr}</span><br />
           <textarea style={{ width: '99%', height: '75px' }} onChange={this.updateData} value={this.data} />
           
@@ -361,7 +383,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         data={this.dataAsObject.cleanData}
         onChange={this.setValue}
         onToolAction={this.setToolAction}
-        pivotOn={ this.pivotOn?'b':null}
+        pivotOn={ this.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
         columnList={ this.columnList?this.colDef:null }
         showTools={this.showTools}
       />
@@ -373,10 +395,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.propRowHeaderHigh > -1 && <span>&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propGridHigh > -1 && <span>&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propBorderWide > -1 && <span>&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
-          {this.pivotOn && <span>&nbsp;&nbsp;pivotOn='b'&nbsp;&nbsp;</span>}
+          {this.pivotOn && <span>&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
           {this.showTools && <span>&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
           {this.propPadWide > -1 && <span>&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
-          {this.colHeaderHide && <span>&nbsp;&nbsp;colHeaderHide=&#123;{this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
+          {this.colHeaderHide && <span>&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
           {this.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.styleHeader}&#125;</span>}
           {this.styleInput && <span><br />&nbsp;&nbsp;styleInput=&#123;{this.styleInput}&#125;</span>}
           {this.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.styleCell}&#125;</span>}
