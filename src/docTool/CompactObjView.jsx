@@ -16,7 +16,7 @@ class CompactObjView extends React.Component {
     }
 
     return (
-      <div>{items}</div>
+      <div>&nbsp;&nbsp;&nbsp;&nbsp;&#123;{items}&#125;</div>
     );
   }
 }

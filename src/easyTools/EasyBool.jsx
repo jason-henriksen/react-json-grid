@@ -2,13 +2,14 @@ import React from 'react';
 import autoBind from 'react-autobind';
 import PropTypes from 'prop-types';
 
+import CheckEmpty from 'mdi-react/CheckboxBlankOutlineIcon';
+import CheckFull from 'mdi-react/CheckboxMarkedOutlineIcon';
 
 
 class EasyBool extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
   toggle(){
-    console.log('eb toggle');
     if(this.props.cellData){
       this.props.onChange( this.props.x, this.props.y, this.props.objKey, false);
     }
@@ -18,18 +19,25 @@ class EasyBool extends React.Component {
   }
 
   render() {
+    if(this.props.trueText){
 
-    var rendVal = '';
-    if(this.props.cellData){
-      rendVal = this.props.trueText || 'true';
+      var rtext = this.props.cellData?(this.props.trueText||'true'):(this.props.falseText||'false');
+
+      return( <div  onClick={this.toggle} 
+                    id={this.props.id} 
+                    style={{...this.props.style}}
+                    >{rtext}</div>);
     }
     else{
-      rendVal = this.props.falseText || 'false';
-    }
+      var rval = 'scale(0.8) rotate(90deg) ';
+      if(this.props.cellData || this.props.trueText || this.props.falseText ){rval='scale(0.8) rotate(00deg)';} // don't rotate selected, or when text is set.
 
-    return (
-      <div id={this.props.id} onClick={this.toggle}>{rendVal}</div>
-    );
+      return (
+        <div  onClick={this.toggle} id={this.props.id} style={{...this.props.style,marginTop:'-4px',width:'24px',transform: rval,transition: '0.2s'}}>{this.props.cellData?
+              (this.props.trueText ||<CheckFull/>):
+              (this.props.falseText ||<CheckEmpty/>) }</div>      
+      );
+    }
   }
 }
 

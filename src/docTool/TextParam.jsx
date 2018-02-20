@@ -8,9 +8,9 @@ class TextParam extends React.Component {
 
   render() {    
     return (
-      <div>
-        <div style={{ width: '50%', display: 'inline-block' }}>{this.props.label}</div>
-        &nbsp;<input onChange={this.props.action} value={this.props.curValue}/>
+      <div  style={{height:'28px',marginTop:'3px'}}>
+        <div style={{display: 'inline-block',width:'90px',verticalAlign:'middle' }}>{this.props.label}&nbsp;</div>
+        <input style={{display: 'inline-block',width:'200px',verticalAlign:'middle' }} onChange={this.props.action} value={this.props.curValue}/>
       </div>
     );
   }

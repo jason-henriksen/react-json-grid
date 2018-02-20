@@ -2,7 +2,6 @@ import { observable, computed, action } from 'mobx';
 
 class GridStore {           // Just a class.  Nothing fancy here.
   constructor() { 
-    console.log('here');
   }
 
   @observable cursor = {x:0,y:0,                    // cursor x and y values
@@ -47,6 +46,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
     
   }
 
+  /*
+  something funky here:
+  this method takes the props and updates the grid store.
+  However, the gridStore is ALSO part of the props.  So once this method id done, it will be called again with the newly updated props.
+  The method must give the same results again in order not to get into a loop of re-changing props each round. 
+  I'd love a cleaner solution to this, but not sure what that would be yet.
+  */
   @action prepSelectionField(props)
   {
     var dataWide = 0;
@@ -67,6 +73,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
       }
     }
     if (this.cursor.maxX !== dataWide - 1 || this.cursor.maxY !== dataHigh - 1) {
+      // ensure that we only set the values if they've actuallly changed.
       this.cursor.maxX = dataWide-1;
       this.cursor.maxY = dataHigh-1;
     }

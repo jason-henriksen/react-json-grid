@@ -1,6 +1,12 @@
 import React from 'react';
 import autoBind from 'react-autobind';
 
+import ArrowLeftThick from 'mdi-react/ArrowLeftThickIcon';
+import ArrowRightThick from 'mdi-react/ArrowRightThickIcon';
+import CloseOctagonOutline from 'mdi-react/CloseOctagonOutlineIcon';
+
+
+
 
 class NumWheel extends React.Component {
   constructor(props) { super(props); autoBind(this); }
@@ -25,24 +31,26 @@ class NumWheel extends React.Component {
   render() {
 
     var displayVal = this.props.curValue;
-    if (-1 === displayVal) { displayVal='default'; }
+    if (-1 === displayVal) { displayVal='-'; }
 
     var res = '';
     if(this.props.incr){
       res = <div>
-        <div style={{ width: '30%', display: 'inline-block' }}>{this.props.label}</div>
-        <button onClick={this.defVal}>X</button>
-        <button onClick={this.lessVal}>-{''+this.props.incr}</button>
-        <button onClick={this.lessVal}>+{'' + this.props.incr}</button>&nbsp;{displayVal}
+      <div style={{ width: '30%', display: 'inline-block' }}>{this.props.label}</div>
+        <CloseOctagonOutline onClick={this.defVal}/>
+        <ArrowLeftThick onClick={this.lessVal}/>
+        {displayVal}
+        <ArrowRightThick onClick={this.moreVal}/> 
       </div>
     }
     else{
-      res = <div>
-        <div style={{ width: '30%', display: 'inline-block' }}>{this.props.label}</div>
-        <button onClick={this.defVal}>X</button>
-        <button onClick={this.less1}>-</button>
-        <button onClick={this.more1}>+</button>
-        &nbsp;{displayVal}
+      res = 
+      <div style={{userSelect: 'none',height:'28px',marginTop:'2px'}}>
+        <CloseOctagonOutline onClick={this.defVal} style={{verticalAlign:'middle'}}/>
+        <ArrowLeftThick onClick={this.less1} style={{verticalAlign:'middle'}}/>
+        <div style={{ display: 'inline-block',verticalAlign:'middle'}}>{displayVal}</div>
+        <ArrowRightThick onClick={this.more1} style={{verticalAlign:'middle'}}/> 
+        <div style={{ display: 'inline-block',verticalAlign:'middle' }}>{this.props.label}</div>
       </div>
     }
 

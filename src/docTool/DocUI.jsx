@@ -35,7 +35,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable propPadWide = -1;
   @action setPadWidth(val) { this.propPadWide = val; }
   
-  @observable propGridHigh = 300;
+  @observable propGridHigh = -1;
   @action setGridHigh(val) { this.propGridHigh = val; }
 
   @observable propRowHigh = -1;
@@ -288,51 +288,67 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
     return (
         <div>
-          <div style={{width:'40%',display:'inline-block',padding:'5px',verticalAlign:'top'}}>
-          <h3>Parameter UI</h3>
-          <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
-          <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
-          <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
-          <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
-          <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showTools' help='show button bar, validations, add/remove rows' />
-          <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
-          <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
-          <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
-          <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
-
-          <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
-          <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
-          <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
-          <hr/>
-
+          <div style={{width:'40%',display:'inline-block',verticalAlign:'top'}}>
+            <div style={{borderBottom:'2px solid grey'}}>
+              <br/>Parameter UI<br/>
+              <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
+                <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
+                <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
+                <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
+                <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
+                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showTools' help='show button bar, validations, add/remove rows' />
+              </div>
+              <div style={{display:'inline-block',verticalAlign:'top',height:'200px',width:'0px',border:'1px solid grey'}}/>
+              <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
+                <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
+                <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
+                <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
+                <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
+              </div>
+              <div style={{display:'inline-block',verticalAlign:'top',height:'200px',width:'0px',border:'1px solid grey'}}/>
+              <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
+                <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
+                <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
+              </div>
+            </div>
           {this.columnList &&
           <div>
-          <h3>Column Rules</h3>
-          <Grid 
-            data={this.colDef} 
-              columnList={[
-                { key: 'editDisabled', easyBool: true }, 
-                { key: 'easyBool', easyBool: true },
-                { key: 'easyInt', easyBool: true },
-                { key: 'easyFloat', easyBool: true },
-                { key: 'easyMoney', easyBool: true },
-                { key: 'easyDate', easyBool: true },
-                { key: 'easyMenu', easyBool: true },
-                { key: 'easyAltText'  },
-              ]}
-            pivotOn='title' 
-            onChange={this.setColDefValue}
-            gridHigh={300}
-          />
+            <br/>Column Configuration<br/>
+            <Grid 
+              gridHigh={100}
+              data={this.colDef} 
+                columnList={[
+                  { key: 'editDisabled', easyBool: true }, 
+                  { key: 'easyBool', easyBool: true },
+                  { key: 'easyInt', easyBool: true },
+                  { key: 'easyFloat', easyBool: true },
+                  { key: 'easyMoney', easyBool: true },
+                  { key: 'easyDate', easyBool: true },
+                  { key: 'easyMenu', easyBool: true },
+                  { key: 'easyAltText'  },
+                ]}
+              pivotOn='title' 
+              onChange={this.setColDefValue}
+              gridHigh={300}
+            />
           </div>
           }
+          <br/><br/><br/>Example Data (this.data)<br/>
+          <button onClick={this.makeS}>5 rows</button>
+          <button onClick={this.makeM}>150 rows</button>
+          <button onClick={this.makeL}>50K rows (slow build, fast render)</button>
+          <span style={{ color: 'red' }}>{this.dataAsObject.dataErr}</span><br />
+          <textarea style={{ width: '99%', height: '75px' }} onChange={this.updateData} value={this.data} />
+          
 
         </div>
 
-  <div style={{width:'50%',height:'300px',marginLeft:'10px',outline:this.outlineCSS,display:'inline-block'}}>
+  <div style={{width:'50%',height:'300px',marginLeft:'30px',display:'inline-block'}}>
           <br />
-          This Grid is contained in a div with a width of 50% and a height set to 300px.  <br />
-      <Grid 
+          <br />
+          <br />
+      <Grid style={{outline:this.outlineCSS}}
         styleHeader={this.jsonHeaderStyleObject}
         styleInput={this.jsonInputStyleObject}
         styleCell={this.jsonCellStyleObject}        
@@ -350,33 +366,28 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         showTools={this.showTools}
       />
       <br/>
-
-          <h3>Example Code</h3>
-          &lt;Grid <br />
-          {this.propRowHigh > -1 && <span>rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propRowHeaderHigh > -1 && <span>colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propGridHigh > -1 && <span>gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propBorderWide > -1 && <span>borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
-          {this.pivotOn && <span>pivotOn='b'&nbsp;&nbsp;</span>}
-          {this.showTools && <span>showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
-          {this.propPadWide > -1 && <span>padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
-          {this.colHeaderHide && <span>colHeaderHide=&#123;{this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
-          {this.styleHeader && <span><br />styleHeader=&#123;{this.styleHeader}&#125;</span>}
-          {this.styleInput && <span><br />styleInput=&#123;{this.styleInput}&#125;</span>}
-          {this.styleCell && <span><br />styleCell=&#123;{this.styleCell}&#125;</span>}
-          {this.columnList && <span><br />columnList=&#123;[{colListAsText}]&#125;</span>}          
-          <br/>data=&#123;this.data&#125;
-          <br/>onChange=&#123;(x,y,objKey,value)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;
-          {this.showTools && <span><br />onToolAction=&#123;(x,y,objKey,toolName)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;</span>}
+      <br />
+      <div style={{font:'10px monospace'}}>
+          &lt;Grid
+          {this.propRowHigh > -1 && <span>&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.propRowHeaderHigh > -1 && <span>&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.propGridHigh > -1 && <span>&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.propBorderWide > -1 && <span>&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
+          {this.pivotOn && <span>&nbsp;&nbsp;pivotOn='b'&nbsp;&nbsp;</span>}
+          {this.showTools && <span>&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
+          {this.propPadWide > -1 && <span>&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
+          {this.colHeaderHide && <span>&nbsp;&nbsp;colHeaderHide=&#123;{this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
+          {this.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.styleHeader}&#125;</span>}
+          {this.styleInput && <span><br />&nbsp;&nbsp;styleInput=&#123;{this.styleInput}&#125;</span>}
+          {this.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.styleCell}&#125;</span>}
+          {this.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{colListAsText}&nbsp;&nbsp;]&#125;</span>}          
+          <br/>&nbsp;&nbsp;data=&#123;this.data&#125;
+          <br/>&nbsp;&nbsp;onChange=&#123;(x,y,objKey,value)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;
+          {this.showTools && <span><br />&nbsp;&nbsp;onToolAction=&#123;(x,y,objKey,toolName)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;</span>}
           <br />/&gt;
+      </div>
 
 
-          <h3>Example Data (this.data)</h3>
-          <button onClick={this.makeS}>5 rows</button>
-          <button onClick={this.makeM}>150 rows</button>
-          <button onClick={this.makeL}>50K rows (slow build, fast render)</button>
-          <span style={{ color: 'red' }}>{this.dataAsObject.dataErr}</span><br />
-          <textarea style={{ width: '99%', height: '75px' }} onChange={this.updateData} value={this.data} />
 
     </div>
 

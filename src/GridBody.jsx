@@ -7,6 +7,7 @@ import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
 import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
+import GridMath from './GridMath';
 
 import EasyBool from './easyTools/EasyBool';
 
@@ -18,6 +19,7 @@ import EasyBool from './easyTools/EasyBool';
     super(props); 
     autoBind(this); 
     this.componentWillReceiveProps(props);    // first call needs to set up the data store
+    this.uiMath = new GridMath();
   }
 
   @observable scrollBarWide = 0;              // keep track of how wide the scroll bar will be
@@ -34,13 +36,6 @@ import EasyBool from './easyTools/EasyBool';
     }
   }
 
-  // javascript sucks at math
-  makeValidInt(inputVal,defaultVal){
-    var res = (inputVal||defaultVal);
-    if(inputVal===0){res=inputVal;}
-    if(res<0){ res = defaultVal; }
-    return Number(res);
-  }
 
   @action blurControl(evt){
     // brain dead LUCK is the only thing making this work.
@@ -52,177 +47,99 @@ import EasyBool from './easyTools/EasyBool';
   }
 
   @action addRow(){
-    // JJHNOTE: pivot suppor
+    // JJHNOTE: pivot support
     console.log(this.props);
     this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y, 
       this.props.GridStore.keyList[this.props.GridStore.cursor.x],'ADDROW');
   }
   @action cutRow() {
-    // JJHNOTE: pivot suppor
+    // JJHNOTE: pivot support
     this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y,
       this.props.GridStore.keyList[this.props.GridStore.cursor.x],'CUTROW');
   }
 
   render() {
 
-    var borderWideLocal = this.makeValidInt(this.props.borderWide,1);
-    var padWideLocal = this.makeValidInt(this.props.padWide, 3);
+    var ui = this.uiMath.calcGridBody(this.props, this.scrollBarWide);
 
-    var rowWide = this.props.width - this.scrollBarWide;
-    var autoColWide = 0; // width of the default filled column, before weights
-    var fixedRowCount = this.props.rowCount;
-    var keyNames=[];
 
-    // user requested height does NOT include padding.  
-    var rowHighNoPadLocal = this.makeValidInt(this.props.rowHigh, 18);
-    if (-1 === rowHighNoPadLocal) { rowHighNoPadLocal=23;}
-    var rowHighWithPadLocal = this.makeValidInt(rowHighNoPadLocal, 18);
-    rowHighWithPadLocal += padWideLocal;
-    rowHighWithPadLocal += padWideLocal;
-
-    var colHeaderHigh = this.props.colHeaderHigh;
-    if (-1 === colHeaderHigh) { colHeaderHigh = 18; }
-    if (this.props.colHeaderHide) { colHeaderHigh = 0; } // hiDe not wide or high
-    
-    var gridHighLocal = this.props.gridHigh || 300;
-    if (gridHighLocal === -1) {
-      gridHighLocal = 300;
-    }
-
-    var showBottomGridLine=true;
-    var rowHeaderList=[];
-    var saveColumnForRowHeader=0;
-
-    if(this.props.data && this.props.data.length>0){
-      // we have rows of objects to display ( check for an array )
-
-      if(this.props.pivotOn){  // pivot the data using this key as the col header
-        //---- PIVOTED FLOW
-        keyNames.push('\\');
-        for(var pctr=0;pctr<this.props.data.length;pctr++){
-          keyNames.push(this.props.data[pctr][this.props.pivotOn]);
-        }
-        rowHeaderList = Object.keys(this.props.data[0]);
-        fixedRowCount = rowHeaderList.length;
-        saveColumnForRowHeader=1;
-      }
-      else{
-        //---- NORMAL FLOW
-        keyNames = Object.keys(this.props.data[0]);
-        if (this.props.rowCount != this.props.data.length) {
-          fixedRowCount = this.props.data.length;
-        }
-        
-      }
-
-      autoColWide = Math.floor(
-        ( this.props.width -  // total width
-          borderWideLocal -  // minus left most border bar
-          this.scrollBarWide  // minus scroll bar
-        ) / (keyNames.length)); // div number of items + (optionally plus 1 if a row header is present)
-      autoColWide -= (borderWideLocal);   // each column minus right border amount
-      autoColWide -= (padWideLocal);      // each column minus left pad amount
-      autoColWide -= (padWideLocal);      // each column minus right pad amount
-
-      // check wether to show the bottom line
-      var actualDisplayHigh = (this.props.data.length*rowHighWithPadLocal)+colHeaderHigh;
-      if(actualDisplayHigh < gridHighLocal){
-        showBottomGridLine=false;
-      }
-
-    }
-    else if(this.props.getRowData){
-      autoColWide=
-        this.props.width -
-        this.scrollBarWide -
-        (borderWideLocal*2);
-      keyNames = ["No Data Provided"];
-    }
-    else{
-      autoColWide =
-        this.props.width -
-        this.scrollBarWide -
-        (borderWideLocal * 2);
-      keyNames = ["No Data Provided"];
-    }
-    
 
     var header=[];
     var marginOffset=0;
-    if (!this.props.colHeaderHide) {    
-      for(var ctr=0;ctr<keyNames.length;ctr++){
+    if (!this.props.colHeaderHide) {     // provide a header row.
+      for(var ctr=0;ctr<ui.keyNames.length;ctr++){
 
-        var titleText = keyNames[ctr]; // what key am I on?
+        var titleText = ui.keyNames[ctr]; // what key am I on?
         if(this.props.GridStore.colDefList[titleText]){ // is there a colDef that uses this key?
           titleText = this.props.GridStore.colDefList[titleText].title || titleText; // if there is a title for the colDef use it, or just stick with thekey
         }
+        // NOTE: check for header components here.
 
         header.push(  <div key={ctr} 
                           style={{
-                            backgroundColor: '#F3F3F3',
-                            textAlign:'center',
-                            ...this.props.styleHeader,
-                            width:autoColWide,
+                            backgroundColor: '#F3F3F3',     // default, may be over ridden by styleHeader. Order matters.
+                            textAlign:'center',             // default, may be over ridden by styleHeader. Order matters.
+                            ...this.props.styleHeader,      // user specified styles.
+                            width:ui.autoColWide,              // everything from here down cannot be over-ridden by the user.
                             borderStyle: 'solid',
-                            borderWidth:borderWideLocal,
-                            padding: padWideLocal+'px',
+                            borderWidth:ui.borderWideLocal,
+                            padding: ui.padWideLocal+'px',
                             display:'inline-block', 
                             marginLeft:marginOffset,
-                            height:colHeaderHigh+'px'}}>
+                            height:ui.colHeaderHigh+'px'}}>
                         {titleText}
                       </div> );
-        marginOffset=-1*borderWideLocal;
+        marginOffset=-1*ui.borderWideLocal;
       }
     }
-    else{
+    else{  // header is hidden so provide a top border line.
       header.push(<div style={{
         ...this.props.styleHeader,
-        width: (borderWideLocal + (keyNames.length*(autoColWide+borderWideLocal+padWideLocal+padWideLocal)) + 'px'),
-        borderTopStyle: 'solid',
-        borderTopWidth: borderWideLocal,
-        height: '0px'
-      }} />);
+        width: (ui.borderWideLocal + (ui.keyNames.length*(ui.autoColWide+ui.borderWideLocal+ui.padWideLocal+ui.padWideLocal)) + 'px'),
+        borderTopStyle: 'solid', borderTopWidth: ui.borderWideLocal, height: '0px' }} />);
     }
 
     return (
-        <div style={{height:gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
-          <ScrollbarSize
+        <div style={{height:ui.gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
+          {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
+          <ScrollbarSize                               
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
           />        
-          <div>{header}</div>
+          <div>{header}</div>                          {/* put the header in place */}
+          {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
             width='100%'            
-            height={gridHighLocal - (colHeaderHigh||0) -(borderWideLocal*3) }
-            itemCount={fixedRowCount}
-            itemSize={rowHighWithPadLocal+borderWideLocal}            
+            height={ui.gridHighLocal - (ui.colHeaderHigh||0) -(ui.borderWideLocal*3) }
+            itemCount={ui.fixedRowCount}
+            itemSize={ui.rowHighWithPadLocal+ui.borderWideLocal}            
 
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
-                <GridRow  cellHigh={rowHighNoPadLocal}
-                          colHeaderHigh={colHeaderHigh}
+                <GridRow  cellHigh={ui.rowHighNoPadLocal}
+                          colHeaderHigh={ui.colHeaderHigh}
                           data={this.props.data}
                           GridStore={this.props.GridStore}
                           index={index} 
-                          borderWide={borderWideLocal} 
-                          padWide={padWideLocal} 
-                          rowWide={rowWide} 
-                          autoColWide={autoColWide} 
-                          keyNames={keyNames} 
+                          borderWide={ui.borderWideLocal} 
+                          padWide={ui.padWideLocal} 
+                          rowWide={ui.rowWide} 
+                          autoColWide={ui.autoColWide} 
+                          keyNames={ui.keyNames} 
                           styleInput={this.props.styleInput}
                           styleCell={this.props.styleCell}
-                          rowHeaderList={rowHeaderList}
+                          rowHeaderList={ui.rowHeaderList}
                           pivotOn={this.props.pivotOn}
                           onChange={this.props.onChange}
                 />
               </div>
             }
           />                    
-      {showBottomGridLine &&
+      {ui.showBottomGridLine &&
         <div style={{ ...this.props.styleHeader,
-                      width: (borderWideLocal + (keyNames.length*(autoColWide+borderWideLocal+padWideLocal+padWideLocal)) + 'px'),
+                      width: (ui.borderWideLocal + (ui.keyNames.length*(ui.autoColWide+ui.borderWideLocal+ui.padWideLocal+ui.padWideLocal)) + 'px'),
                       borderTopStyle: 'solid',                      
-                      borderTopWidth: borderWideLocal,
+                      borderTopWidth: ui.borderWideLocal,
                       height:'0px'}}/>
       }
         {this.props.showTools &&

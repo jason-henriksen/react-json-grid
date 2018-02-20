@@ -19,9 +19,11 @@ class Grid extends React.Component {
 
   render(){
     return(
+      <div  style={this.props.style}>
         <ContainerDimensions>
           <GridBody {...this.props} GridStore={this.GridStore}/>
         </ContainerDimensions>
+      </div>
     );
   }
 }
