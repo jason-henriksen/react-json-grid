@@ -389,7 +389,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
       />
       <br/>
       <br />
-      <div style={{font:'10px monospace'}}>
+      <div style={{font:'20px monospace'}}>
           &lt;Grid
           {this.propRowHigh > -1 && <span>&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propRowHeaderHigh > -1 && <span>&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}

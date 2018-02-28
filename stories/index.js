@@ -37,28 +37,33 @@ storiesOf('Easy Tools - EasyBool', module)
   .add('EasyBool true with text styled', () => (
     <div style={{ border: '1px dashed green', width: '50%' }}>
       <EasyBool
-        x={5} y={6} objKey='keyName' cellData={true} trueText='yep' falseText='nope' id='myId'  style={{textAlign:'center'}}
+        x={5} y={6}     objKey='keyName' cellData={true} 
+        trueText='yep'  falseText='nope' 
+        id='myId'       style={{textAlign:'center'}}
         onChange={(x, y, objKey, val) => { window.alert(x, y, objKey, val); }}
       />
     </div>
   ))
-  .add('EasyBool false with text  styled', () => (
-      <div style={{ border: '1px dashed green', width: '50%' }}>
-        <EasyBool
-          x={5} y={6} objKey='keyName' cellData={false} trueText='yep' falseText='nope' id='myId'  style={{textAlign:'center'}}
-          onChange={(x, y, objKey, val) => { window.alert(x, y, objKey, val); }}
-        />
-      </div>
+
+  
+  .add('EasyBool false with text styled', () => (
+    <EasyBool
+      x={5} y={6} objKey='keyName' cellData={false} 
+      trueText='yep' falseText='nope' 
+      id='myId'  style={{textAlign:'center'}}
+      onChange={(x, y, objKey, val) => { window.alert(x, y, objKey, val); }}
+    />
   ))
   
   .add('EasyBool true with icon', () => (
-    <div style={{ border: '1px dashed green', width: '50%' }}>
       <EasyBool
-        x={5} y={6} objKey='keyName' cellData={true} id='myId'
+        x={5} y={6} objKey='keyName' cellData={true} 
+        id='myId'
         onChange={(x, y, objKey, val) => { window.alert(x, y, objKey, val); }}
       />
-    </div>
   ))
+
+
   .add('EasyBool false with icon', () => (
       <div style={{ border: '1px dashed green', width: '50%' }}>
         <EasyBool

@@ -46,7 +46,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
     
   }
 
-  /*
+  /* 	
   something funky here:
   this method takes the props and updates the grid store.
   However, the gridStore is ALSO part of the props.  So once this method id done, it will be called again with the newly updated props.
@@ -55,6 +55,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   */
   @action prepSelectionField(props)
   {
+
     var dataWide = 0;
     var dataHigh = 0;
     if (props.data && props.data.length > 0) {

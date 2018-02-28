@@ -22,6 +22,21 @@ class GridMath
     {
       // object to return
       var result={};
+      result.keyNames=[];
+      result.showBottomGridLine=true;
+      result.rowHeaderList=[];
+      result.saveColumnForRowHeader=0;
+
+      // empty object checking
+      if(!scrollBarWide){
+        result.notReady='missing scrollbar size';
+        return result 
+      }
+
+      if(!props){
+        result.notReady='missing grid props';
+        return result 
+      }
 
       // general info
       result.borderWideLocal = this.makeValidInt(props.borderWide,1);
@@ -51,12 +66,6 @@ class GridMath
         result.gridHighLocal = 300;
       }
 
-
-      result.showBottomGridLine=true;
-      result.rowHeaderList=[];
-      result.saveColumnForRowHeader=0;
-
-      result.keyNames=[];
 
       // look at the data to display and figure out what we need to do.
       if(props.data && props.data.length>0){
@@ -93,7 +102,6 @@ class GridMath
         if(result.actualDisplayHigh < result.gridHighLocal){
           result.showBottomGridLine=false;
         }
-  
       }
       else if(props.getRowData){
         // ==== ROW DATA METHOD we have rows of objects to display ( check for an array )  

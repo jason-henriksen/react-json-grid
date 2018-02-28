@@ -58,11 +58,22 @@ import EasyBool from './easyTools/EasyBool';
       this.props.GridStore.keyList[this.props.GridStore.cursor.x],'CUTROW');
   }
 
+
+
   render() {
 
-    var ui = this.uiMath.calcGridBody(this.props, this.scrollBarWide);
-
-
+    var ui = this.uiMath.calcGridBody(this.props, (this.scrollBarWide||20));
+    if(ui.notReady){
+      
+      return( 
+      <div>
+          <ScrollbarSize                               
+            onLoad={this.setScrollBarWide}
+            onChange={this.setScrollBarWide}
+          /> 
+          Loading...               
+      </div>);
+    }
 
     var header=[];
     var marginOffset=0;

@@ -1,9 +1,9 @@
 {
-  "name": "mobx-form",
+  "name": "react-json-grid",
   "version": "1.0.2",
-  "description": "A simple form helper for mobx",
-  "main": "lib/FormModel.js",
+  "description": "A grid UI component for any valid form of JSON",
   "scripts": {
+    "test": "jest",
     "check": "echo \"TODO: add tests\" && exit 0",
     "changelog": "changelogx -f markdown -o ./changelog.md",
     "do-changelog": "npm run changelog && git add ./changelog.md && git commit -m 'DOC: Generate changelog' --no-verify",
@@ -27,6 +27,7 @@
   ],
   "author": "royriojas",
   "license": "MIT",
+  "main": "lib/FormModel.js",
   "bugs": {
     "url": "https://github.com/royriojas/mobx-form/issues"
   },
@@ -67,8 +68,12 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "changelogx": "^1.0.19",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest-cli": "^22.4.0",
     "mobx": "^2.3.1",
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "storybook-addon-props": "^3.0.4"
   }
 }

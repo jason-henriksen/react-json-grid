@@ -11,7 +11,7 @@ class CompactObjView extends React.Component {
     var keyList = Object.keys( this.props.target );
     for(var ctr=0;ctr<keyList.length;ctr++){
       if (this.props.target[keyList[ctr]]){
-        items.push(<span>{keyList[ctr] + "='" + this.props.target[keyList[ctr]]+"' "}</span>)
+        items.push(<span key={keyList[ctr]}>{keyList[ctr] + "='" + this.props.target[keyList[ctr]]+"' "}</span>)
       }
     }
 
