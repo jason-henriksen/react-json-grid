@@ -18,24 +18,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/royriojas/mobx-form.git"
+    "url": "git+https://github.com/jason-henriksen/react-json-grid.git"
   },
   "keywords": [
-    "form",
-    "model",
+    "grid",
+    "json",
     "mobx"
   ],
-  "author": "royriojas",
+  "author": "jason henriksen",
   "license": "MIT",
-  "main": "lib/FormModel.js",
-  "bugs": {
-    "url": "https://github.com/royriojas/mobx-form/issues"
-  },
-  "homepage": "https://github.com/royriojas/mobx-form#readme",
+  "main": "lib/index.js",
   "dependencies": {
     "coalescy": "^1.0.0",
     "debouncy": "^1.0.7",
     "mdi-react": "^2.1.19",
+    "mobx": "^2.3.1",
     "mobx-react": "^4.3.5",
     "moment": "^2.20.1",
     "prop-types": "^15.6.0",
@@ -71,7 +68,6 @@
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "jest-cli": "^22.4.0",
-    "mobx": "^2.3.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "storybook-addon-props": "^3.0.4"
