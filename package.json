@@ -1,6 +1,6 @@
 {
   "name": "react-json-grid",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A grid UI component for any valid form of JSON",
   "scripts": {
     "test": "jest",
