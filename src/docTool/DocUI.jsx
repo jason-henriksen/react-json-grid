@@ -334,7 +334,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <div>
             <br/>Column Configuration<br/>
             <Grid 
-              gridHigh={100}
               data={this.colDef} 
                 columnList={[
                   { key: 'editDisabled', easyBool: true }, 
