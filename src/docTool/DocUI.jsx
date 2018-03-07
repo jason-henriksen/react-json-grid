@@ -2,7 +2,7 @@ import React from 'react';
 import { toJS,observable,action,computed } from 'mobx';
 import { observer } from 'mobx-react';
 import autoBind from 'react-autobind';
-import Grid from '../index';
+import Grid from '../Grid';
 import rrjsTool from 'really-relaxed-json';
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import  Grid  from '../src/index.js';
+import  Grid  from '../src/Grid';
 import  DocUI  from '../src/docTool/DocUI';
 import EasyBool from '../src/easyTools/EasyBool';
 import WrapperEasyBool from './WrapperEasyBool';

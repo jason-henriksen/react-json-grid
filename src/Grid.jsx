@@ -14,14 +14,13 @@ class Grid extends React.Component {
   constructor(props) { 
     super(props); 
     autoBind(this);
-    this.GridStore = new GridStore();
   }  
 
   render(){
     return(
       <div  style={this.props.style}>
         <ContainerDimensions>
-          <GridBody {...this.props} GridStore={this.GridStore}/>
+          <GridBody {...this.props} GridStore={this.props.GridStore}/>
         </ContainerDimensions>
       </div>
     );
@@ -40,7 +39,7 @@ Grid.propTypes = {
 
 // Default proptypes
 Grid.defaultProps = {
-  title: "Hello Watch"
+  GridStore : new GridStore()
 };
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import VirtualList from 'react-tiny-virtual-list';
-import { observable,action } from 'mobx';
+import { observable,action,trace } from 'mobx';
 import { observer } from 'mobx-react';
 import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
@@ -14,7 +14,7 @@ import EasyBool from './easyTools/EasyBool';
 // Wrapper for the grid
 // This grid allows deep styling via style objects, 
 // but retains control of border and padding to ensure that the grid lines up.
-@observer class GridBody extends React.Component {
+const GridBody = observer( class GridBody extends React.Component {
   constructor(props) { 
     super(props); 
     autoBind(this); 
@@ -110,7 +110,7 @@ import EasyBool from './easyTools/EasyBool';
         borderTopStyle: 'solid', borderTopWidth: ui.borderWideLocal, height: '0px' }} />);
     }
 
-    return (
+    var retVal=
         <div style={{height:ui.gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize                               
@@ -159,9 +159,12 @@ import EasyBool from './easyTools/EasyBool';
           </div>
         }
       </div>
-    );
+    
+    trace(true);
+    return(retVal);
   }
-}
+})
+
 
 
 export default GridBody;
