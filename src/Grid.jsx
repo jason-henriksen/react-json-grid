@@ -5,8 +5,7 @@ import GridBody from './GridBody';
 import GridStore from './GridStore';
 import Provider from 'mobx-react';
 import autoBind from 'react-autobind';
-
- 
+import ScrollbarSize from 'react-scrollbar-size';
 
 class Grid extends React.Component {
 
@@ -14,13 +13,17 @@ class Grid extends React.Component {
   constructor(props) { 
     super(props); 
     autoBind(this);
+    this.scrollBarWide = 20;
+    this.GridStore = new GridStore();
   }  
+
+  setScrollBarWide(exp) { this.scrollBarWide = exp.scrollbarWidth+2; } // account for rounding error
 
   render(){
     return(
       <div  style={this.props.style}>
-        <ContainerDimensions>
-          <GridBody {...this.props} GridStore={this.props.GridStore}/>
+        <ContainerDimensions>          
+          <GridBody {...this.props} GridStore={this.GridStore} scrollBarWide={this.scrollBarWide}/>
         </ContainerDimensions>
       </div>
     );
@@ -29,7 +32,6 @@ class Grid extends React.Component {
 
 // Proptypes
 Grid.propTypes = {
-  title: PropTypes.string.isRequired,
   rowCount: PropTypes.number,
   rowHigh: PropTypes.number,
   colHeaderHigh: PropTypes.number,
@@ -39,7 +41,6 @@ Grid.propTypes = {
 
 // Default proptypes
 Grid.defaultProps = {
-  GridStore : new GridStore()
 };
 
 

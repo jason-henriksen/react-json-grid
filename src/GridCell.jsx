@@ -37,6 +37,8 @@ import EasyBool from './easyTools/EasyBool';
 
   @action onKeyDownWhenViewing(e)
   {
+    console.log(e.key);
+    
     this.props.GridStore.autoFocus=true;
     if (this.props.x !== this.props.GridStore.cursor.editX ||
         this.props.y !== this.props.GridStore.cursor.editY) {
@@ -60,11 +62,11 @@ import EasyBool from './easyTools/EasyBool';
           this.props.GridStore.cursor.y = 0;
         }
       }
-      else{
+      else if (e.keyCode == '32') { // space
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.curEditingValue = null;
+        this.props.GridStore.curEditingValue = '';
       }
     }
     e.stopPropagation();
@@ -106,6 +108,7 @@ import EasyBool from './easyTools/EasyBool';
   }
 
   @action onEnter(e) {
+
     if (e.keyCode == '13') {  
       this.endEdit(); 
       this.props.GridStore.cursor.y++;

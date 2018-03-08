@@ -54,7 +54,7 @@ class GridMath
       result.rowHighWithPadLocal += result.padWideLocal;
       
       // column header height
-      result.colHeaderHigh = props.colHeaderHigh;
+      result.colHeaderHigh = (props.colHeaderHigh||-1);
       if (-1 === result.colHeaderHigh) { result.colHeaderHigh = 18; }
       if (props.colHeaderHide) { result.colHeaderHigh = 0; } // hide not wide or high
 

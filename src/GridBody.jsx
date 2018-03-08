@@ -77,6 +77,7 @@ const GridBody = observer( class GridBody extends React.Component {
 
     var header=[];
     var marginOffset=0;
+    var headerUsage=0;
     if (!this.props.colHeaderHide) {     // provide a header row.
       for(var ctr=0;ctr<ui.keyNames.length;ctr++){
 
@@ -97,31 +98,31 @@ const GridBody = observer( class GridBody extends React.Component {
                             padding: ui.padWideLocal+'px',
                             display:'inline-block', 
                             marginLeft:marginOffset,
-                            height:ui.colHeaderHigh+'px'}}>
+                            overflow:'hidden',
+                            height:ui.colHeaderHigh+'px',
+                            maxHeight:ui.colHeaderHigh+'px'}}>
                         {titleText}
                       </div> );
         marginOffset=-1*ui.borderWideLocal;
       }
+      headerUsage=(ui.colHeaderHigh+(2*ui.padWideLocal)+(2*ui.borderWideLocal));
     }
     else{  // header is hidden so provide a top border line.
       header.push(<div style={{
         ...this.props.styleHeader,
         width: (ui.borderWideLocal + (ui.keyNames.length*(ui.autoColWide+ui.borderWideLocal+ui.padWideLocal+ui.padWideLocal)) + 'px'),
         borderTopStyle: 'solid', borderTopWidth: ui.borderWideLocal, height: '0px' }} />);
+      headerUsage=1;
     }
 
     var retVal=
         <div style={{height:ui.gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
-          <ScrollbarSize                               
-            onLoad={this.setScrollBarWide}
-            onChange={this.setScrollBarWide}
-          />        
-          <div>{header}</div>                          {/* put the header in place */}
+          <div style={{padding:'0px',margin:'0px',maxHeight:''+headerUsage+'px',minHeight:''+headerUsage+'px',height:''+headerUsage+'px'}}>{header}</div>{/* put the header in place */}
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
             width='100%'            
-            height={ui.gridHighLocal - (ui.colHeaderHigh||0) -(ui.borderWideLocal*3) }
+            height={ui.gridHighLocal - headerUsage }
             itemCount={ui.fixedRowCount}
             itemSize={ui.rowHighWithPadLocal+ui.borderWideLocal}            
 
@@ -160,7 +161,6 @@ const GridBody = observer( class GridBody extends React.Component {
         }
       </div>
     
-    trace(true);
     return(retVal);
   }
 })
