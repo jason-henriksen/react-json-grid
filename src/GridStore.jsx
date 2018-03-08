@@ -157,9 +157,26 @@ class GridStore {           // Just a class.  Nothing fancy here.
 
   @computed get curEditIsValidFor() {
     var res={};
-    res.isValidInt = (!isNaN(this.curEditingValue) && (function (x) { return (x | 0) === x; })(parseFloat(this.curEditingValue)));
-    res.isValidFloat = !isNaN(this.curEditingValue);
+    res.isValidInt = this.checkValidInt(this.curEditingValue);
+    res.isValidFloat = this.checkValidFloat (this.curEditingValue);
     return res;
+  }
+
+  checkValidInt(t){    
+    return (!isNaN(t) && (function (x) { return (x | 0) === x; })(parseFloat(t)));
+  }
+  checkValidFloat(t) {
+    return (!isNaN(t));
+  }
+
+  getDataRespectingPivot(clientData){
+    if(this.pivotOn){
+      return clientData[this.cursor.editX][this.keyList[this.cursor.editY]]; // y is rows down / outer array
+    }
+    else{
+      return clientData[this.cursor.editY][this.keyList[this.cursor.editX]];
+    }
+    
   }
 
 }

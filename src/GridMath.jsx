@@ -42,7 +42,7 @@ class GridMath
       result.borderWideLocal = this.makeValidInt(props.borderWide,1);
       result.padWideLocal = this.makeValidInt(props.padWide, 3);
   
-      result.rowWide = props.width - (scrollBarWide||20);   // how wide is each row.
+      result.rowWide = props.width - (scrollBarWide||16);   // how wide is each row.
       result.autoColWide = 0;                                   // width of the default filled column, before weights
       result.fixedRowCount = props.rowCount;               // what is the rowCount limit
 
@@ -101,7 +101,7 @@ class GridMath
         result.actualDisplayHigh = (props.data.length*result.rowHighWithPadLocal)+result.colHeaderHigh;
         if(result.actualDisplayHigh < result.gridHighLocal){
           result.showBottomGridLine=false;
-        }
+        }             
       }
       else if(props.getRowData){
         // ==== ROW DATA METHOD we have rows of objects to display ( check for an array )  

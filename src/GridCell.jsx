@@ -37,8 +37,6 @@ import EasyBool from './easyTools/EasyBool';
 
   @action onKeyDownWhenViewing(e)
   {
-    console.log(e.key);
-    
     this.props.GridStore.autoFocus=true;
     if (this.props.x !== this.props.GridStore.cursor.editX ||
         this.props.y !== this.props.GridStore.cursor.editY) {
@@ -66,7 +64,7 @@ import EasyBool from './easyTools/EasyBool';
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.curEditingValue = '';
+        this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);
       }
     }
     e.stopPropagation();
@@ -95,7 +93,6 @@ import EasyBool from './easyTools/EasyBool';
         // value is not valid for the field definition.  Do not make the change.
         this.props.GridStore.cursor.editX = -1;
         this.props.GridStore.cursor.editY = -1;
-        this.props.GridStore.curEditingValue = null;
         return;
       }
     }
@@ -104,7 +101,6 @@ import EasyBool from './easyTools/EasyBool';
     
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
-    this.props.GridStore.curEditingValue = null;
   }
 
   @action onEnter(e) {
@@ -118,7 +114,8 @@ import EasyBool from './easyTools/EasyBool';
 
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-      this.props.GridStore.curEditingValue = null;
+
+      this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);
     }
     else if (e.keyCode == '9') { // tab
       // commit this one
@@ -134,7 +131,8 @@ import EasyBool from './easyTools/EasyBool';
       }
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-      this.props.GridStore.curEditingValue = null;
+
+      this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);;
       this.props.GridStore.autoFocus=true;
       e.stopPropagation();
       e.preventDefault();        
@@ -143,7 +141,6 @@ import EasyBool from './easyTools/EasyBool';
       // cell edit abort
       this.props.GridStore.cursor.editX = -1;
       this.props.GridStore.cursor.editY = -1;
-      this.props.GridStore.curEditingValue = null;
     }
     
   }  
@@ -159,6 +156,18 @@ import EasyBool from './easyTools/EasyBool';
       // CSSNOTE!
       style.backgroundColor = 'lightblue';
       style.zIndex = 5;
+    }
+
+    // order ride width if needed
+    if (this.props.GridStore.colDefList[this.props.objKey]) { // is there a colDef that uses this key?
+      var curColWide = style.width;
+      if (this.props.GridStore.colDefList[this.props.objKey].widePx) {
+        curColWide = this.props.GridStore.colDefList[this.props.objKey].widePx+'px';
+      }
+      else if (this.props.GridStore.colDefList[this.props.objKey].widePct) {
+        curColWide = (this.props.uiMath.rowWide * (this.props.GridStore.colDefList[this.props.objKey].widePct / 100)) + 'px';
+      }
+      style.width = curColWide;
     }
     
     if(this.props.x>0){
@@ -190,6 +199,8 @@ import EasyBool from './easyTools/EasyBool';
         styleIn.marginLeft=-1*this.props.borderWide;
       }
       styleIn.verticalAlign='top';
+      styleIn.width = style.width;  // use the column defined width override if needed.
+
 
       // check for easy column tools
       if(this.props.GridStore.colDefList &&
@@ -259,7 +270,7 @@ import EasyBool from './easyTools/EasyBool';
       }
     } 
     else{
-
+      //===== VIEW SIDE
 
       var renderVal = '' + (this.props.cellData||'');
       if (this.props.GridStore.colDefList && 
@@ -275,6 +286,14 @@ import EasyBool from './easyTools/EasyBool';
           (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
         ) {
           style.textAlign = "right";
+          // check validation
+          if (
+            (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.checkValidInt(this.props.cellData) ) ||
+            (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.checkValidFloat(this.props.cellData) ) ||
+            (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.checkValidFloat(this.props.cellData) )
+          ) {
+            style.outline = "3px orange dashed";
+          }          
         }
         
         // check for custom renders

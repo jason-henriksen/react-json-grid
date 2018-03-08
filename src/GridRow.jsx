@@ -114,6 +114,7 @@ import GridCell from './GridCell';
             titleText = this.props.GridStore.colDefList[titleText].title || titleText; // if there is a title for the colDef use it, or just stick with thekey
           }
           
+          
           cellArray.push(
             <GridCell
               key={this.props.index + '-RH'}
@@ -126,7 +127,9 @@ import GridCell from './GridCell';
               borderWide={this.props.borderWide}
               padWide={this.props.padWide}
               GridStore={this.props.GridStore}
+              data={this.props.data}
               cellData={titleText}
+              uiMath={this.props.uiMath}
               onChange={this.props.onChange}
             />);
           isFirst=false;
@@ -154,8 +157,10 @@ import GridCell from './GridCell';
           borderWide={this.props.borderWide}
           padWide={this.props.padWide}
           GridStore={this.props.GridStore}
+          data={this.props.data}
           cellData={cellData}
-            onChange={this.props.onChange}
+          uiMath={this.props.uiMath}
+          onChange={this.props.onChange}
         />            
         );
         isFirst = false;

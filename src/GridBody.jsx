@@ -81,18 +81,30 @@ const GridBody = observer( class GridBody extends React.Component {
     if (!this.props.colHeaderHide) {     // provide a header row.
       for(var ctr=0;ctr<ui.keyNames.length;ctr++){
 
-        var titleText = ui.keyNames[ctr]; // what key am I on?
-        if(this.props.GridStore.colDefList[titleText]){ // is there a colDef that uses this key?
-          titleText = this.props.GridStore.colDefList[titleText].title || titleText; // if there is a title for the colDef use it, or just stick with thekey
+        var keyName = ui.keyNames[ctr]; // what key am I on?
+        var colTitle = keyName;
+        var curColWide=ui.autoColWide;
+
+        if(this.props.GridStore.colDefList[keyName]){ // is there a colDef that uses this key?
+          colTitle = this.props.GridStore.colDefList[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
+          
+          if (this.props.GridStore.colDefList[keyName].widePx) {
+            curColWide = this.props.GridStore.colDefList[keyName].widePx;
+          }
+          else if (this.props.GridStore.colDefList[keyName].widePct) {
+            curColWide = ui.rowWide * (this.props.GridStore.colDefList[keyName].widePct/100);
+          }
         }
         // NOTE: check for header components here.
+        curColWide=curColWide+'px';
 
         header.push(  <div key={ctr} 
                           style={{
                             backgroundColor: '#F3F3F3',     // default, may be over ridden by styleHeader. Order matters.
                             textAlign:'center',             // default, may be over ridden by styleHeader. Order matters.
                             ...this.props.styleHeader,      // user specified styles.
-                            width:ui.autoColWide,              // everything from here down cannot be over-ridden by the user.
+                            width: curColWide,              // everything from here down cannot be over-ridden by the user.
+                            maxWidth: curColWide,              // everything from here down cannot be over-ridden by the user.
                             borderStyle: 'solid',
                             borderWidth:ui.borderWideLocal,
                             padding: ui.padWideLocal+'px',
@@ -101,7 +113,7 @@ const GridBody = observer( class GridBody extends React.Component {
                             overflow:'hidden',
                             height:ui.colHeaderHigh+'px',
                             maxHeight:ui.colHeaderHigh+'px'}}>
-                        {titleText}
+                        {colTitle}
                       </div> );
         marginOffset=-1*ui.borderWideLocal;
       }
@@ -118,6 +130,10 @@ const GridBody = observer( class GridBody extends React.Component {
     var retVal=
         <div style={{height:ui.gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
+          <ScrollbarSize
+            onLoad={this.setScrollBarWide}
+            onChange={this.setScrollBarWide}
+          /> 
           <div style={{padding:'0px',margin:'0px',maxHeight:''+headerUsage+'px',minHeight:''+headerUsage+'px',height:''+headerUsage+'px'}}>{header}</div>{/* put the header in place */}
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
@@ -141,6 +157,7 @@ const GridBody = observer( class GridBody extends React.Component {
                           styleInput={this.props.styleInput}
                           styleCell={this.props.styleCell}
                           rowHeaderList={ui.rowHeaderList}
+                          uiMath={ui}
                           pivotOn={this.props.pivotOn}
                           onChange={this.props.onChange}
                 />
