@@ -42,9 +42,12 @@ class GridMath
       result.borderWideLocal = this.makeValidInt(props.borderWide,1);
       result.padWideLocal = this.makeValidInt(props.padWide, 3);
   
-      result.rowWide = props.width - (scrollBarWide||16);   // how wide is each row.
+      result.gridWide = this.makeValidInt(props.gridWide,800);
+      result.rowWide = result.gridWide - (scrollBarWide||16);   // how wide is each row.
       result.autoColWide = 0;                                   // width of the default filled column, before weights
       result.fixedRowCount = props.rowCount;               // what is the rowCount limit
+
+      console.log(props.gridWide,result.gridWide,result.rowWide);
 
       // how high is each row:  user requested height does NOT include padding.  
       result.rowHighNoPadLocal = this.makeValidInt(props.rowHigh, 18);
@@ -89,7 +92,7 @@ class GridMath
         }  
         //--- no column width data
         result.autoColWide = Math.floor(
-          ( props.width -  // total width
+          ( result.gridWide -  // total width
             result.borderWideLocal -  // minus left most border bar
             (scrollBarWide||20)  // minus scroll bar
           ) / (result.keyNames.length)); // div number of items + (optionally plus 1 if a row header is present)
@@ -106,7 +109,7 @@ class GridMath
       else if(props.getRowData){
         // ==== ROW DATA METHOD we have rows of objects to display ( check for an array )  
         result.autoColWide=
-          props.width -
+           result.gridWide -
           (scrollBarWide||20) -
           (result.borderWideLocal*2);
         result.keyNames = ["No Data Provided"];
@@ -114,7 +117,7 @@ class GridMath
       else{
         // ==== NO DATA PROVIDED
         result.autoColWide =
-          props.width -
+           result.gridWide -
           (scrollBarWide||20) -
           (result.borderWideLocal * 2);
         result.keyNames = ["No Data Provided"];

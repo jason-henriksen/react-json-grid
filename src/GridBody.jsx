@@ -9,6 +9,11 @@ import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
 import GridMath from './GridMath';
 
+import PlaylistRemoveIcon from 'mdi-react/PlaylistRemoveIcon';
+import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
+
+
+
 import EasyBool from './easyTools/EasyBool';
 
 // Wrapper for the grid
@@ -128,20 +133,21 @@ const GridBody = observer( class GridBody extends React.Component {
     }
 
     var retVal=
-        <div style={{height:ui.gridHighLocal}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
+        <div style={{height:ui.gridHighLocal,width:ui.gridWide+'px'}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
           /> 
-          <div style={{padding:'0px',margin:'0px',maxHeight:''+headerUsage+'px',minHeight:''+headerUsage+'px',height:''+headerUsage+'px'}}>{header}</div>{/* put the header in place */}
+          <div style={{padding:'0px',margin:'0px',maxHeight:''+headerUsage+'px',minHeight:''+headerUsage+'px',height:''+headerUsage+'px'}}>
+            {header}
+          </div>{/* put the header in place */}
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
             width='100%'            
             height={ui.gridHighLocal - headerUsage }
             itemCount={ui.fixedRowCount}
-            itemSize={ui.rowHighWithPadLocal+ui.borderWideLocal}            
-
+            itemSize={ui.rowHighWithPadLocal+ui.borderWideLocal} 
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
                 <GridRow  cellHigh={ui.rowHighNoPadLocal}
@@ -173,7 +179,7 @@ const GridBody = observer( class GridBody extends React.Component {
       }
         {this.props.showTools &&
           <div>
-          <button onClick={this.addRow}>Add Row</button><button onClick={this.cutRow}>Cut Row</button>
+          <button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button>
           </div>
         }
       </div>

@@ -35,6 +35,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable propPadWide = -1;
   @action setPadWidth(val) { this.propPadWide = val; }
   
+  @observable propGridWide = -1;
+  @action setGridWide(val) { this.propGridWide = val; }
+  
   @observable propGridHigh = -1;
   @action setGridHigh(val) { this.propGridHigh = val; }
 
@@ -43,6 +46,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable propRowHeaderHigh = -1;
   @action setRowHeaderHigh(val) { this.propRowHeaderHigh = val; }
+
+  @observable propMinColWide = -1;
+  @action setMinColWide(val) { this.propMinColWide = val; }
 
   @observable colHeaderHide = false;
   @action toggleColHeaderHide() { this.colHeaderHide = !this.colHeaderHide; }
@@ -306,8 +312,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
     return (
         <div>
-          <div style={{width:'40%',display:'inline-block',verticalAlign:'top'}}>
-            <div style={{borderBottom:'2px solid grey'}}>
+          <div style={{width:'450px',display:'inline-block',borderRight:'2px solid grey',verticalAlign:'top'}}>
+            <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
                 <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
@@ -315,16 +321,13 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
                 <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
                 <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showTools' help='show button bar, validations, add/remove rows' />
-              </div>
-              <div style={{display:'inline-block',verticalAlign:'top',height:'200px',width:'0px',border:'1px solid grey'}}/>
-              <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
                 <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
                 <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
                 <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
-              </div>
-              <div style={{display:'inline-block',verticalAlign:'top',height:'200px',width:'0px',border:'1px solid grey'}}/>
-              <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
+                <NumWheel action={this.setMinColWide} incr={5} curValue={this.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
+                <NumWheel action={this.setGridWide} incr={100} curValue={this.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br/>Not set by CSS because the number is needed for javascript calculations.</div>} />
+                <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHigh' help={<div>Forced height of the grid.<br/>Not set by CSS because the number is needed for javascript calculations.</div>} />
                 <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
@@ -354,22 +357,24 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <br/><br/><br/>Example Data (this.data)<br/>
           <button style={{width:'90px'}} onClick={this.makeS}>5 objects</button>
           <button style={{width:'90px'}} onClick={this.makeM}>150 objects</button>
-          <button style={{width:'300px'}} onClick={this.makeL}>50K objects (slow data build, fast render)</button>
+          <button style={{width:'90px'}} onClick={this.makeL}>50K objects</button>
           <br/>
           <button style={{width:'90px'}} onClick={this.makeSA}>5 arrays</button>
           <button style={{width:'90px'}} onClick={this.makeMA}>150 arrays</button>
-          <button style={{width:'300px'}} onClick={this.makeLA}>50K arrays (slow data build, fast render)</button>
+          <button style={{width:'90px'}} onClick={this.makeLA}>50K arrays</button>
           <span style={{ color: 'red' }}>{this.dataAsObject.dataErr}</span><br />
-          <textarea style={{ width: '99%', height: '75px' }} onChange={this.updateData} value={this.data} />
+          <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
           
 
         </div>
 
-  <div style={{width:'50%',height:'300px',marginLeft:'30px',display:'inline-block'}}>
+  <div style={{marginLeft:'30px',display:'inline-block'}}>
           <br />
           <br />
           <br />
       <Grid style={{outline:this.outlineCSS}}
+        gridHigh={this.propGridHigh}
+        gridWide={this.propGridWide}      
         styleHeader={this.jsonHeaderStyleObject}
         styleInput={this.jsonInputStyleObject}
         styleCell={this.jsonCellStyleObject}        
@@ -378,7 +383,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         colHeaderHide={this.colHeaderHide}
         borderWide={this.propBorderWide}
         padWide={this.propPadWide}
-        gridHigh={this.propGridHigh}
         data={this.dataAsObject.cleanData}
         onChange={this.setValue}
         onToolAction={this.setToolAction}
@@ -390,9 +394,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
       <br />
       <div style={{font:'20px monospace'}}>
           &lt;Grid
+          {this.propGridWide > -1 && <span>&nbsp;&nbsp;gridWide=&#123;{this.propGridWide}&#125;&nbsp;&nbsp;</span>}
+          {this.propGridHigh > -1 && <span>&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propRowHigh > -1 && <span>&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propRowHeaderHigh > -1 && <span>&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propGridHigh > -1 && <span>&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propBorderWide > -1 && <span>&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
           {this.pivotOn && <span>&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
           {this.showTools && <span>&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}

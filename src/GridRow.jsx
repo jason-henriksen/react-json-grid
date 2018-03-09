@@ -169,8 +169,7 @@ import GridCell from './GridCell';
   }
     
     return(
-      <div style={{ width: this.props.rowWide,
-                    height:this.props.rowHigh}}>
+      <div>
         {cellArray}
       </div>
     );
