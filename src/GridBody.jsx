@@ -53,20 +53,17 @@ const GridBody = observer( class GridBody extends React.Component {
 
   @action addRow(){
     // JJHNOTE: pivot support
-    console.log(this.props);
     this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y, 
       this.props.GridStore.keyList[this.props.GridStore.cursor.x],'ADDROW');
   }
   @action cutRow() {
     // JJHNOTE: pivot support
+    // JJHNOTE:j documentation for handler
     this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y,
       this.props.GridStore.keyList[this.props.GridStore.cursor.x],'CUTROW');
   }
 
-
-
   render() {
-
     var ui = this.uiMath.calcGridBody(this.props, (this.scrollBarWide||20));
     if(ui.notReady){
       
@@ -111,8 +108,8 @@ const GridBody = observer( class GridBody extends React.Component {
                             width: curColWide,              // everything from here down cannot be over-ridden by the user.
                             maxWidth: curColWide,              // everything from here down cannot be over-ridden by the user.
                             borderStyle: 'solid',
-                            borderWidth:ui.borderWideLocal,
-                            padding: ui.padWideLocal+'px',
+                            borderWidth:ui.borderWide,
+                            padding: ui.padWide+'px',
                             display:'inline-block', 
                             marginLeft:marginOffset,
                             overflow:'hidden',
@@ -120,20 +117,20 @@ const GridBody = observer( class GridBody extends React.Component {
                             maxHeight:ui.colHeaderHigh+'px'}}>
                         {colTitle}
                       </div> );
-        marginOffset=-1*ui.borderWideLocal;
+        marginOffset=-1*ui.borderWide;
       }
-      headerUsage=(ui.colHeaderHigh+(2*ui.padWideLocal)+(2*ui.borderWideLocal));
+      headerUsage=(ui.colHeaderHigh+(2*ui.padWide)+(2*ui.borderWide));
     }
     else{  // header is hidden so provide a top border line.
       header.push(<div style={{
         ...this.props.styleHeader,
-        width: (ui.borderWideLocal + (ui.keyNames.length*(ui.autoColWide+ui.borderWideLocal+ui.padWideLocal+ui.padWideLocal)) + 'px'),
-        borderTopStyle: 'solid', borderTopWidth: ui.borderWideLocal, height: '0px' }} />);
+        width: (ui.borderWide + (ui.keyNames.length*(ui.autoColWide+ui.borderWide+ui.padWide+ui.padWide)) + 'px'),
+        borderTopStyle: 'solid', borderTopWidth: ui.borderWide, height: '0px' }} />);
       headerUsage=1;
     }
 
     var retVal=
-        <div style={{height:ui.gridHighLocal,width:ui.gridWide+'px'}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
+        <div style={{height:ui.gridHigh,width:ui.gridWide+'px'}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
@@ -145,27 +142,19 @@ const GridBody = observer( class GridBody extends React.Component {
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
             width='100%'            
-            height={ui.gridHighLocal - headerUsage }
+            height={ui.gridHigh - headerUsage }
             itemCount={ui.fixedRowCount}
-            itemSize={ui.rowHighWithPadLocal+ui.borderWideLocal} 
+            itemSize={ui.rowHighWithPad+ui.borderWide} 
             renderItem={({ index, style }) => 
               <div key={index} style={style}>
-                <GridRow  cellHigh={ui.rowHighNoPadLocal}
-                          colHeaderHigh={ui.colHeaderHigh}
-                          data={this.props.data}
+                <GridRow  data={this.props.data}
                           GridStore={this.props.GridStore}
-                          index={index} 
-                          borderWide={ui.borderWideLocal} 
-                          padWide={ui.padWideLocal} 
-                          rowWide={ui.rowWide} 
-                          autoColWide={ui.autoColWide} 
-                          keyNames={ui.keyNames} 
                           styleInput={this.props.styleInput}
                           styleCell={this.props.styleCell}
-                          rowHeaderList={ui.rowHeaderList}
                           uiMath={ui}
                           pivotOn={this.props.pivotOn}
                           onChange={this.props.onChange}
+                          index={index} 
                 />
               </div>
             }
@@ -174,7 +163,7 @@ const GridBody = observer( class GridBody extends React.Component {
         <div style={{ ...this.props.styleHeader,
                       width: (ui.rowWide+ 'px'),
                       borderTopStyle: 'solid',                      
-                      borderTopWidth: ui.borderWideLocal,
+                      borderTopWidth: ui.borderWide,
                       height:'0px'}}/>
       }
         {this.props.showTools &&

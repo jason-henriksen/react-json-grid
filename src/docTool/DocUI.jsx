@@ -29,6 +29,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable showTools = false;
   @action toggleTools() { this.showTools = !this.showTools; }
 
+  @observable editDisabled = false;
+  @action toggleEditDisabled() { this.editDisabled = !this.editDisabled; }
+  
   @observable propBorderWide = -1;
   @action setBorderWidth(val) { this.propBorderWide = val; }
 
@@ -310,8 +313,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
     return (
         <div style={{ overflowY: 'hidden',height:(window.innerHeight-20)+'px'}}>
-          <div style={{width:'450px',display:'inline-block',
-                borderRight:'2px solid grey',verticalAlign:'top',overflowY:'scroll',height:'100%'}}>
+          <div style={{marginLeft:'30px',position:'absolute',top:'0px',bottom:'0px',left:'0px',width:'475px',overflow:'auto',
+                       borderRight:'2px solid grey',verticalAlign:'top'}}>
             <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
@@ -320,6 +323,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
                 <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
                 <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showTools' help='show button bar, validations, add/remove rows' />
+                <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
                 <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
                 <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
@@ -368,13 +372,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
         </div>
 
-  <div style={{marginLeft:'30px',display:'inline-block'}}>
+  <div style={{marginLeft:'30px',position:'absolute',top:'0px',bottom:'0px',left:'500px',right:'0px',overflow:'auto'}}>
           <br />
           <br />
           <br />
       <Grid style={{outline:this.outlineCSS}}
         gridHigh={this.propGridHigh}
         gridWide={this.propGridWide}      
+        editDisabled={this.editDisabled}
         styleHeader={this.jsonHeaderStyleObject}
         styleInput={this.jsonInputStyleObject}
         styleCell={this.jsonCellStyleObject}        
@@ -392,17 +397,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
       />
       <br/>
       <br />
+      <br />
       <div style={{font:'20px monospace'}}>
           &lt;Grid
-          {this.propGridWide > -1 && <span>&nbsp;&nbsp;gridWide=&#123;{this.propGridWide}&#125;&nbsp;&nbsp;</span>}
-          {this.propGridHigh > -1 && <span>&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propRowHigh > -1 && <span>&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propRowHeaderHigh > -1 && <span>&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propBorderWide > -1 && <span>&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
-          {this.pivotOn && <span>&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
-          {this.showTools && <span>&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
-          {this.propPadWide > -1 && <span>&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
-          {this.colHeaderHide && <span>&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
+          {this.propGridWide > -1 && <span><br />&nbsp;&nbsp;gridWide=&#123;{this.propGridWide}&#125;&nbsp;&nbsp;</span>}
+          {this.propGridHigh > -1 && <span><br />&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.propRowHigh > -1 && <span><br />&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.editDisabled && <span><br />&nbsp;&nbsp;editDisabled=&#123;{''+this.editDisabled}&#125;&nbsp;&nbsp;</span>}
+          {this.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
+          {this.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
+          {this.showTools && <span><br />&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
+          {this.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
+          {this.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
           {this.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.styleHeader}&#125;</span>}
           {this.styleInput && <span><br />&nbsp;&nbsp;styleInput=&#123;{this.styleInput}&#125;</span>}
           {this.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.styleCell}&#125;</span>}

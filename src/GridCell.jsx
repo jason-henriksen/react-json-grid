@@ -236,7 +236,7 @@ window.reactJsonGridFocusInput = function(elem){
     }
     
     if(this.props.x>0){
-      style.marginLeft=-1*this.props.borderWide;
+      style.marginLeft=-1*this.props.uiMath.borderWide;
     }
     // render data standard
     var renderPlan = '';
@@ -261,7 +261,7 @@ window.reactJsonGridFocusInput = function(elem){
       var styleIn={...this.props.styleInput};
       
       if(this.props.x>0){
-        styleIn.marginLeft=-1*this.props.borderWide;
+        styleIn.marginLeft=-1*this.props.uiMath.borderWide;
       }
       styleIn.verticalAlign='top';
       styleIn.width = style.width;  // use the column defined width override if needed.

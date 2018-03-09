@@ -39,8 +39,8 @@ class GridMath
       }
 
       // general info
-      result.borderWideLocal = this.makeValidInt(props.borderWide,1);
-      result.padWideLocal = this.makeValidInt(props.padWide, 3);
+      result.borderWide = this.makeValidInt(props.borderWide,1);
+      result.padWide = this.makeValidInt(props.padWide, 3);
   
       result.gridWide = this.makeValidInt(props.gridWide,800);
       result.rowWide = result.gridWide - (scrollBarWide||16);   // how wide is each row.
@@ -48,11 +48,11 @@ class GridMath
       result.fixedRowCount = props.rowCount;               // what is the rowCount limit
 
       // how high is each row:  user requested height does NOT include padding.  
-      result.rowHighNoPadLocal = this.makeValidInt(props.rowHigh, 18);
-      if (-1 === result.rowHighNoPadLocal) { result.rowHighNoPadLocal=23;}
-      result.rowHighWithPadLocal = this.makeValidInt(result.rowHighNoPadLocal, 18);
-      result.rowHighWithPadLocal += result.padWideLocal;
-      result.rowHighWithPadLocal += result.padWideLocal;
+      result.rowHighNoPad = this.makeValidInt(props.rowHigh, 18);
+      if (-1 === result.rowHighNoPad) { result.rowHighNoPad=23;}
+      result.rowHighWithPad = this.makeValidInt(result.rowHighNoPad, 18);
+      result.rowHighWithPad += result.padWide;
+      result.rowHighWithPad += result.padWide;
       
       // column header height
       result.colHeaderHigh = (props.colHeaderHigh||-1);
@@ -62,9 +62,9 @@ class GridMath
       // grid height
       var testStyleHeight = null;
       if(props.style){ testStyleHeight = props.style.height}; // needed for null safety on props.style.  Needs to remove trailing px or % !!! 
-      result.gridHighLocal = testStyleHeight || props.gridHigh || 300;  // read from style, read from attributes, read from gridHigh attribute, default to 300
-      if (result.gridHighLocal === -1) {
-        result.gridHighLocal = 300;
+      result.gridHigh = testStyleHeight || props.gridHigh || 300;  // read from style, read from attributes, read from gridHigh attribute, default to 300
+      if (result.gridHigh === -1) {
+        result.gridHigh = 300;
       }
 
 
@@ -101,14 +101,14 @@ class GridMath
             if (props.columnList[cctr]) { // is there a colDef that uses this key?
               if (props.columnList[cctr].widePx) {                
                 change = Number(props.columnList[cctr].widePx);
-                change += Number(result.borderWideLocal) + Number(result.padWideLocal) + Number(result.padWideLocal);
+                change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide+=change;
                 availableWide -= change;
                 autoColCount--;
               }
               else if (props.columnList[cctr].widePct) {
                 change = (Number(result.rowWide) * (Number(props.columnList[cctr].widePct) / 100));
-                change += Number(result.borderWideLocal) + Number(result.padWideLocal) + Number(result.padWideLocal);
+                change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide += change;
                 availableWide -= change;
                 autoColCount--;
@@ -121,18 +121,18 @@ class GridMath
         //--- no column width data
         result.autoColWide = Math.floor(
           ( availableWide -          // total width
-            result.borderWideLocal   // minus left most border bar
+            result.borderWide   // minus left most border bar
                                      // scrollbar already handled by basin on rowWide.
           ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
-        result.autoColWide -= (result.borderWideLocal);   // each column minus right border amount
-        result.autoColWide -= (result.padWideLocal);      // each column minus left pad amount
-        result.autoColWide -= (result.padWideLocal);      // each column minus right pad amount
+        result.autoColWide -= (result.borderWide);   // each column minus right border amount
+        result.autoColWide -= (result.padWide);      // each column minus left pad amount
+        result.autoColWide -= (result.padWide);      // each column minus right pad amount
         console.log(availableWide,result.autoColWide,result.autoColCount);
   
 
         // check wether to show the bottom line
-        result.actualDisplayHigh = (props.data.length*result.rowHighWithPadLocal)+result.colHeaderHigh;
-        if(result.actualDisplayHigh < result.gridHighLocal){
+        result.actualDisplayHigh = (props.data.length*result.rowHighWithPad)+result.colHeaderHigh;
+        if(result.actualDisplayHigh < result.gridHigh){
           result.showBottomGridLine=false;
         }             
       }
@@ -141,7 +141,7 @@ class GridMath
         result.autoColWide=
            result.gridWide -
           (scrollBarWide||20) -
-          (result.borderWideLocal*2);
+          (result.borderWide*2);
         result.keyNames = ["No Data Provided"];
       }
       else{
@@ -149,7 +149,7 @@ class GridMath
         result.autoColWide =
            result.gridWide -
           (scrollBarWide||20) -
-          (result.borderWideLocal * 2);
+          (result.borderWide * 2);
         result.keyNames = ["No Data Provided"];
       }
       
