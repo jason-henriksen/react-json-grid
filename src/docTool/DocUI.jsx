@@ -303,16 +303,15 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   render() {
 
-    console.log("render start");
-
     var colListAsText=[];
     for(var cctr=0;cctr<this.colDef.length;cctr++){
       colListAsText.push(<CompactObjView target={this.colDef[cctr]} key={JSON.stringify(this.colDef[cctr])+cctr}/>);
     }
 
     return (
-        <div>
-          <div style={{width:'450px',display:'inline-block',borderRight:'2px solid grey',verticalAlign:'top'}}>
+        <div style={{ overflowY: 'hidden',height:(window.innerHeight-20)+'px'}}>
+          <div style={{width:'450px',display:'inline-block',
+                borderRight:'2px solid grey',verticalAlign:'top',overflowY:'scroll',height:'100%'}}>
             <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
@@ -350,7 +349,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 ]}
               pivotOn='title' 
               onChange={this.setColDefValue}
-              gridHigh={300}
+              gridHigh={600}
+              gridWide={425}
             />
           </div>
           }

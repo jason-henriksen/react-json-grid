@@ -172,7 +172,7 @@ const GridBody = observer( class GridBody extends React.Component {
           />                    
       {ui.showBottomGridLine &&
         <div style={{ ...this.props.styleHeader,
-                      width: (ui.borderWideLocal + (ui.keyNames.length*(ui.autoColWide+ui.borderWideLocal+ui.padWideLocal+ui.padWideLocal)) + 'px'),
+                      width: (ui.rowWide+ 'px'),
                       borderTopStyle: 'solid',                      
                       borderTopWidth: ui.borderWideLocal,
                       height:'0px'}}/>

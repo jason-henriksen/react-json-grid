@@ -90,12 +90,43 @@ class GridMath
             result.fixedRowCount = props.data.length;
           }          
         }  
+
+
+        var availableWide = result.rowWide;         // amount of space to allocate evenly
+        var autoColCount = result.keyNames.length;
+        var fixedWide = 0;                          // becomes the new rowWide is all columns are specified
+        var change = 0;
+        if (props.columnList && props.columnList.length && props.pivotOn===false){ // only autosize allowed on pivoted data
+          autoColCount = props.columnList.length;  // number of columns that need auto width
+          for (var cctr = 0; cctr<props.columnList.length;cctr++){
+            change=0;
+            if (props.columnList[cctr]) { // is there a colDef that uses this key?
+              if (props.columnList[cctr].widePx) {                
+                change = Number(props.columnList[cctr].widePx);
+                change += Number(result.borderWideLocal) + Number(result.padWideLocal) + Number(result.padWideLocal);
+
+                fixedWide+=change;
+                availableWide -= change;
+                autoColCount--;
+              }
+              else if (props.columnList[cctr].widePct) {
+                change = (result.rowWide * (props.columnList[cctr].widePct / 100));
+                change += result.borderWideLocal + result.padWideLocal + result.padWideLocal;
+                fixedWide += change;
+                availableWide -= change;
+                autoColCount--;
+              }
+            }
+          }
+        }
+        //if(autoColCount===0 && fixedWide<result.rowWide){ result.rowWide=fixedWide; } // all columns have a fixed width & smaller than available space.  This basically moves the scroll bar;
+
         //--- no column width data
         result.autoColWide = Math.floor(
-          ( result.gridWide -  // total width
-            result.borderWideLocal -  // minus left most border bar
-            (scrollBarWide||20)  // minus scroll bar
-          ) / (result.keyNames.length)); // div number of items + (optionally plus 1 if a row header is present)
+          ( availableWide -          // total width
+            result.borderWideLocal   // minus left most border bar
+                                     // scrollbar already handled by basin on rowWide.
+          ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
         result.autoColWide -= (result.borderWideLocal);   // each column minus right border amount
         result.autoColWide -= (result.padWideLocal);      // each column minus left pad amount
         result.autoColWide -= (result.padWideLocal);      // each column minus right pad amount
