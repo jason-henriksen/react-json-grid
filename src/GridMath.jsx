@@ -47,8 +47,6 @@ class GridMath
       result.autoColWide = 0;                                   // width of the default filled column, before weights
       result.fixedRowCount = props.rowCount;               // what is the rowCount limit
 
-      console.log(props.gridWide,result.gridWide,result.rowWide);
-
       // how high is each row:  user requested height does NOT include padding.  
       result.rowHighNoPadLocal = this.makeValidInt(props.rowHigh, 18);
       if (-1 === result.rowHighNoPadLocal) { result.rowHighNoPadLocal=23;}
@@ -104,14 +102,13 @@ class GridMath
               if (props.columnList[cctr].widePx) {                
                 change = Number(props.columnList[cctr].widePx);
                 change += Number(result.borderWideLocal) + Number(result.padWideLocal) + Number(result.padWideLocal);
-
                 fixedWide+=change;
                 availableWide -= change;
                 autoColCount--;
               }
               else if (props.columnList[cctr].widePct) {
-                change = (result.rowWide * (props.columnList[cctr].widePct / 100));
-                change += result.borderWideLocal + result.padWideLocal + result.padWideLocal;
+                change = (Number(result.rowWide) * (Number(props.columnList[cctr].widePct) / 100));
+                change += Number(result.borderWideLocal) + Number(result.padWideLocal) + Number(result.padWideLocal);
                 fixedWide += change;
                 availableWide -= change;
                 autoColCount--;
@@ -130,7 +127,9 @@ class GridMath
         result.autoColWide -= (result.borderWideLocal);   // each column minus right border amount
         result.autoColWide -= (result.padWideLocal);      // each column minus left pad amount
         result.autoColWide -= (result.padWideLocal);      // each column minus right pad amount
+        console.log(availableWide,result.autoColWide,result.autoColCount);
   
+
         // check wether to show the bottom line
         result.actualDisplayHigh = (props.data.length*result.rowHighWithPadLocal)+result.colHeaderHigh;
         if(result.actualDisplayHigh < result.gridHighLocal){

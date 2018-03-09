@@ -15,6 +15,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import EasyBool from './easyTools/EasyBool';
 
+window.reactJsonGridFocusInput = function(elem){
+    console.log(elem);
+    elem.focus();
+    elem.setSelectionRange(elem.value.length,elem.value.length);
+}
+
 
 @observer class GridCell extends React.Component {
   constructor(props) { super(props); autoBind(this); }
@@ -44,20 +50,43 @@ import EasyBool from './easyTools/EasyBool';
         this.props.GridStore.cellMoveKey(e);
       }
       else if (e.keyCode == '13') {
-        this.props.GridStore.cursor.y++;
-        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
-          this.props.GridStore.cursor.y = 0;
+        if(e.shiftKey) {
+          // back-enter
+          this.props.GridStore.cursor.y--;
+          if (this.props.GridStore.cursor.y < 0 ) {
+            this.props.GridStore.cursor.y = 0;
+          }
         }
+        else{
+          // forward-enter
+          this.props.GridStore.cursor.y++;
+          if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+            this.props.GridStore.cursor.y = 0;
+          }
+        }        
       }
       else if (e.keyCode == '9') { // tab
-        this.props.GridStore.cursor.x++;
-        if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
-          this.props.GridStore.cursor.x = 0;
-          this.props.GridStore.cursor.y++;
-          console.log(JSON.stringify(this.props.GridStore.cursor));
+        if(e.shiftKey) {
+          // back tab
+          this.props.GridStore.cursor.x--;
+          if (this.props.GridStore.cursor.x < 0) {
+            this.props.GridStore.cursor.x = this.props.GridStore.cursor.maxX;
+            this.props.GridStore.cursor.y--;
+          }
+          if (this.props.GridStore.cursor.y < 0) {
+            this.props.GridStore.cursor.y = 0;
+          }
         }
-        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
-          this.props.GridStore.cursor.y = 0;
+        else{
+          // forward tab
+          this.props.GridStore.cursor.x++;
+          if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
+            this.props.GridStore.cursor.x = 0;
+            this.props.GridStore.cursor.y++;
+          }
+          if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+            this.props.GridStore.cursor.y = 0;
+          }
         }
       }
       else if (e.keyCode == '32') { // space
@@ -65,6 +94,14 @@ import EasyBool from './easyTools/EasyBool';
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
         this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);
+      }
+      else{
+        if( e.key.length===1 ){ // must be a char
+          // not that the react code calls a javascript function to make sure the cursor goes to the end of the input so you can keep typing naturally.
+          this.props.GridStore.cursor.editX = this.props.x;
+          this.props.GridStore.cursor.editY = this.props.y;
+          this.props.GridStore.curEditingValue = ''+e.key;
+        }
       }
     }
     e.stopPropagation();
@@ -103,35 +140,63 @@ import EasyBool from './easyTools/EasyBool';
     this.props.GridStore.cursor.editY = -1;
   }
 
-  @action onEnter(e) {
+  @action onKeyDownWhenEditing(e) {
 
     if (e.keyCode == '13') {  
+      // commit the value
       this.endEdit(); 
-      this.props.GridStore.cursor.y++;
-      if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
-        this.props.GridStore.cursor.y = 0;
+      // move the cursor
+      if(e.shiftKey) {
+        // back-enter
+        this.props.GridStore.cursor.y--;
+        if (this.props.GridStore.cursor.y < 0 ) {
+          this.props.GridStore.cursor.y = 0;
+        }
       }
+      else{
+        // forward-enter
+        this.props.GridStore.cursor.y++;
+        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+          this.props.GridStore.cursor.y = 0;
+        }
+      }        
 
+      // start editing new location
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-
       this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);
     }
     else if (e.keyCode == '9') { // tab
-      // commit this one
-      // start editing the next one
+      // commit the value
       this.endEdit(); 
-      this.props.GridStore.cursor.x++;
-      if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
-        this.props.GridStore.cursor.x = 0;
-        this.props.GridStore.cursor.y++;
+
+      // move the cursor
+      if(e.shiftKey) {
+        // back tab
+        this.props.GridStore.cursor.x--;
+        if (this.props.GridStore.cursor.x < 0) {
+          this.props.GridStore.cursor.x = this.props.GridStore.cursor.maxX;
+          this.props.GridStore.cursor.y--;
+        }
+        if (this.props.GridStore.cursor.y < 0) {
+          this.props.GridStore.cursor.y = 0;
+        }
       }
-      if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
-        this.props.GridStore.cursor.y = 0;
+      else{
+        // forward tab
+        this.props.GridStore.cursor.x++;
+        if (this.props.GridStore.cursor.x > this.props.GridStore.cursor.maxX) {
+          this.props.GridStore.cursor.x = 0;
+          this.props.GridStore.cursor.y++;
+        }
+        if (this.props.GridStore.cursor.y > this.props.GridStore.cursor.maxY) {
+          this.props.GridStore.cursor.y = 0;
+        }
       }
+
+      // start editing the next one
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-
       this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);;
       this.props.GridStore.autoFocus=true;
       e.stopPropagation();
@@ -262,9 +327,9 @@ import EasyBool from './easyTools/EasyBool';
         renderPlan = 
           <input value={curDisplayVal} 
                   onChange={this.valChange}
-                  onKeyDown={this.onEnter}
+                  onKeyDown={this.onKeyDownWhenEditing}
                   id={this.props.id} style={styleIn}
-                  ref={input => input && input.focus()}
+                  ref={input => input && window.reactJsonGridFocusInput(input)}
                   onBlur={this.endEdit}
             />
       }
@@ -328,7 +393,7 @@ import EasyBool from './easyTools/EasyBool';
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 
                         id={this.props.id} style={style}                        
-                        ref={div => div && isFocusNeeded && div.focus()}
+                        ref={div => div && isFocusNeeded && div.focus() }
                         onKeyDown={this.onKeyDownWhenViewing}>
             {renderVal}
       </div>;
