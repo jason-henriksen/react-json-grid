@@ -7,6 +7,7 @@ import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
 import { ContainerDimensions } from 'react-container-dimensions';
 import GridCell from './GridCell';
+import ReactTooltip from 'react-tooltip';
 
 
 @observer class GridRow extends React.Component {
@@ -90,7 +91,7 @@ import GridCell from './GridCell';
     inputStyleLocal.marginTop = '-4';
     
 
-    var forceObjKey = null;  // used for pivoted data only
+    var keyName = null;  // used for pivoted data only
 
     var columnCount = this.props.GridStore.cursor.maxX+1;
     if (this.props.pivotOn){
@@ -107,17 +108,19 @@ import GridCell from './GridCell';
       // row header / pivot work
       if(ctr===-1){
         if(this.props.uiMath.rowHeaderList && this.props.uiMath.rowHeaderList.length > this.props.index) {
-          forceObjKey = this.props.uiMath.rowHeaderList[this.props.index];          
-
-          var titleText = this.props.uiMath.rowHeaderList[this.props.index]; // what key am I on?
-          if (this.props.GridStore.colDefList[titleText]) { // is there a colDef that uses this key?
-            titleText = this.props.GridStore.colDefList[titleText].title || titleText; // if there is a title for the colDef use it, or just stick with thekey
+          var keyName = this.props.uiMath.rowHeaderList[this.props.index]; // what key am I on?
+          var titleText = keyName;
+          if (this.props.GridStore.colDefList[keyName]) { // is there a colDef that uses this key?
+            titleText = this.props.GridStore.colDefList[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
           }
           
-          
+          var helpComp=null;
+          if (this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { 
+            helpComp = this.props.GridStore.colDefList[keyName].altText; 
+          }
           cellArray.push(
-            <GridCell
-              key={this.props.index + '-RH'}
+            <a data-tip data-for={'dataTip' + keyName} key={this.props.index + '-RH'}>                      
+            <GridCell              
               id={this.props.index + '-RH'}
               x={ctr}
               y={this.props.index}
@@ -129,7 +132,9 @@ import GridCell from './GridCell';
               cellData={titleText}
               uiMath={this.props.uiMath}
               onChange={this.props.onChange}
-            />);
+            />
+            </a>
+            );
           isFirst=false;
         }
       }
@@ -137,7 +142,7 @@ import GridCell from './GridCell';
 
         var cellData = '';
         if(this.props.pivotOn){
-          cellData = this.props.data[ctr][forceObjKey];
+          cellData = this.props.data[ctr][keyName];
         }
         else{
           cellData = this.props.data[this.props.index][this.props.uiMath.keyNames[ctr]];
@@ -149,7 +154,7 @@ import GridCell from './GridCell';
           id={this.props.index+'-'+ctr}
           x={ctr}
           y={this.props.index}
-          objKey={forceObjKey||this.props.uiMath.keyNames[ctr]}
+          objKey={keyName||this.props.uiMath.keyNames[ctr]}
           styleInput={isFirst ? inputStyleFirst : inputStyleLocal}
           styleCell={isFirst ? cellStyleFirst : cellStyleLocal}
           GridStore={this.props.GridStore}
@@ -166,6 +171,11 @@ import GridCell from './GridCell';
     
     return(
       <div>
+        {helpComp &&  // only render this if helpComp is defined
+          <ReactTooltip id={'dataTip' + keyName} effect='solid' place='right' >
+            {helpComp}
+          </ReactTooltip>
+        }          
         {cellArray}
       </div>
     );

@@ -67,7 +67,7 @@ class GridMath
         result.gridHigh = 300;
       }
 
-
+      var autoColCount=0;
       // look at the data to display and figure out what we need to do.
       if(props.data && props.data.length>0){
         // ==== OBJECTS we have rows of objects to display ( check for an array )  
@@ -88,18 +88,17 @@ class GridMath
             result.fixedRowCount = props.data.length;
           }          
         }  
-
+        autoColCount = result.keyNames.length;
 
         var availableWide = result.rowWide;         // amount of space to allocate evenly
-        var autoColCount = result.keyNames.length;
         var fixedWide = 0;                          // becomes the new rowWide is all columns are specified
         var change = 0;
-        if (props.columnList && props.columnList.length && props.pivotOn===false){ // only autosize allowed on pivoted data
+        if (props.columnList && props.columnList.length && !props.pivotOn){ // only autosize allowed on pivoted data
           autoColCount = props.columnList.length;  // number of columns that need auto width
           for (var cctr = 0; cctr<props.columnList.length;cctr++){
             change=0;
             if (props.columnList[cctr]) { // is there a colDef that uses this key?
-              if (props.columnList[cctr].widePx) {                
+              if (props.columnList[cctr].widePx) {
                 change = Number(props.columnList[cctr].widePx);
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide+=change;
@@ -121,14 +120,12 @@ class GridMath
         //--- no column width data
         result.autoColWide = Math.floor(
           ( availableWide -          // total width
-            result.borderWide   // minus left most border bar
+            result.borderWide        // minus left most border bar
                                      // scrollbar already handled by basin on rowWide.
           ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
         result.autoColWide -= (result.borderWide);   // each column minus right border amount
         result.autoColWide -= (result.padWide);      // each column minus left pad amount
         result.autoColWide -= (result.padWide);      // each column minus right pad amount
-        console.log(availableWide,result.autoColWide,result.autoColCount);
-  
 
         // check wether to show the bottom line
         result.actualDisplayHigh = (props.data.length*result.rowHighWithPad)+result.colHeaderHigh;

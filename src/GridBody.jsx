@@ -8,6 +8,7 @@ import autoBind from 'react-autobind';
 import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
 import GridMath from './GridMath';
+import ReactTooltip from 'react-tooltip';
 
 import PlaylistRemoveIcon from 'mdi-react/PlaylistRemoveIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
@@ -86,21 +87,28 @@ const GridBody = observer( class GridBody extends React.Component {
         var keyName = ui.keyNames[ctr]; // what key am I on?
         var colTitle = keyName;
         var curColWide=ui.autoColWide;
-
+        var helpComp=null;
         if(this.props.GridStore.colDefList[keyName]){ // is there a colDef that uses this key?
           colTitle = this.props.GridStore.colDefList[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
           
-          if (this.props.GridStore.colDefList[keyName].widePx) {
+          if (this.props.GridStore.colDefList[keyName].widePx) {        // width by px
             curColWide = this.props.GridStore.colDefList[keyName].widePx;
           }
-          else if (this.props.GridStore.colDefList[keyName].widePct) {
+          else if (this.props.GridStore.colDefList[keyName].widePct) {  // width by pct
             curColWide = ui.rowWide * (this.props.GridStore.colDefList[keyName].widePct/100);
+          }
+          
+          if(!this.props.pivotOn){
+            // handle alt text.  Note that the 'text' could be a component.  regular header
+            if (this.props.GridStore.colDefList[keyName].altText) { helpComp = this.props.GridStore.colDefList[keyName].altText; }
           }
         }
         // NOTE: check for header components here.
         curColWide=curColWide+'px';
 
-        header.push(  <div key={ctr} 
+        header.push(  
+          <a data-tip data-for={'dataTip' + ctr} key={ctr} >
+                        <div
                           style={{
                             backgroundColor: '#F3F3F3',     // default, may be over ridden by styleHeader. Order matters.
                             textAlign:'center',             // default, may be over ridden by styleHeader. Order matters.
@@ -115,8 +123,14 @@ const GridBody = observer( class GridBody extends React.Component {
                             overflow:'hidden',
                             height:ui.colHeaderHigh+'px',
                             maxHeight:ui.colHeaderHigh+'px'}}>
-                        {colTitle}
-                      </div> );
+                          {colTitle}
+                          { helpComp &&  // only render this if helpComp is defined
+                            <ReactTooltip id={'dataTip' + ctr} >
+                              {helpComp}
+                            </ReactTooltip>
+                          }
+                        </div>
+                      </a>);
         marginOffset=-1*ui.borderWide;
       }
       headerUsage=(ui.colHeaderHigh+(2*ui.padWide)+(2*ui.borderWide));

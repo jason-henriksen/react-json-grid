@@ -88,7 +88,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           easyFloat: '',
           easyMoney: '',
           easyDate: '',
-          easyAltText: '',
+          altText: '',
 
           styleHeader: '',
           styleInput: '',          
@@ -111,7 +111,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           easyFloat: '',
           easyMoney: '',
           easyDate: '',
-          easyAltText: '',
+          altText: '',
 
           styleHeader: '',
           styleInput: '',
@@ -134,7 +134,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           easyFloat: '',
           easyMoney: '',
           easyDate: '',
-          easyAltText: '',
+          altText: '',
 
           styleHeader: '',
           styleInput: '',
@@ -157,7 +157,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           easyFloat: '',
           easyMoney: '',
           easyDate: '',
-          easyAltText: '',
+          altText: '',
 
           styleHeader: '',
           styleInput: '',
@@ -326,11 +326,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
                 <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
+                <NumWheel action={this.setGridWide} incr={100} curValue={this.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
+                <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHigh' help={<div>Forced height of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
                 <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
                 <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
                 <NumWheel action={this.setMinColWide} incr={5} curValue={this.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
-                <NumWheel action={this.setGridWide} incr={100} curValue={this.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br/>Not set by CSS because the number is needed for javascript calculations.</div>} />
-                <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHigh' help={<div>Forced height of the grid.<br/>Not set by CSS because the number is needed for javascript calculations.</div>} />
                 <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
@@ -342,14 +342,17 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
             <Grid 
               data={this.colDef} 
                 columnList={[
-                  { key: 'editDisabled', easyBool: true }, 
-                  { key: 'easyBool', easyBool: true },
-                  { key: 'easyInt', easyBool: true },
-                  { key: 'easyFloat', easyBool: true },
-                  { key: 'easyMoney', easyBool: true },
-                  { key: 'easyDate', easyBool: true },
-                  { key: 'easyMenu', easyBool: true },
-                  { key: 'easyAltText'  },
+                  { key: 'key', altText: 'key name (or index) of the data for this column' }, 
+                  { key: 'title', altText: 'text in the title bar of the column' }, 
+                  { key: 'editDisabled', easyBool: true, altText:'disable editing for this column' }, 
+                  { key: 'easyBool', easyBool: true, altText:'render this column as a check box' },
+                  { key: 'easyInt', easyBool: true , altText:'render and validate this column as an integer' },
+                  { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float'},
+                  { key: 'easyMoney', easyBool: true, altText: 'render and validate this column as money' },
+                  { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
+                  { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
+                  { key: 'easyMenu', easyBool: true, altText: 'render and validate this column as a menu' },
+                  { key: 'altText', altText: 'provide help text when mousing over the column header' },
                 ]}
               pivotOn='title' 
               onChange={this.setColDefValue}

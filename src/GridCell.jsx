@@ -16,7 +16,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import EasyBool from './easyTools/EasyBool';
 
 window.reactJsonGridFocusInput = function(elem){
-    console.log(elem);
     elem.focus();
     elem.setSelectionRange(elem.value.length,elem.value.length);
 }
