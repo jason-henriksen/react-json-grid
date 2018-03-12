@@ -40,7 +40,7 @@ class DatePickerOverlay extends React.Component {
 
     return (
       <div>
-        <div style={{position:'absolute',top:'0px',bottom:'0px',left:'0px',width:this.props.uiMath.rowWide+'px',backgroundColor:'grey',zIndex:'20',opacity:'0.7'}} />
+        <div style={{position:'absolute',top:'0px',bottom:'0px',left:'0px',width:this.props.uiMath.rowWide+'px',backgroundColor:'grey',zIndex:'20',opacity:'0.7'}} onClick={this.endEdit} />
         <div style={{position:'absolute',top:'15px',left:'15px',backgroundColor:'white',zIndex:'30'}}>
             <DatePicker
               id='react-datepicker-manual'
