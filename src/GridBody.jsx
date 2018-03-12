@@ -104,6 +104,10 @@ const GridBody = observer( class GridBody extends React.Component {
           }
         }
         // NOTE: check for header components here.
+        if (ctr===0 && this.props.pivotOn && ui.pivotRowHeaderWide) {
+          curColWide = Number(ui.pivotRowHeaderWide);
+        }
+        
         curColWide=curColWide+'px';
 
         header.push(  

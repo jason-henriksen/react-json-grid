@@ -113,6 +113,10 @@ import ReactTooltip from 'react-tooltip';
           if (this.props.GridStore.colDefList[keyName]) { // is there a colDef that uses this key?
             titleText = this.props.GridStore.colDefList[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
           }
+
+          if(this.props.uiMath.pivotRowHeaderWide){
+            cellStyleFirst.width = Number(this.props.uiMath.pivotRowHeaderWide);
+          }
           
           var helpComp=null;
           if (this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { 

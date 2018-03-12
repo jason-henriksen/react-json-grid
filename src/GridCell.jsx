@@ -8,6 +8,7 @@ import autoBind from 'react-autobind';
 import { ContainerDimensions } from 'react-container-dimensions';
 
 import moment from 'moment';
+import accounting from 'accounting';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -124,7 +125,10 @@ window.reactJsonGridFocusInput = function(elem){
       if (
         (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
         (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-        (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+        ( (this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar || 
+           this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
+           this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound)
+          && !this.props.GridStore.curEditIsValidFor.isValidFloat)
       ) {
         // value is not valid for the field definition.  Do not make the change.
         this.props.GridStore.cursor.editX = -1;
@@ -209,6 +213,8 @@ window.reactJsonGridFocusInput = function(elem){
     
   }  
 
+
+
   render() {
 
     var style={...this.props.styleCell};
@@ -222,9 +228,10 @@ window.reactJsonGridFocusInput = function(elem){
       style.zIndex = 5;
     }
 
-    // order ride width if needed
+    // over ride width if needed
     if (this.props.GridStore.colDefList[this.props.objKey]) { // is there a colDef that uses this key?
       var curColWide = style.width;
+      //console.log('cw ' + curColWide);
       if (this.props.GridStore.colDefList[this.props.objKey].widePx) {
         curColWide = this.props.GridStore.colDefList[this.props.objKey].widePx+'px';
       }
@@ -274,7 +281,9 @@ window.reactJsonGridFocusInput = function(elem){
         if (
             (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
             (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-            (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+          ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
+            this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
+            this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) && !this.props.GridStore.curEditIsValidFor.isValidFloat)
           ){
           styleIn.outline="5px red dashed";
         }
@@ -283,7 +292,9 @@ window.reactJsonGridFocusInput = function(elem){
         if (
           (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
           (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
-          (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
+          ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
+            this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
+            this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound))
         ) {
           styleIn.textAlign = "right";
         }          
@@ -347,17 +358,33 @@ window.reactJsonGridFocusInput = function(elem){
         if (
           (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
           (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
-          (this.props.GridStore.colDefList[this.props.objKey].easyMoney)
+          ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
+            this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
+            this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound))
         ) {
           style.textAlign = "right";
           // check validation
           if (
             (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.checkValidInt(this.props.cellData) ) ||
             (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.checkValidFloat(this.props.cellData) ) ||
-            (this.props.GridStore.colDefList[this.props.objKey].easyMoney && !this.props.GridStore.checkValidFloat(this.props.cellData) )
+            ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
+              this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
+              this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) && !this.props.GridStore.checkValidFloat(this.props.cellData) )
           ) {
             style.outline = "3px orange dashed";
           }          
+
+          // since we're here: format the money:
+          if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar) {
+            renderVal = accounting.formatMoney(this.props.cellData, "$", 2, ",", ".");
+          }
+          else if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro) {
+            renderVal = accounting.formatMoney(this.props.cellData, "€", 2, ".", ",");
+          }
+          else if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) {
+            renderVal = accounting.formatMoney(this.props.cellData, "£", 2, ".", ",");
+          }
+
         }
         
         // check for custom renders
@@ -389,6 +416,7 @@ window.reactJsonGridFocusInput = function(elem){
         }
       }  
 
+      //console.log('fs '+style);
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 
                         id={this.props.id} style={style}                        

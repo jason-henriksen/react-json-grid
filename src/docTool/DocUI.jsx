@@ -59,6 +59,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable pivotOn = false;
   @action togglePivotOn() { this.pivotOn = !this.pivotOn; }
 
+  @observable pivotRowHeaderWide = -1;
+  @action setPivotRowHeaderWide(val) { this.pivotRowHeaderWide = val; }
+
   @observable columnList = false;
   @action toggleColumnList() { this.columnList = !this.columnList; }
 
@@ -76,101 +79,36 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable colDef = 
       [
         {  
-          key: 'a', 
-          title:'col A',
-        editDisabled: '',
-
-          widePct: '',
-          widePx: '',
-
-          easyBool:'',
-          easyInt: '',
-          easyFloat: '',
-          easyMoney: '',
-          easyDate: '',
-          altText: '',
-
-          styleHeader: '',
-          styleInput: '',          
-          styleCell: '',
-          
-          compHeader: '',
-          compInput: '',
-          compCell: '',
+          key: 'a',           title:'col A',        editDisabled: '',          widePct: '',          widePx: '',
+          easyBool:'',          easyInt: '',          easyFloat: '',          easyMoneyDollar: '',          easyMoneyEuro: '',          easyMoneyPound: '',
+        easyDate: '',           easyMenu: '',altText: '',
+          styleHeader: '',          styleInput: '',                    styleCell: '',          
+          compHeader: '',          compInput: '',          compCell: '',displayFormatter:''
         },       
         {
-          key: 'b', 
-          title: 'col B',
-          editDisabled: '',
-
-          widePct: '',
-          widePx: '',
-
-          easyBool: '',
-          easyInt: '',
-          easyFloat: '',
-          easyMoney: '',
-          easyDate: '',
-          altText: '',
-
-          styleHeader: '',
-          styleInput: '',
-          styleCell: '',
-
-          compHeader: '',
-          compInput: '',
-          compCell: '',
+          key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
+          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+          easyDate: '', altText: '',
+          styleHeader: '', styleInput: '', styleCell: '',
+          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         },
         {
-          key: 'c',
-          title: 'col C',
-          editDisabled: '',
-
-          widePct: '',
-          widePx: '',
-
-          easyBool: '',
-          easyInt: '',
-          easyFloat: '',
-          easyMoney: '',
-          easyDate: '',
-          altText: '',
-
-          styleHeader: '',
-          styleInput: '',
-          styleCell: '',
-
-          compHeader: '',
-          compInput: '',
-          compCell: '',
+          key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
+          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+          easyDate: '', altText: '',
+          styleHeader: '', styleInput: '', styleCell: '',
+          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         },
         {
-          key: 'd',
-          title: 'col D',
-          editDisabled: '',
-
-          widePct: '',
-          widePx: '',
-
-          easyBool: '',
-          easyInt: '',
-          easyFloat: '',
-          easyMoney: '',
-          easyDate: '',
-          altText: '',
-
-          styleHeader: '',
-          styleInput: '',
-          styleCell: '',
-
-          compHeader: '',
-          compInput: '',
-          compCell: '',
+          key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
+          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+          easyDate: '', altText: '',
+          styleHeader: '', styleInput: '', styleCell: '',
+          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         }
     
                       ]
   @action setColDefValue(x, y, objKey, newValue) {
-    console.log('changing def '+objKey+' ' +newValue);
     this.colDef[y][objKey] = newValue;
   }
   
@@ -331,6 +269,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
                 <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
                 <NumWheel action={this.setMinColWide} incr={5} curValue={this.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
+                <NumWheel action={this.setPivotRowHeaderWide} incr={25} curValue={this.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br/>use this to set the pixel width of the row header</div>} />
+                
                 <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
@@ -348,13 +288,16 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                   { key: 'easyBool', easyBool: true, altText:'render this column as a check box' },
                   { key: 'easyInt', easyBool: true , altText:'render and validate this column as an integer' },
                   { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float'},
-                  { key: 'easyMoney', easyBool: true, altText: 'render and validate this column as money' },
+                  { key: 'easyMoneyDollar', easyBool: true, altText: 'render and validate this column as dollars' },
+                  { key: 'easyMoneyEuro', easyBool: true, altText: 'render and validate this column as euros' },
+                  { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
                   { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
                   { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
                   { key: 'easyMenu', easyBool: true, altText: 'render and validate this column as a menu' },
                   { key: 'altText', altText: 'provide help text when mousing over the column header' },
                 ]}
               pivotOn='title' 
+              pivotRowHeaderWide={125}              
               onChange={this.setColDefValue}
               gridHigh={600}
               gridWide={425}
@@ -395,6 +338,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         onChange={this.setValue}
         onToolAction={this.setToolAction}
         pivotOn={ this.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
+        pivotRowHeaderWide={this.pivotRowHeaderWide}
         columnList={ this.columnList?this.colDef:null }
         showTools={this.showTools}
       />
@@ -410,6 +354,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
           {this.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
+          {this.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}
           {this.showTools && <span><br />&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
           {this.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
           {this.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}

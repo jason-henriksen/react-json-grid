@@ -115,6 +115,10 @@ class GridMath
             }
           }
         }
+        if(props.pivotOn && props.pivotRowHeaderWide){
+          result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
+          availableWide -= Number(props.pivotRowHeaderWide); // allow a set width pivot header, but still only autocol for pivoted data
+        }
         //if(autoColCount===0 && fixedWide<result.rowWide){ result.rowWide=fixedWide; } // all columns have a fixed width & smaller than available space.  This basically moves the scroll bar;
 
         //--- no column width data

@@ -54,7 +54,7 @@ import { observer } from 'mobx-react';
     return( 
     <div>
       <div style={{verticalAlign: 'middle',lineHeight:'normal',display: 'flex',alignItems:'center'}}>
-        <div style={{display:'inline-block',minWidth:'125px',font:'16px monospace',cursor:'help'}} onClick={this.toggleHelpOn} >{this.props.label}</div>
+        <div style={{display:'inline-block',minWidth:'175px',font:'16px monospace',cursor:'help'}} onClick={this.toggleHelpOn} >{this.props.label}</div>
         <CloseOctagonOutline onClick={this.defVal}/>
         <ArrowLeftThick onClick={this.lessVal}/>
         <ArrowLeft onClick={this.less1}/>
