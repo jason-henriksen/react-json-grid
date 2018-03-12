@@ -260,7 +260,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
                 <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
                 <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
-                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showTools' help='show button bar, validations, add/remove rows' />
+                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showToolsAddCut' help='show button bar, validations, add/remove rows' />
+                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showToolsPages' help='show button bar, validations, add/remove rows' />
+                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showToolsCustom' help='show button bar, validations, add/remove rows' />
                 <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
                 <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
@@ -285,6 +287,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                   { key: 'key', altText: 'key name (or index) of the data for this column' }, 
                   { key: 'title', altText: 'text in the title bar of the column' }, 
                   { key: 'editDisabled', easyBool: true, altText:'disable editing for this column' }, 
+                  { key: 'widePct', easyFloat: true, altText: 'percent of grid width to make this column.  Too big will cause side scrolling!' },
+                  { key: 'widePx', easyInt: true, altText: 'width in pixels to make this column.  Too big will cause side scrolling!' },
                   { key: 'easyBool', easyBool: true, altText:'render this column as a check box' },
                   { key: 'easyInt', easyBool: true , altText:'render and validate this column as an integer' },
                   { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float'},
