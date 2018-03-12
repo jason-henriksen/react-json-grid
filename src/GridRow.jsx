@@ -24,7 +24,6 @@ import ReactTooltip from 'react-tooltip';
     var marginOffset = Math.floor(-1 * this.props.uiMath.borderWide);
 
     var sharedBaseStyleLeftCol = {
-      ...this.props.styleHeader,
       width: this.props.uiMath.autoColWide,
       borderStyle: 'solid',
       borderColor: 'black',
@@ -35,19 +34,6 @@ import ReactTooltip from 'react-tooltip';
       display: 'inline-block',
       outline: outline,
       overflow:'hidden',
-    };
-    var sharedBaseStyleLeftColIn = {
-      width: this.props.uiMath.autoColWide,
-      borderStyle: 'solid',
-      borderColor: 'black',
-      backgroundColor: '#fffef4',
-      borderWidth: this.props.uiMath.borderWide,
-      padding: (this.props.uiMath.padWide || 0) + 'px',
-      borderTop: '0px',
-      height: this.props.uiMath.rowHighNoPad,
-      display: 'inline-block',
-      outline: outline,
-      overflow: 'hidden',
     };
 
     if (this.props.uiMath.rowHeaderList && this.props.uiMath.rowHeaderList.length>0){ // if pivoted or rowHeadered, make the row headers have header style
@@ -85,9 +71,7 @@ import ReactTooltip from 'react-tooltip';
     var cellStyleFirst = Object.assign(sharedBaseStyleLeftCol, (this.props.styleCell||{}));      
     var cellStyleLocal = Object.assign(sharedBaseStyle2, (this.props.styleCell || {}));
 
-    var inputStyleFirst = Object.assign(sharedBaseStyleLeftColIn, (this.props.styleInput || {}));
     var inputStyleLocal = Object.assign(sharedBaseStyleInput, (this.props.styleInput || {}));
-    inputStyleFirst.marginTop='-4';
     inputStyleLocal.marginTop = '-4';
     
 
@@ -122,6 +106,10 @@ import ReactTooltip from 'react-tooltip';
           if (this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { 
             helpComp = this.props.GridStore.colDefList[keyName].altText; 
           }
+
+          // add in the row header style
+          var rowHeaderStyle={...cellStyleFirst,...this.props.styleRowHeader};
+
           cellArray.push(
             <a data-tip data-for={'dataTip' + keyName} key={this.props.index + '-RH'}>                      
             <GridCell              
@@ -129,8 +117,7 @@ import ReactTooltip from 'react-tooltip';
               x={ctr}
               y={this.props.index}
               forceNoEdit={true}
-              styleInput={inputStyleFirst}
-              styleCell={cellStyleFirst}
+              styleCell={rowHeaderStyle}
               GridStore={this.props.GridStore}
               data={this.props.data}
               cellData={titleText}
@@ -159,7 +146,7 @@ import ReactTooltip from 'react-tooltip';
           x={ctr}
           y={this.props.index}
           objKey={keyName||this.props.uiMath.keyNames[ctr]}
-          styleInput={isFirst ? inputStyleFirst : inputStyleLocal}
+          styleInput={inputStyleLocal}
           styleCell={isFirst ? cellStyleFirst : cellStyleLocal}
           GridStore={this.props.GridStore}
           data={this.props.data}

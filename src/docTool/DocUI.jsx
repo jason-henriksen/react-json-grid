@@ -26,8 +26,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable showOutline = false;
   @action toggleOutline() { this.showOutline = !this.showOutline; }
   
-  @observable showTools = false;
-  @action toggleTools() { this.showTools = !this.showTools; }
+  @observable showToolsAddCut = false;
+  @action toggleToolsAddCut() { this.showToolsAddCut = !this.showToolsAddCut; }
+
+  @observable showToolsPage = false;
+  @action toggleToolsPage() { this.showToolsPage = !this.showToolsPage; }
+
+  @observable showToolsCustom = false;
+  @action toggleToolsCustom() { this.showToolsCustom = !this.showToolsCustom; }
 
   @observable editDisabled = false;
   @action toggleEditDisabled() { this.editDisabled = !this.editDisabled; }
@@ -69,11 +75,18 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable styleHeader = '';
   @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
+  @observable styleRowHeader = '';
+  @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
   @observable styleCell = '';
   @action setCellStyle(evt) { this.styleCell = evt.target.value; }
   @observable styleInput = '';
   @action setInputStyle(evt) { this.styleInput = evt.target.value; }
 
+  @observable formatDate = '';
+  @action setFormatDate(evt) { this.formatDate = evt.target.value; }
+  @observable formatTime = '';
+  @action setFormatTime(evt) { this.formatTime = evt.target.value; }
+  
 
 
   @observable colDef = 
@@ -81,28 +94,28 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         {  
           key: 'a',           title:'col A',        editDisabled: '',          widePct: '',          widePx: '',
           easyBool:'',          easyInt: '',          easyFloat: '',          easyMoneyDollar: '',          easyMoneyEuro: '',          easyMoneyPound: '',
-        easyDate: '',           easyMenu: '',altText: '',
+        easyDate: '',easyDateTime: '',           easyMenu: '',altText: '',
           styleHeader: '',          styleInput: '',                    styleCell: '',          
           compHeader: '',          compInput: '',          compCell: '',displayFormatter:''
         },       
         {
           key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
           easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '', altText: '',
+          easyDate: '',easyDateTime: '', altText: '',
           styleHeader: '', styleInput: '', styleCell: '',
           compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         },
         {
           key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
           easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '', altText: '',
+          easyDate: '',easyDateTime: '', altText: '',
           styleHeader: '', styleInput: '', styleCell: '',
           compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         },
         {
           key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
           easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '', altText: '',
+          easyDate: '',easyDateTime: '', altText: '',
           styleHeader: '', styleInput: '', styleCell: '',
           compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         }
@@ -157,7 +170,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   {
     // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
     // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
-    console.log(x,y,objKey,newValue);
     var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));    
     cleanData[y][objKey]=newValue;
     this.data = JSON.stringify(cleanData);
@@ -166,7 +178,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @action setToolAction(x, y, objKey, tool) {
     // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
     // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
-    console.log(x, y, objKey, tool);
     var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
     if("ADDROW"===tool){
       cleanData.splice(y+1, 0, {});
@@ -218,6 +229,17 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     }
     return res;
   }
+  @computed get jsonRowHeaderStyleObject(){
+    var res={}
+    if(!this.styleRowHeader){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.styleRowHeader));
+    } catch(e) {
+      res={backgroundColor:'red',err:'invalid JSX Style'};
+    }
+    return res;
+  }
+  
   @computed get jsonInputStyleObject(){
     var res={}
     if(!this.styleInput){ return res; }
@@ -259,11 +281,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
                 <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
                 <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
-                <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
-                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showToolsAddCut' help='show button bar, validations, add/remove rows' />
-                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showToolsPages' help='show button bar, validations, add/remove rows' />
-                <Toggle action={this.toggleTools} toggleValue={this.showTools} label='showToolsCustom' help='show button bar, validations, add/remove rows' />
+                <Toggle action={this.toggleToolsAddCut} toggleValue={this.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
+                <Toggle action={this.toggleToolsPage} toggleValue={this.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
+                <Toggle action={this.toggleToolsCustom} toggleValue={this.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br/>Note that you must supply an array of components to this attribute</div>} />
                 <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
+                <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
                 <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
                 <NumWheel action={this.setGridWide} incr={100} curValue={this.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
@@ -274,8 +296,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <NumWheel action={this.setPivotRowHeaderWide} incr={25} curValue={this.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br/>use this to set the pixel width of the row header</div>} />
                 
                 <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.setRowHeaderStyle} curValue={this.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
                 <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
+                <TextParam action={this.setFormatDate} curValue={this.formatDate} label='formatDate' help='preferred date format.' />
+                <TextParam action={this.setFormatTime} curValue={this.formatTime} label='formatTime' help='preferred time format.' />
               </div>
             </div>
           {this.columnList &&
@@ -303,6 +328,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               pivotOn='title' 
               pivotRowHeaderWide={125}              
               onChange={this.setColDefValue}
+              styleRowHeader={{textAlign:'left'}}
               gridHigh={600}
               gridWide={425}
             />
@@ -331,6 +357,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         gridWide={this.propGridWide}      
         editDisabled={this.editDisabled}
         styleHeader={this.jsonHeaderStyleObject}
+        styleRowHeader={this.jsonRowHeaderStyleObject}
         styleInput={this.jsonInputStyleObject}
         styleCell={this.jsonCellStyleObject}        
         rowHigh={this.propRowHigh}
@@ -344,7 +371,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         pivotOn={ this.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
         pivotRowHeaderWide={this.pivotRowHeaderWide}
         columnList={ this.columnList?this.colDef:null }
-        showTools={this.showTools}
+        showToolsAddCut={this.showToolsAddCut}
+        showToolsPage={this.showToolsPage}
+        showToolsCustom={null}
+        formatDate={this.formatDate}
+        formatTime={this.formatTime}
       />
       <br/>
       <br />
@@ -363,8 +394,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
           {this.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
           {this.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.styleHeader}&#125;</span>}
+          {this.styleRowHeader && <span><br />&nbsp;&nbsp;styleRowHeader=&#123;{this.styleRowHeader}&#125;</span>}
           {this.styleInput && <span><br />&nbsp;&nbsp;styleInput=&#123;{this.styleInput}&#125;</span>}
           {this.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.styleCell}&#125;</span>}
+          {this.formatDate && <span><br />&nbsp;&nbsp;formatDate=&#123;{this.formatDate}&#125;</span>}
+          {this.formatTime && <span><br />&nbsp;&nbsp;formatTime=&#123;{this.formatTime}&#125;</span>}
           {this.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{colListAsText}&nbsp;&nbsp;]&#125;</span>}          
           <br/>&nbsp;&nbsp;data=&#123;this.data&#125;
           <br/>&nbsp;&nbsp;onChange=&#123;(x,y,objKey,value)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;

@@ -13,7 +13,7 @@ import ReactTooltip from 'react-tooltip';
 import PlaylistRemoveIcon from 'mdi-react/PlaylistRemoveIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 
-
+import DatePickerOverlay from './easyTools/DatePickerOverlay';
 
 import EasyBool from './easyTools/EasyBool';
 
@@ -154,9 +154,14 @@ const GridBody = observer( class GridBody extends React.Component {
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
           /> 
+          {/* put the header in place */}
           <div style={{padding:'0px',margin:'0px',maxHeight:''+headerUsage+'px',minHeight:''+headerUsage+'px',height:''+headerUsage+'px'}}>
             {header}
-          </div>{/* put the header in place */}
+          </div>
+
+          {/* if needed, put the date picker overlay in place */}
+          { (this.props.GridStore.showDatePicker||this.props.GridStore.showDateTimePicker) && <DatePickerOverlay GridStore={this.props.GridStore} uiMath={ui}/> }
+
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
             width='100%'            
@@ -169,6 +174,7 @@ const GridBody = observer( class GridBody extends React.Component {
                           GridStore={this.props.GridStore}
                           styleInput={this.props.styleInput}
                           styleCell={this.props.styleCell}
+                          styleRowHeader={this.props.styleRowHeader}
                           uiMath={ui}
                           pivotOn={this.props.pivotOn}
                           onChange={this.props.onChange}
@@ -184,7 +190,7 @@ const GridBody = observer( class GridBody extends React.Component {
                       borderTopWidth: ui.borderWide,
                       height:'0px'}}/>
       }
-        {this.props.showTools &&
+        {this.props.showToolsAddCut &&
           <div>
           <button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button>
           </div>

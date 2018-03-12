@@ -13,7 +13,7 @@ import { observer } from 'mobx-react';
 
   @observable isShowingHelp = false;
   @action toggleHelpOn() { this.isShowingHelp = !this.isShowingHelp; }
-  @action toggleHelpOff() { console.log('-'); this.isShowingHelp = false; }
+  @action toggleHelpOff() { this.isShowingHelp = false; }
 
   render() {    
     var rval = 'rotate(90deg)';
@@ -24,9 +24,9 @@ import { observer } from 'mobx-react';
   
     return (
     <div>      
-      <div onClick={this.props.action} style={{display: 'flex',alignItems:'center'}}>
+      <div style={{display: 'flex',alignItems:'center'}}>
         <div style={{ display: 'inline-block', minWidth: '175px', font: '16px monospace', cursor: 'help' }} onClick={this.toggleHelpOn} >{this.props.label}</div>
-        <div style={{verticalAlign:'middle',display: 'inline-block',transform: rval,transition: '0.2s'}}>
+        <div style={{verticalAlign:'middle',display: 'inline-block',transform: rval,transition: '0.2s'}}  onClick={this.props.action} >
           {this.props.toggleValue?<CheckFull style={{marginLeft:'2px'}}/>:<CheckEmpty style={{marginRight:'2px'}}/>}
         </div>&nbsp;
       </div>

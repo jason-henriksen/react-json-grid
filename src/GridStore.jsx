@@ -4,11 +4,11 @@ class GridStore {           // Just a class.  Nothing fancy here.
   constructor() { 
   }
 
-  @observable cursor = {x:0,y:0,                    // cursor x and y values
-                        maxX:-1,maxY:-1,              // max legal x and y values.
-                        selectToX:-1,selectToY:-1,  // selection box for shift selection
-                        editX:-1,editY:-1,          // cell being edited
-                        shiftSelInProgress:false    // for shift arrow selecting cells
+  @observable cursor = {x:0,y:0,                         // cursor x and y values
+                        maxX:-1,maxY:-1,                 // max legal x and y values.
+                        selectToX:-1,selectToY:-1,       // selection box for shift selection
+                        editX:-1,editY:-1,editObjKey:-1, // cell being edited
+                        shiftSelInProgress:false         // for shift arrow selecting cells
                        };
   @observable selectedCells = [];                 // for control clicking cells.
   @observable curEditingValue='';                 // value being edited before it is applied.
@@ -19,6 +19,9 @@ class GridStore {           // Just a class.  Nothing fancy here.
 
   @observable colDefList = {};                    // column definition meta data
   @observable keyList=[]                          // list of the keys in the given data object.
+
+  @observable showDatePicker = false;             // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
+  @observable showDateTimePicker = false;         // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
 
 
 
@@ -162,10 +165,12 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return res;
   }
 
-  checkValidInt(t){    
+  checkValidInt(t){  
+    if(!t) return true; // blank+null is ok.  
     return (!isNaN(t) && (function (x) { return (x | 0) === x; })(parseFloat(t)));
   }
   checkValidFloat(t) {
+    if(!t) return true; // blank+null is ok.
     return (!isNaN(t));
   }
 

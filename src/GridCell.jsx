@@ -32,7 +32,15 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.y === this.props.GridStore.cursor.y) {
       this.props.GridStore.cursor.editX = this.props.x;
       this.props.GridStore.cursor.editY = this.props.y;
+      this.props.GridStore.cursor.objKey = this.props.objKey;
       this.props.GridStore.curEditingValue = this.props.cellData;
+      // check for dates and menus
+      if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
+        this.props.GridStore.showDatePicker=true;
+      }
+      else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
+        this.props.GridStore.showDateTimePicker=true;
+      }
     }
     else{
       this.props.GridStore.cursor.x = this.props.x;
@@ -46,10 +54,10 @@ window.reactJsonGridFocusInput = function(elem){
     this.props.GridStore.autoFocus=true;
     if (this.props.x !== this.props.GridStore.cursor.editX ||
         this.props.y !== this.props.GridStore.cursor.editY) {
-      if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40' ) {
+      if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40' ) {  // arrows
         this.props.GridStore.cellMoveKey(e);
       }
-      else if (e.keyCode == '13') {
+      else if (e.keyCode == '13') { // enter
         if(e.shiftKey) {
           // back-enter
           this.props.GridStore.cursor.y--;
@@ -93,14 +101,34 @@ window.reactJsonGridFocusInput = function(elem){
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);
+        this.props.GridStore.cursor.objKey = this.props.objKey;
+        this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);        
+        // pop overlay editors if needed
+        if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
+          this.props.GridStore.showDatePicker=true;
+        }
+        else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
+          this.props.GridStore.showDateTimePicker=true;
+        }          
+      }
+      else if (e.keyCode == '46') { // delete: instant kill!
+        this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, '');
       }
       else{
         if( e.key.length===1 ){ // must be a char
           // not that the react code calls a javascript function to make sure the cursor goes to the end of the input so you can keep typing naturally.
           this.props.GridStore.cursor.editX = this.props.x;
           this.props.GridStore.cursor.editY = this.props.y;
-          this.props.GridStore.curEditingValue = ''+e.key;
+          this.props.GridStore.cursor.objKey = this.props.objKey;
+          if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
+            this.props.GridStore.showDatePicker=true;
+          }
+          else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
+            this.props.GridStore.showDateTimePicker=true;
+          }          
+          else{            
+            this.props.GridStore.curEditingValue = ''+e.key;
+          }
         }
       }
     }
@@ -231,7 +259,6 @@ window.reactJsonGridFocusInput = function(elem){
     // over ride width if needed
     if (this.props.GridStore.colDefList[this.props.objKey]) { // is there a colDef that uses this key?
       var curColWide = style.width;
-      //console.log('cw ' + curColWide);
       if (this.props.GridStore.colDefList[this.props.objKey].widePx) {
         curColWide = this.props.GridStore.colDefList[this.props.objKey].widePx+'px';
       }
@@ -307,30 +334,12 @@ window.reactJsonGridFocusInput = function(elem){
       if (this.props.GridStore.colDefList &&
           this.props.GridStore.colDefList[this.props.objKey] &&
           this.props.GridStore.colDefList[this.props.objKey].easyDate){
-        renderPlan=
-        <div tabIndex='0' id={this.props.id} style={style}>
-          <DatePicker
-            selected={moment(curDisplayVal)}
-            onChange={this.valChangeDate}
-            id={this.props.id}
-            onBlur={this.endEdit}            
-          />      
-        </div >        
-
+        renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }
       else if (this.props.GridStore.colDefList &&
         this.props.GridStore.colDefList[this.props.objKey] &&
         this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
-        renderPlan =
-          <DatePicker
-            customInput={<span style={styleIn}>{'' + curDisplayVal}</span>}
-            selected={moment(curDisplayVal)}
-            onChange={this.valChangeDate}
-            showTimeSelect
-            dateFormat="LLL"  
-            id={this.props.id}
-            onBlur={this.endEdit}
-          />
+        renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }      
       else{
         // use the normal text input editor
@@ -342,7 +351,7 @@ window.reactJsonGridFocusInput = function(elem){
                   ref={input => input && window.reactJsonGridFocusInput(input)}
                   onBlur={this.endEdit}
             />
-      }
+      }      
     } 
     else{
       //===== VIEW SIDE
@@ -358,6 +367,8 @@ window.reactJsonGridFocusInput = function(elem){
         if (
           (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
           (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
+          (this.props.GridStore.colDefList[this.props.objKey].easyDate) ||
+          (this.props.GridStore.colDefList[this.props.objKey].easyDateTime) ||
           ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
             this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
             this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound))
@@ -383,6 +394,25 @@ window.reactJsonGridFocusInput = function(elem){
           }
           else if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) {
             renderVal = accounting.formatMoney(this.props.cellData, "£", 2, ".", ",");
+          }
+          // since we're here: highlight invalid dates & times
+          if (this.props.GridStore.colDefList[this.props.objKey].easyDate) {
+            var parsed = moment(this.props.cellData, this.props.uiMath.formatDate);
+            if(!parsed.isValid){
+              style.outline = "3px orange dashed";
+            }
+            else{
+              renderVal = parsed.format(this.props.uiMath.formatDate);
+            }
+          }
+          else if (this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
+            var parsed = moment(this.props.cellData, this.props.uiMath.formatDate+' '+this.props.uiMath.formatTime);
+            if(!parsed.isValid){
+              style.outline = "3px orange dashed";
+            }
+            else{
+              renderVal = parsed.format(this.props.uiMath.formatDate+' '+this.props.uiMath.formatTime);
+            }
           }
 
         }
@@ -413,10 +443,9 @@ window.reactJsonGridFocusInput = function(elem){
                   cellData={this.props.cellData}
                   id={this.props.id+'-comp'}
                   onChange={this.props.GridStore.onChange}/></span>
-        }
+        }       
       }  
 
-      //console.log('fs '+style);
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 
                         id={this.props.id} style={style}                        

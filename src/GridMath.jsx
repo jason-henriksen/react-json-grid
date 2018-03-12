@@ -67,6 +67,9 @@ class GridMath
         result.gridHigh = 300;
       }
 
+      result.formatDate = props.formatDate||'YYYY-MM-DD';
+      result.formatTime = props.formatTime||'HH:mm';
+
       var autoColCount=0;
       // look at the data to display and figure out what we need to do.
       if(props.data && props.data.length>0){
@@ -115,7 +118,7 @@ class GridMath
             }
           }
         }
-        if(props.pivotOn && props.pivotRowHeaderWide){
+        if(props.pivotOn && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
           result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
           availableWide -= Number(props.pivotRowHeaderWide); // allow a set width pivot header, but still only autocol for pivoted data
         }

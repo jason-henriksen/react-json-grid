@@ -16,7 +16,7 @@ import { observer } from 'mobx-react';
 
   @observable isShowingHelp=false;
   @action toggleHelpOn(){ this.isShowingHelp=!this.isShowingHelp; }
-  @action toggleHelpOff(){ console.log('-');this.isShowingHelp=false; }
+  @action toggleHelpOff(){ this.isShowingHelp=false; }
 
   defVal() { this.props.action(-1); } // account for rounding error
 
