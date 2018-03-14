@@ -7,6 +7,7 @@ import rrjsTool from 'really-relaxed-json';
 
 
 import Toggle from './Toggle';
+import ToggleFolder from './ToggleFolder';
 import NumWheel from './NumWheel';
 import TextParam from './TextParam';
 import CompactObjView from './CompactObjView';
@@ -70,6 +71,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable columnList = false;
   @action toggleColumnList() { this.columnList = !this.columnList; }
+
+  @observable showSizeStuff = false;
+  @action toggleShowSizeStuff() { this.showSizeStuff = !this.showSizeStuff; }
+  @observable showFormatStuff = false;
+  @action toggleShowFormatStuff() { this.showFormatStuff = !this.showFormatStuff; }
+  @observable showStyleStuff = false;
+  @action toggleShowStyleStuff() { this.showStyleStuff = !this.showStyleStuff; }
+  @observable showClassStuff = false;
+  @action toggleShowClassStuff() { this.showClassStuff = !this.showClassStuff; }
+  @observable showPivotStuff = false;
+  @action toggleShowPivotStuff() { this.showPivotStuff = !this.showPivotStuff; }
+  @observable showEditStuff = false;
+  @action toggleShowEditStuff() { this.showEditStuff = !this.showEditStuff; }
 
 
 
@@ -278,14 +292,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
             <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
+              <ToggleFolder action={this.toggleShowSizeStuff} toggleValue={this.showSizeStuff} label='Size Features' help='display API for sizing' />
+              { this.showSizeStuff &&  
+              <div>
                 <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
                 <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
-                <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
-                <Toggle action={this.toggleToolsAddCut} toggleValue={this.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
-                <Toggle action={this.toggleToolsPage} toggleValue={this.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
-                <Toggle action={this.toggleToolsCustom} toggleValue={this.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br/>Note that you must supply an array of components to this attribute</div>} />
-                <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
-                <Toggle action={this.toggleColumnList} toggleValue={this.columnList} label='columnList' help='define column info.' />
                 <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
                 <NumWheel action={this.setGridWide} incr={100} curValue={this.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
@@ -293,47 +304,87 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
                 <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
                 <NumWheel action={this.setMinColWide} incr={5} curValue={this.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
-                <NumWheel action={this.setPivotRowHeaderWide} incr={25} curValue={this.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br/>use this to set the pixel width of the row header</div>} />
-                
+                </div>
+              }
+
+              <ToggleFolder action={this.toggleColumnList} toggleValue={this.columnList} label='Column Definition Features' help='define column meta data' />
+              {this.columnList &&
+                <div>
+                <Grid
+                  data={this.colDef}
+                  columnList={[
+                    { key: 'key', altText: 'key name (or index) of the data for this column' },
+                    { key: 'title', altText: 'text in the title bar of the column' },
+                    { key: 'editDisabled', easyBool: true, altText: 'disable editing for this column' },
+                    { key: 'widePct', easyFloat: true, altText: 'percent of grid width to make this column.  Too big will cause side scrolling!' },
+                    { key: 'widePx', easyInt: true, altText: 'width in pixels to make this column.  Too big will cause side scrolling!' },
+                    { key: 'easyBool', easyBool: true, altText: 'render this column as a check box' },
+                    { key: 'easyInt', easyBool: true, altText: 'render and validate this column as an integer' },
+                    { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float' },
+                    { key: 'easyMoneyDollar', easyBool: true, altText: 'render and validate this column as dollars' },
+                    { key: 'easyMoneyEuro', easyBool: true, altText: 'render and validate this column as euros' },
+                    { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
+                    { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
+                    { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
+                    { key: 'easyMenu', easyBool: true, altText: 'render and validate this column as a menu' },
+                    { key: 'altText', altText: 'provide help text when mousing over the column header' },
+                  ]}
+                  pivotOn='title'
+                  pivotRowHeaderWide={125}
+                  onChange={this.setColDefValue}
+                  styleRowHeader={{ textAlign: 'left' }}
+                  gridHigh={600}
+                  gridWide={425}
+                />
+                </div>
+              }
+
+              <ToggleFolder action={this.toggleShowEditStuff} toggleValue={this.showEditStuff} label='Edit/Tools Features' help='display edit tools' />
+              {this.showEditStuff &&
+                <div>
+                  <Toggle action={this.toggleToolsAddCut} toggleValue={this.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
+                  <Toggle action={this.toggleToolsPage} toggleValue={this.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
+                  <Toggle action={this.toggleToolsCustom} toggleValue={this.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
+                  <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
+                </div>
+              }
+              <ToggleFolder action={this.toggleShowPivotStuff} toggleValue={this.showPivotStuff} label='Pivot Features' help='display data pivot' />
+              {this.showPivotStuff &&
+                <div>
+                  <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
+                  <NumWheel action={this.setPivotRowHeaderWide} incr={25} curValue={this.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br />use this to set the pixel width of the row header</div>} />
+                </div>
+              }
+              <ToggleFolder action={this.toggleShowStyleStuff} toggleValue={this.showStyleStuff} label='Style Features' help='display API for style objects' />
+              {this.showStyleStuff &&  
+                <div>
                 <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.setRowHeaderStyle} curValue={this.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
                 <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
+                </div>
+              }
+              <ToggleFolder action={this.toggleShowClassStuff} toggleValue={this.showClassStuff} label='Class Features' help='display API for css class usage' />
+              {this.showClassStuff &&
+                <div>
+                <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='classHeader' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.setRowHeaderStyle} curValue={this.styleRowHeader} label='classRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+                <TextParam action={this.setInputStyle} curValue={this.styleInput} label='classRow' help='style for default cells.  cannot control border or padding.' />
+                <TextParam action={this.setCellStyle} curValue={this.styleCell} label='classRowOdd' help='style for default input cells.  cannot control border or padding.' />
+                </div>
+              }              
+              <ToggleFolder action={this.toggleShowFormatStuff} toggleValue={this.showFormatStuff} label='Format Features' help='display API for date, time and other formatters' />
+              {this.showFormatStuff &&
+                <div>
                 <TextParam action={this.setFormatDate} curValue={this.formatDate} label='formatDate' help='preferred date format.' />
                 <TextParam action={this.setFormatTime} curValue={this.formatTime} label='formatTime' help='preferred time format.' />
+                </div>
+              }
+              ?? Copy Paste Features ??<br/>
+              ?? Multi-Select Features ??<br />
+              ?? Component Examples ??<br />
               </div>
             </div>
-          {this.columnList &&
-          <div>
-            <br/>Column Configuration<br/>
-            <Grid 
-              data={this.colDef} 
-                columnList={[
-                  { key: 'key', altText: 'key name (or index) of the data for this column' }, 
-                  { key: 'title', altText: 'text in the title bar of the column' }, 
-                  { key: 'editDisabled', easyBool: true, altText:'disable editing for this column' }, 
-                  { key: 'widePct', easyFloat: true, altText: 'percent of grid width to make this column.  Too big will cause side scrolling!' },
-                  { key: 'widePx', easyInt: true, altText: 'width in pixels to make this column.  Too big will cause side scrolling!' },
-                  { key: 'easyBool', easyBool: true, altText:'render this column as a check box' },
-                  { key: 'easyInt', easyBool: true , altText:'render and validate this column as an integer' },
-                  { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float'},
-                  { key: 'easyMoneyDollar', easyBool: true, altText: 'render and validate this column as dollars' },
-                  { key: 'easyMoneyEuro', easyBool: true, altText: 'render and validate this column as euros' },
-                  { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
-                  { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
-                  { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
-                  { key: 'easyMenu', easyBool: true, altText: 'render and validate this column as a menu' },
-                  { key: 'altText', altText: 'provide help text when mousing over the column header' },
-                ]}
-              pivotOn='title' 
-              pivotRowHeaderWide={125}              
-              onChange={this.setColDefValue}
-              styleRowHeader={{textAlign:'left'}}
-              gridHigh={600}
-              gridWide={425}
-            />
-          </div>
-          }
           <br/><br/><br/>Example Data (this.data)<br/>
           <button style={{width:'90px'}} onClick={this.makeS}>5 objects</button>
           <button style={{width:'90px'}} onClick={this.makeM}>150 objects</button>
