@@ -14,6 +14,7 @@ import PlaylistRemoveIcon from 'mdi-react/PlaylistRemoveIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 
 import DatePickerOverlay from './easyTools/DatePickerOverlay';
+import MenuPickerOverlay from './easyTools/MenuPickerOverlay';
 
 import EasyBool from './easyTools/EasyBool';
 
@@ -160,7 +161,8 @@ const GridBody = observer( class GridBody extends React.Component {
           </div>
 
           {/* if needed, put the date picker overlay in place */}
-          { (this.props.GridStore.showDatePicker||this.props.GridStore.showDateTimePicker) && <DatePickerOverlay GridStore={this.props.GridStore} uiMath={ui}/> }
+          {(this.props.GridStore.showDatePicker||this.props.GridStore.showDateTimePicker) && <DatePickerOverlay GridStore={this.props.GridStore} uiMath={ui}/> }
+          {(this.props.GridStore.showMenuPicker) && <MenuPickerOverlay GridStore={this.props.GridStore} uiMath={ui} />}
 
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList

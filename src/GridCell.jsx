@@ -41,6 +41,12 @@ window.reactJsonGridFocusInput = function(elem){
       else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
         this.props.GridStore.showDateTimePicker=true;
       }
+      else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+        this.props.GridStore.showMenuPicker = true;
+      }
+      else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].overlayComp) {
+        this.props.GridStore.showOverlayComp = true;
+      }          
     }
     else{
       this.props.GridStore.cursor.x = this.props.x;
@@ -109,6 +115,12 @@ window.reactJsonGridFocusInput = function(elem){
         }
         else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
           this.props.GridStore.showDateTimePicker=true;
+        }          
+        else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+          this.props.GridStore.showMenuPicker = true;
+        }          
+        else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].overlayComp) {
+          this.props.GridStore.showOverlayComp = true;
         }          
       }
       else if (e.keyCode == '46') { // delete: instant kill!
@@ -341,6 +353,51 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
         renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }      
+      else if (this.props.GridStore.colDefList &&
+        this.props.GridStore.colDefList[this.props.objKey] &&
+        this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+        renderPlan = <div style={style}>
+        <div style={{position:'absolute',top:'5px',left:'25px',width:'450px',height:'150px',overflow:'auto',backgroundColor:'white',zIndex:'50'}}>
+          <div>a</div>
+          <div>b</div>
+          <div>c</div>
+          <div>d</div>        
+          <div>a</div>
+          <div>b</div>
+          <div>c</div>
+          <div>d</div>        
+          <div>a</div>
+          <div>b</div>
+          <div>c</div>
+          <div>d</div>        
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>        
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>
+            <div>a</div>
+            <div>b</div>
+            <div>c</div>
+            <div>d</div>        
+        {curDisplayVal}
+        </div>
+        </div>
+      }            
       else{
         // use the normal text input editor
         renderPlan = 
