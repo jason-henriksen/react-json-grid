@@ -15,6 +15,7 @@ import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 
 import DatePickerOverlay from './easyTools/DatePickerOverlay';
 import MenuPickerOverlay from './easyTools/MenuPickerOverlay';
+import AltTextOverlay from './easyTools/AltTextOverlay';
 
 import EasyBool from './easyTools/EasyBool';
 
@@ -98,9 +99,15 @@ const GridBody = observer( class GridBody extends React.Component {
           else if (this.props.GridStore.colDefList[keyName].widePct) {  // width by pct
             curColWide = ui.rowWide * (this.props.GridStore.colDefList[keyName].widePct/100);
           }
-          
-          if(!this.props.pivotOn){
-            // handle alt text.  Note that the 'text' could be a component.  regular header
+
+          if(this.props.pivotOn){                  // handle pivoted alt text.  Note that the 'text' could be a component.  regular header
+            if(ctr>0){
+              if (this.props.GridStore.colDefList[ this.props.GridStore.keyList[ctr-1] ].altText) { 
+                helpComp = this.props.GridStore.colDefList[ this.props.GridStore.keyList[ctr-1] ].altText; 
+              }
+            }
+          }
+          else{// handle alt text.  Note that the 'text' could be a component.  regular header
             if (this.props.GridStore.colDefList[keyName].altText) { helpComp = this.props.GridStore.colDefList[keyName].altText; }
           }
         }
@@ -163,6 +170,7 @@ const GridBody = observer( class GridBody extends React.Component {
           {/* if needed, put the date picker overlay in place */}
           {(this.props.GridStore.showDatePicker||this.props.GridStore.showDateTimePicker) && <DatePickerOverlay GridStore={this.props.GridStore} uiMath={ui}/> }
           {(this.props.GridStore.showMenuPicker) && <MenuPickerOverlay GridStore={this.props.GridStore} uiMath={ui} />}
+          <AltTextOverlay GridStore={this.props.GridStore} uiMath={ui}/>
 
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList

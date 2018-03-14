@@ -8,6 +8,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
                         maxX:-1,maxY:-1,                 // max legal x and y values.
                         selectToX:-1,selectToY:-1,       // selection box for shift selection
                         editX:-1,editY:-1,editObjKey:-1, // cell being edited
+                        showAltX:-1,showAltY:-1,         // for displaying alt text help
                         shiftSelInProgress:false         // for shift arrow selecting cells
                        };
   @observable selectedCells = [];                 // for control clicking cells.

@@ -326,7 +326,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                     { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
                     { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
                     { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
-                    { key: 'easyMenu', easyBool: true, altText: 'render and validate this column as a menu' },
+                    { key: 'easyMenu', altText: 'render and validate this column as a menu' },
                     { key: 'altText', altText: 'provide help text when mousing over the column header' },
                   ]}
                   pivotOn='title'

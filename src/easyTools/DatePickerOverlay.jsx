@@ -25,7 +25,7 @@ class DatePickerOverlay extends React.Component {
     else{
       this.props.GridStore.curEditingValue = evt.format(this.props.uiMath.formatDate);    
     }
-    this.props.GridStore.onChangePivotWrapper(this.props.GridStore.cursor.editX, this.props.GridStore.cursor.editY, this.props.GridStore.cursor.objKey, this.props.GridStore.curEditingValue);    
+    this.props.GridStore.onChangePivotWrapper(this.props.GridStore.cursor.editX, this.props.GridStore.cursor.editY, this.props.GridStore.cursor.editObjKey, this.props.GridStore.curEditingValue);    
     this.endEdit();
   }
 

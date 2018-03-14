@@ -10,9 +10,23 @@ import GridCell from './GridCell';
 import ReactTooltip from 'react-tooltip';
 
 
+
 @observer class GridRow extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
+  showRowHeaderAltText(e,x,y)
+  {
+    this.props.GridStore.cursor.showAltX = x;
+    this.props.GridStore.cursor.showAltY = y;
+  }
+  hideRowHeaderAltText(e,x,y)
+  {
+    if(this.props.GridStore.cursor.showAltX === x && this.props.GridStore.cursor.showAltY === y){
+      this.props.GridStore.cursor.showAltX = -1;  // don't mess with it if values were set by someone else.
+      this.props.GridStore.cursor.showAltY = -1;
+      }
+  }
+    
   render() {
 
     var selRow=false;
@@ -71,6 +85,7 @@ import ReactTooltip from 'react-tooltip';
     var cellStyleFirst = Object.assign(sharedBaseStyleLeftCol, (this.props.styleCell||{}));      
     var cellStyleLocal = Object.assign(sharedBaseStyle2, (this.props.styleCell || {}));
 
+    var inputStyleFirst = Object.assign(sharedBaseStyleLeftCol, (this.props.styleCell||{}));      
     var inputStyleLocal = Object.assign(sharedBaseStyleInput, (this.props.styleInput || {}));
     inputStyleLocal.marginTop = '-4';
     
@@ -101,6 +116,7 @@ import ReactTooltip from 'react-tooltip';
           if(this.props.uiMath.pivotRowHeaderWide){
             cellStyleFirst.width = Number(this.props.uiMath.pivotRowHeaderWide);
           }
+          isFirst=false;
           
           var helpComp=null;
           if (this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { 
@@ -111,13 +127,15 @@ import ReactTooltip from 'react-tooltip';
           var rowHeaderStyle={...cellStyleFirst,...this.props.styleRowHeader};
 
           cellArray.push(
-            <a data-tip data-for={'dataTip' + keyName} key={this.props.index + '-RH'}>                      
+            <a onMouseEnter={(e)=>this.showRowHeaderAltText(e,ctr,this.props.index)}  onMouseLeave={(e)=>this.hideRowHeaderAltText(e,ctr,this.props.index)}   
+               key={this.props.index + '-RH'}>                      
             <GridCell              
               id={this.props.index + '-RH'}
               x={ctr}
               y={this.props.index}
               forceNoEdit={true}
               styleCell={rowHeaderStyle}
+              isFirstColumn={true}
               GridStore={this.props.GridStore}
               data={this.props.data}
               cellData={titleText}
@@ -125,8 +143,7 @@ import ReactTooltip from 'react-tooltip';
               onChange={this.props.onChange}
             />
             </a>
-            );
-          isFirst=false;
+          );
         }
       }
       else{
@@ -147,7 +164,8 @@ import ReactTooltip from 'react-tooltip';
           y={this.props.index}
           objKey={keyName||this.props.uiMath.keyNames[ctr]}
           styleInput={inputStyleLocal}
-          styleCell={isFirst ? cellStyleFirst : cellStyleLocal}
+          styleCell={cellStyleLocal}
+          isFirstColumn={isFirst}
           GridStore={this.props.GridStore}
           data={this.props.data}
           cellData={cellData}

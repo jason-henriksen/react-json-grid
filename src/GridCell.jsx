@@ -32,8 +32,9 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.y === this.props.GridStore.cursor.y) {
       this.props.GridStore.cursor.editX = this.props.x;
       this.props.GridStore.cursor.editY = this.props.y;
-      this.props.GridStore.cursor.objKey = this.props.objKey;
+      this.props.GridStore.cursor.editObjKey = this.props.objKey;
       this.props.GridStore.curEditingValue = this.props.cellData;
+      console.log('start edit ',this.props.GridStore.cursor.editX,this.props.GridStore.cursor.editY,this.props.GridStore.cursor.editObjKey);
       // check for dates and menus
       if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
         this.props.GridStore.showDatePicker=true;
@@ -107,7 +108,7 @@ window.reactJsonGridFocusInput = function(elem){
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
-        this.props.GridStore.cursor.objKey = this.props.objKey;
+        this.props.GridStore.cursor.editObjKey = this.props.objKey;
         this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);        
         // pop overlay editors if needed
         if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
@@ -131,7 +132,7 @@ window.reactJsonGridFocusInput = function(elem){
           // not that the react code calls a javascript function to make sure the cursor goes to the end of the input so you can keep typing naturally.
           this.props.GridStore.cursor.editX = this.props.x;
           this.props.GridStore.cursor.editY = this.props.y;
-          this.props.GridStore.cursor.objKey = this.props.objKey;
+          this.props.GridStore.cursor.editObjKey = this.props.objKey;
           if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
             this.props.GridStore.showDatePicker=true;
           }
@@ -160,6 +161,7 @@ window.reactJsonGridFocusInput = function(elem){
 
   @action endEdit()
   {
+    debugger;
     if (this.props.GridStore.colDefList &&
       this.props.GridStore.colDefList[this.props.objKey]) {
       if (
@@ -171,6 +173,7 @@ window.reactJsonGridFocusInput = function(elem){
           && !this.props.GridStore.curEditIsValidFor.isValidFloat)
       ) {
         // value is not valid for the field definition.  Do not make the change.
+        console.log('end edit cell 1');
         this.props.GridStore.cursor.editX = -1;
         this.props.GridStore.cursor.editY = -1;
         return;
@@ -178,7 +181,7 @@ window.reactJsonGridFocusInput = function(elem){
     }
     
     this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
-    
+    console.log('end edit cell 2');
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
   }
@@ -258,6 +261,8 @@ window.reactJsonGridFocusInput = function(elem){
   render() {
 
     var style={...this.props.styleCell};
+    var styleIn={...this.props.styleInput};
+    
     if (this.props.GridStore.selectionBounds.l <= this.props.x &&
         this.props.GridStore.selectionBounds.r >= this.props.x &&
         this.props.GridStore.selectionBounds.t <= this.props.y &&
@@ -267,6 +272,16 @@ window.reactJsonGridFocusInput = function(elem){
       style.backgroundColor = 'lightblue';
       style.zIndex = 5;
     }
+
+    if(!this.props.isFirstColumn){
+      style.marginLeft=-1*this.props.uiMath.borderWide;
+      styleIn.marginLeft=-1*this.props.uiMath.borderWide;
+    }
+    else{
+      style.marginLeft=0;
+      styleIn.marginLeft=0;
+    }
+  
 
     // over ride width if needed
     if (this.props.GridStore.colDefList[this.props.objKey]) { // is there a colDef that uses this key?
@@ -280,9 +295,6 @@ window.reactJsonGridFocusInput = function(elem){
       style.width = curColWide;
     }
     
-    if(this.props.x>0){
-      style.marginLeft=-1*this.props.uiMath.borderWide;
-    }
     // render data standard
     var renderPlan = '';
     var isFocusNeeded = this.props.GridStore.autoFocus && this.props.x === this.props.GridStore.cursor.x && this.props.y === this.props.GridStore.cursor.y;
@@ -303,11 +315,7 @@ window.reactJsonGridFocusInput = function(elem){
           this.props.x === this.props.GridStore.cursor.editX &&
           this.props.y === this.props.GridStore.cursor.editY)
     {
-      var styleIn={...this.props.styleInput};
       
-      if(this.props.x>0){
-        styleIn.marginLeft=-1*this.props.uiMath.borderWide;
-      }
       styleIn.verticalAlign='top';
       styleIn.width = style.width;  // use the column defined width override if needed.
 
@@ -353,51 +361,6 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
         renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }      
-      else if (this.props.GridStore.colDefList &&
-        this.props.GridStore.colDefList[this.props.objKey] &&
-        this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
-        renderPlan = <div style={style}>
-        <div style={{position:'absolute',top:'5px',left:'25px',width:'450px',height:'150px',overflow:'auto',backgroundColor:'white',zIndex:'50'}}>
-          <div>a</div>
-          <div>b</div>
-          <div>c</div>
-          <div>d</div>        
-          <div>a</div>
-          <div>b</div>
-          <div>c</div>
-          <div>d</div>        
-          <div>a</div>
-          <div>b</div>
-          <div>c</div>
-          <div>d</div>        
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>        
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>        
-        {curDisplayVal}
-        </div>
-        </div>
-      }            
       else{
         // use the normal text input editor
         renderPlan = 
