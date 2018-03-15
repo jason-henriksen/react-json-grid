@@ -11,6 +11,7 @@ import ToggleFolder from './ToggleFolder';
 import NumWheel from './NumWheel';
 import TextParam from './TextParam';
 import CompactObjView from './CompactObjView';
+import DataMaker from './DataMaker';
 
 import DataNoiseMed from '../../stories/dataNoiseMedium.js'
 import DataNoiseSmall from '../../stories/dataNoiseSmall.js'
@@ -18,10 +19,16 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
 
 @observer class DocUI extends React.Component {
+
+  @observable data = DataNoiseSmall;
+  @action updateData(evt) { this.data = evt.target.value;}
+  @action updateDataText(txt) { this.data = txt;}
+
   constructor(props) { 
     super(props); autoBind(this); 
     this.rrjs = rrjsTool.createParser();
     this.printer = new rrjsTool.PrettyPrinter( rrjsTool.PrettyPrinter.Options.Companion.JsonPretty);
+    this.dm = new DataMaker(this.updateDataText);
   }
 
   @observable showOutline = false;
@@ -38,6 +45,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable editDisabled = false;
   @action toggleEditDisabled() { this.editDisabled = !this.editDisabled; }
+  
+  @observable editAsText = false;
+  @action toggleEditAsText() { this.editAsText = !this.editAsText; }
   
   @observable propBorderWide = -1;
   @action setBorderWidth(val) { this.propBorderWide = val; }
@@ -141,44 +151,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   
   
 
-  @observable data = DataNoiseSmall;
-  @action updateData(evt) { this.data = evt.target.value;}
-  @action makeS() { 
-    var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<5;ctr++){res+='{r:'+(5-ctr)+',a:5,b:6,c:8,d:90},';}
-    res = res.substring(0, res.length-1);res+=']';
-    this.data=res;
-  }
-  @action makeM() { 
-    var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<150;ctr++){res+='{r:'+(150-ctr)+',a:5,b:6,c:8,d:90},';}
-    res = res.substring(0, res.length-1);res+=']';
-    this.data=res;
-  }
-  @action makeL() { 
-    var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<50000;ctr++){res+='{"r":'+(50000-ctr)+',"a":5,"b":6,"c":8,"d":90},';}
-    res = res.substring(0, res.length-1);res+=']';
-    this.data=res;
-  }
-  @action makeSA() { 
-    var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<5;ctr++){res+='[1'+ctr+','+(2*ctr)+',3,4,5],';}
-    res = res.substring(0, res.length-1);res+=']';
-    this.data=res;
-  }  
-  @action makeMA() { 
-    var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<150;ctr++){res+='[1'+ctr+','+(2*ctr)+',3,4,5],';}
-    res = res.substring(0, res.length-1);res+=']';
-    this.data=res;
-  }  
-  @action makeLA() { 
-    var res = "[";  // faster to generate strings
-    for(var ctr=0;ctr<50000;ctr++){res+='[1'+ctr+','+(2*ctr)+',3,4,5],';}
-    res = res.substring(0, res.length-1);res+=']';
-    this.data=res;
-  }  
+
 
   @action setValue(x,y,objKey,newValue)
   {
@@ -346,6 +319,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                   <Toggle action={this.toggleToolsPage} toggleValue={this.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
                   <Toggle action={this.toggleToolsCustom} toggleValue={this.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
                   <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
+                  <Toggle action={this.toggleEditAsText} toggleValue={this.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
                 </div>
               }
               <ToggleFolder action={this.toggleShowPivotStuff} toggleValue={this.showPivotStuff} label='Pivot Features' help='display data pivot' />
@@ -386,13 +360,21 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               </div>
             </div>
           <br/><br/><br/>Example Data (this.data)<br/>
-          <button style={{width:'90px'}} onClick={this.makeS}>5 objects</button>
-          <button style={{width:'90px'}} onClick={this.makeM}>150 objects</button>
-          <button style={{width:'90px'}} onClick={this.makeL}>50K objects</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeS}>5 objects</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeM}>150 objects</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeL}>50K objects</button>
           <br/>
-          <button style={{width:'90px'}} onClick={this.makeSA}>5 arrays</button>
-          <button style={{width:'90px'}} onClick={this.makeMA}>150 arrays</button>
-          <button style={{width:'90px'}} onClick={this.makeLA}>50K arrays</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeSA}>5 arrays</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeMA}>150 arrays</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeLA}>50K arrays</button>
+          <br/>
+          <button style={{width:'90px'}} onClick={this.dm.makeAInt}>int[]</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeAWords}>word[]</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeKVP}>key : value[]</button>
+          <br/>
+          <button style={{width:'90px'}} onClick={this.dm.makeCSV}>CSV</button>
+          <button style={{width:'90px'}} onClick={this.dm.makePSV}>PSV</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeKVE}>key=value[]</button><br />
           <span style={{ color: 'red' }}>{this.dataAsObject.dataErr}</span><br />
           <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
           
@@ -407,6 +389,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         gridHigh={this.propGridHigh}
         gridWide={this.propGridWide}      
         editDisabled={this.editDisabled}
+        editAsText={this.editAsText}
         styleHeader={this.jsonHeaderStyleObject}
         styleRowHeader={this.jsonRowHeaderStyleObject}
         styleInput={this.jsonInputStyleObject}
@@ -437,6 +420,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.propGridHigh > -1 && <span><br />&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propRowHigh > -1 && <span><br />&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
           {this.editDisabled && <span><br />&nbsp;&nbsp;editDisabled=&#123;{''+this.editDisabled}&#125;&nbsp;&nbsp;</span>}
+          {this.editAsText && <span><br />&nbsp;&nbsp;editAsText=&#123;{''+this.editAsText}&#125;&nbsp;&nbsp;</span>}
           {this.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
           {this.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}

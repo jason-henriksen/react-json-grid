@@ -187,6 +187,42 @@ class GridStore {           // Just a class.  Nothing fancy here.
     
   }
 
+  @observable jsonAsTxtError = '';
+
+  convertJSONtoTXT(data){
+    this.keyList=[];
+    if(!Array.isArray(data)){
+      this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or objects with a single attribute';
+      console.log(this.jsonAsTxtError);
+      return '### Invalid Data ###';
+    }
+    if(data.length===0){
+      return '';
+    }    
+
+    if(typeof data[0] === 'object'){
+      this.keyList = Object.keys(data[0]);
+      if(this.keyList.length!==1){
+        this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or objects with a single attribute';
+        console.log(this.jsonAsTxtError);
+        return '### Invalid Data ###';
+      }
+      this.cursor.objKey =this.keyList[0];
+      return data.map(x=>x[this.cursor.objKey]).join('\n');  // get the "objKey"th item from each object into an array of primitives then newline-join it together for the response.
+    }
+    else{
+      return data.join('\n');
+    }    
+  }
+
+  convertTXTtoJSON(txt){
+    var lines = txt.split('\n');
+    // bonehead implementation.  this is intended for lists of less than 200 items.
+    for(var ctr=0;ctr<lines.length;ctr++){
+      this.onChange(0, ctr, this.keyList[0], lines[ctr]);    
+    }
+  }  
+
 }
 
 export default GridStore;

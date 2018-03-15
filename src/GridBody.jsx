@@ -8,6 +8,7 @@ import autoBind from 'react-autobind';
 import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
 import GridMath from './GridMath';
+import GridTextBox from './GridTextBox';
 import ReactTooltip from 'react-tooltip';
 
 import PlaylistRemoveIcon from 'mdi-react/PlaylistRemoveIcon';
@@ -16,7 +17,6 @@ import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 import DatePickerOverlay from './easyTools/DatePickerOverlay';
 import MenuPickerOverlay from './easyTools/MenuPickerOverlay';
 import AltTextOverlay from './easyTools/AltTextOverlay';
-
 import EasyBool from './easyTools/EasyBool';
 
 // Wrapper for the grid
@@ -68,6 +68,12 @@ const GridBody = observer( class GridBody extends React.Component {
 
   render() {
     var ui = this.uiMath.calcGridBody(this.props, (this.scrollBarWide||20));
+
+    if(this.props.editAsText){
+      // forget this complex grid nonsense.  Just make a big text area and edit the stuff that way.
+      return(<GridTextBox {...this.props} uiMath={ui}/>);
+    }
+
     if(ui.notReady){
       
       return( 
