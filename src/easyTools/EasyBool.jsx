@@ -10,11 +10,13 @@ class EasyBool extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
   toggle(){
-    if(this.props.cellData){
-      this.props.onChange( this.props.x, this.props.y, this.props.objKey, false);
-    }
-    else{
-      this.props.onChange(this.props.x, this.props.y, this.props.objKey, true);
+    if(!this.props.disabled){
+      if(this.props.cellData){
+        this.props.onChange( this.props.x, this.props.y, this.props.objKey, false);
+      }
+      else{
+        this.props.onChange(this.props.x, this.props.y, this.props.objKey, true);
+      }
     }
   }
 

@@ -36,7 +36,12 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return Number(res);
   }
 
-  @action logNoChangeHandlerMessage() {console.log('no change handler supplied.');}
+  @action logNoChangeHandlerMessage()     {console.log('no onChange handler supplied.');}
+  @action logNoOnRowAddHandlerMessage()   { console.log('no onRowAdd handler supplied.'); }
+  @action logNoOnRowCutHandlerMessage()   { console.log('no onRowCut handler supplied.'); }
+  @action logNoOnGotoPageHandlerMessage() { console.log('no onGotoPage handler supplied.'); }
+  @action logNoOnImportHandlerMessage()   { console.log('no onImport handler supplied.'); }
+  @action logNoOnExportHandlerMessage()   { console.log('no onExport handler supplied.'); }
 
   // don't call the user supplied on change directly.  
   // call this to ensure that the pivot variables get swizzled correctly.
@@ -61,7 +66,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
   */
   @action prepSelectionField(props)
   {
-
     var dataWide = 0;
     var dataHigh = 0;
     if (props.data && props.data.length > 0) {
@@ -85,7 +89,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
       this.cursor.maxY = dataHigh-1;
     }
 
-    this.onChange = (props.onChange || this.logNoChangeHandlerMessage ); // easy availability to cells
+    // make handlers easily available and log messages if they're missing.
+    this.onChange   = (props.onChange   || this.logNoChangeHandlerMessage );  
+    this.onRowAdd   = (props.onRowAdd   || this.logNoOnRowAddHandlerMessage); 
+    this.onRowCut   = (props.onRowCut   || this.logNoOnRowCutHandlerMessage); 
+    this.onGotoPage = (props.onGotoPage || this.logNoGotoPageHandlerMessage); 
+    this.onExport = (props.onExport     || this.logNoOnExportHandlerMessage); 
+    this.onImport = (props.onImport     || this.logNoOnImportHandlerMessage); 
 
     this.pivotOn = props.pivotOn;    // easy availability to cells
 
@@ -188,8 +198,10 @@ class GridStore {           // Just a class.  Nothing fancy here.
   }
 
   @observable jsonAsTxtError = '';
+  @observable textDataLinesLength=0;
 
-  convertJSONtoTXT(data){
+  @action convertJSONtoTXT(data){
+    this.textDataLinesLength=0;
     this.keyList=[];
     if(!Array.isArray(data)){
       this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or objects with a single attribute';
@@ -199,11 +211,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
     if(data.length===0){
       return '';
     }    
+    this.textDataLinesLength = data.length;
 
     if(typeof data[0] === 'object'){
+      this.textDataLinesLength = data.length;
       this.keyList = Object.keys(data[0]);
       if(this.keyList.length!==1){
-        this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or objects with a single attribute';
+        this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or an array of objects with a single attribute';
         console.log(this.jsonAsTxtError);
         return '### Invalid Data ###';
       }
@@ -215,9 +229,21 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }    
   }
 
-  convertTXTtoJSON(txt){
+  @action convertTXTtoJSON(txt){
     var lines = txt.split('\n');
     // bonehead implementation.  this is intended for lists of less than 200 items.
+    if (lines.length > this.textDataLinesLength){
+      var lim = lines.length - this.textDataLinesLength;
+      for (var x=0;x<lim;x++){
+        this.onRowAdd(0,0,'na');
+      }
+    }
+    if (lines.length < this.textDataLinesLength) {
+      var lim = this.textDataLinesLength - lines.length;
+      for (var y = 0; y < lim; y++) {
+        this.onRowCut(0, 0, 'na');
+      }
+    }
     for(var ctr=0;ctr<lines.length;ctr++){
       this.onChange(0, ctr, this.keyList[0], lines[ctr]);    
     }

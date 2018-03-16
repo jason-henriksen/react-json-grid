@@ -40,6 +40,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @observable showToolsPage = false;
   @action toggleToolsPage() { this.showToolsPage = !this.showToolsPage; }
 
+  @observable showToolsImpExp = false;
+  @action toggleToolsImpExp() { this.showToolsImpExp = !this.showToolsImpExp; }
+
   @observable showToolsCustom = false;
   @action toggleToolsCustom() { this.showToolsCustom = !this.showToolsCustom; }
 
@@ -149,10 +152,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     this.colDef[y][objKey] = newValue;
   }
   
-  
-
-
-
   @action setValue(x,y,objKey,newValue)
   {
     // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
@@ -162,19 +161,27 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     this.data = JSON.stringify(cleanData);
   }
 
-  @action setToolAction(x, y, objKey, tool) {
-    // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
-    // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
+  @action onRowAdd(x, y, objKey) {
+    console.log('onRowAdd');
+    debugger;
     var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
-    if("ADDROW"===tool){
-      cleanData.splice(y+1, 0, {});
-    }
-    if ("CUTROW" === tool) {
-      cleanData.splice(y, 1);
-    }
-    
+    cleanData.splice(y + 1, 0, {});
     this.data = JSON.stringify(cleanData);
   }
+
+  @action onRowCut(x, y, objKey) {
+    var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
+    cleanData.splice(y, 1);
+    this.data = JSON.stringify(cleanData);
+  }
+
+  @action onColAdd(x, y, objKey) { }// not implemented yet.  
+  @action onColCut(x, y, objKey) { }// not implemented yet.
+  @action onDataClear(x, y, objKey) { }// not implemented yet.
+  @action onGotoPage(page) {    window.alert('please load page '+page);  }
+  @action onExport() { window.alert('please export'); }
+  @action onImport() { window.alert('please import'); }
+  
   
 
 
@@ -317,6 +324,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <div>
                   <Toggle action={this.toggleToolsAddCut} toggleValue={this.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
                   <Toggle action={this.toggleToolsPage} toggleValue={this.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
+                  <Toggle action={this.toggleToolsImpExp} toggleValue={this.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
                   <Toggle action={this.toggleToolsCustom} toggleValue={this.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
                   <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
                   <Toggle action={this.toggleEditAsText} toggleValue={this.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
@@ -401,12 +409,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         padWide={this.propPadWide}
         data={this.dataAsObject.cleanData}
         onChange={this.setValue}
-        onToolAction={this.setToolAction}
+        onRowAdd={this.onRowAdd}
+        onRowCut={this.onRowCut}
+        onColAdd={this.onColAdd}
+        onColCut={this.onColCut}
+        onImport={this.onImport}
+        onExport={this.onExport}
+        onGotoPage={this.onGotoPage}
         pivotOn={ this.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
         pivotRowHeaderWide={this.pivotRowHeaderWide}
         columnList={ this.columnList?this.colDef:null }
         showToolsAddCut={this.showToolsAddCut}
         showToolsPage={this.showToolsPage}
+        showToolsImpExp={this.showToolsImpExp}
         showToolsCustom={null}
         formatDate={this.formatDate}
         formatTime={this.formatTime}
@@ -424,8 +439,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
           {this.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
           {this.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
-          {this.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}
-          {this.showTools && <span><br />&nbsp;&nbsp;showTools=&#123;{''+this.showTools}&#125;&nbsp;&nbsp;</span>}
+          {this.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}          
+          {this.showToolsAddCut && <span><br />&nbsp;&nbsp;showToolsAddCut=&#123;{''+this.showToolsAddCut}&#125;&nbsp;&nbsp;</span>}
+          {this.showToolsImpExp && <span><br />&nbsp;&nbsp;showToolsImpExp=&#123;{'' + this.showToolsImpExp}&#125;&nbsp;&nbsp;</span>}
+          {this.showToolsPage && <span><br />&nbsp;&nbsp;showToolsPage=&#123;{'' + this.showToolsPage}&#125;&nbsp;&nbsp;</span>}
+          {this.showToolsCustom && <span><br />&nbsp;&nbsp;showToolsCustom=&#123;{'' + this.showToolsCustom}&#125;&nbsp;&nbsp;</span>}
           {this.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
           {this.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
           {this.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.styleHeader}&#125;</span>}
@@ -440,13 +458,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.showTools && <span><br />&nbsp;&nbsp;onToolAction=&#123;(x,y,objKey,toolName)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;</span>}
           <br />/&gt;
       </div>
-
-
-
     </div>
-
-
-        </div>
+  </div>
     );
   }
 }

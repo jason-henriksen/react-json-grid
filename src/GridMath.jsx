@@ -47,6 +47,8 @@ class GridMath
       result.autoColWide = 0;                                   // width of the default filled column, before weights
       result.fixedRowCount = props.rowCount;               // what is the rowCount limit
 
+      result.editDisabled = props.editDisabled || false;
+
       // how high is each row:  user requested height does NOT include padding.  
       result.rowHighNoPad = this.makeValidInt(props.rowHigh, 18);
       if (-1 === result.rowHighNoPad) { result.rowHighNoPad=23;}

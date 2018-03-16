@@ -25,16 +25,29 @@ window.reactJsonGridFocusInput = function(elem){
 @observer class GridCell extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
+  @action isEditDisabled(){
+    var ed=(this.props.uiMath.editDisabled === true);
+    if( (this.props.GridStore.colDefList &&
+         this.props.GridStore.colDefList[this.props.objKey] &&              // edit disabled by column
+         this.props.GridStore.colDefList[this.props.objKey].editDisabled === true)){
+      ed=true;
+    }
+    return ed;
+  }
+
   @action onClick(evt)
   {
-    this.props.GridStore.autoFocus=true;
-    if (this.props.x === this.props.GridStore.cursor.x &&
-        this.props.y === this.props.GridStore.cursor.y) {
+    this.props.GridStore.autoFocus=true;                                    // if we edit, auto focus.
+
+    if (this.props.x === this.props.GridStore.cursor.x &&  // clicked the currently highlighted cell
+        this.props.y === this.props.GridStore.cursor.y &&  // clicked the currently highlighted cell
+        this.isEditDisabled() === false                    // edit is allowable
+    ) {
       this.props.GridStore.cursor.editX = this.props.x;
       this.props.GridStore.cursor.editY = this.props.y;
       this.props.GridStore.cursor.editObjKey = this.props.objKey;
       this.props.GridStore.curEditingValue = this.props.cellData;
-      console.log('start edit ',this.props.GridStore.cursor.editX,this.props.GridStore.cursor.editY,this.props.GridStore.cursor.editObjKey);
+
       // check for dates and menus
       if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
         this.props.GridStore.showDatePicker=true;
@@ -58,7 +71,10 @@ window.reactJsonGridFocusInput = function(elem){
 
   @action onKeyDownWhenViewing(e)
   {
-    this.props.GridStore.autoFocus=true;
+    this.props.GridStore.autoFocus=true;   // if we edit, auto focus it.
+
+    var editDisabled = this.isEditDisabled();
+
     if (this.props.x !== this.props.GridStore.cursor.editX ||
         this.props.y !== this.props.GridStore.cursor.editY) {
       if (e.keyCode == '37' || e.keyCode == '38' || e.keyCode == '39' || e.keyCode == '40' ) {  // arrows
@@ -104,7 +120,7 @@ window.reactJsonGridFocusInput = function(elem){
           }
         }
       }
-      else if (e.keyCode == '32') { // space
+      else if (e.keyCode == '32' && editDisabled === false) { // space
         // cell edit
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
@@ -124,11 +140,11 @@ window.reactJsonGridFocusInput = function(elem){
           this.props.GridStore.showOverlayComp = true;
         }          
       }
-      else if (e.keyCode == '46') { // delete: instant kill!
+      else if (e.keyCode == '46' && editDisabled === false) { // delete: instant kill!
         this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, '');
       }
       else{
-        if( e.key.length===1 ){ // must be a char
+        if (e.key.length === 1 && editDisabled === false){ // must be a char
           // not that the react code calls a javascript function to make sure the cursor goes to the end of the input so you can keep typing naturally.
           this.props.GridStore.cursor.editX = this.props.x;
           this.props.GridStore.cursor.editY = this.props.y;
@@ -161,7 +177,6 @@ window.reactJsonGridFocusInput = function(elem){
 
   @action endEdit()
   {
-    debugger;
     if (this.props.GridStore.colDefList &&
       this.props.GridStore.colDefList[this.props.objKey]) {
       if (
@@ -173,7 +188,6 @@ window.reactJsonGridFocusInput = function(elem){
           && !this.props.GridStore.curEditIsValidFor.isValidFloat)
       ) {
         // value is not valid for the field definition.  Do not make the change.
-        console.log('end edit cell 1');
         this.props.GridStore.cursor.editX = -1;
         this.props.GridStore.cursor.editY = -1;
         return;
@@ -181,7 +195,6 @@ window.reactJsonGridFocusInput = function(elem){
     }
     
     this.props.GridStore.onChangePivotWrapper(this.props.x, this.props.y, this.props.objKey, this.props.GridStore.curEditingValue);
-    console.log('end edit cell 2');
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
   }
@@ -302,23 +315,22 @@ window.reactJsonGridFocusInput = function(elem){
     
     var assumeEditOk=true;
     if (this.props.GridStore.colDefList && 
-      this.props.GridStore.colDefList[this.props.objKey] && 
-      (this.props.GridStore.colDefList[this.props.objKey].editDisabled ||  // turn off the auto editor
-       this.props.GridStore.colDefList[this.props.objKey].easyBool)        // boolean doesn't need the editor
-      ){
+        this.props.GridStore.colDefList[this.props.objKey] && 
+        this.props.GridStore.colDefList[this.props.objKey].easyBool===true)        // boolean doesn't need the editor
+    {
       assumeEditOk = false;
     }
+    if(this.isEditDisabled()){ assumeEditOk=false; }
 
     if (assumeEditOk && 
-          this.props.x === this.props.GridStore.cursor.x &&
-          this.props.y === this.props.GridStore.cursor.y &&
-          this.props.x === this.props.GridStore.cursor.editX &&
-          this.props.y === this.props.GridStore.cursor.editY)
-    {
-      
+          this.props.x === this.props.GridStore.cursor.x &&     // cur render cell is cur cell  
+          this.props.y === this.props.GridStore.cursor.y &&     // cur render cell is cur cell
+          this.props.x === this.props.GridStore.cursor.editX && // cur cell is edit cell
+          this.props.y === this.props.GridStore.cursor.editY    // cur cell is edit cell
+    )
+    {   
       styleIn.verticalAlign='top';
       styleIn.width = style.width;  // use the column defined width override if needed.
-
 
       // check for easy column tools
       if(this.props.GridStore.colDefList &&
@@ -456,12 +468,16 @@ window.reactJsonGridFocusInput = function(elem){
 
         // handle easyBool
         if (this.props.GridStore.colDefList[this.props.objKey].easyBool) {
+
+          var disableEdit = this.isEditDisabled();
+
           renderVal = <span><EasyBool 
                   x={this.props.GridStore.pivotOn ? this.props.y : this.props.x} 
                   y={this.props.GridStore.pivotOn ? this.props.x : this.props.y} 
                   objKey={this.props.objKey}
                   cellData={this.props.cellData}
                   id={this.props.id+'-comp'}
+                  disabled={disableEdit } 
                   onChange={this.props.GridStore.onChange}/></span>
         }       
       }  

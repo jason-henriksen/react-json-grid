@@ -55,15 +55,14 @@ const GridBody = observer( class GridBody extends React.Component {
   }
 
   @action addRow(){
-    // JJHNOTE: pivot support
-    this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y, 
-      this.props.GridStore.keyList[this.props.GridStore.cursor.x],'ADDROW');
+    // JJHNOTE: pivot support needed.  Will reuse column add/cut when that is built.
+    this.props.GridStore.onRowAdd(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y, 
+                                  this.props.GridStore.keyList[this.props.GridStore.cursor.x]);
   }
   @action cutRow() {
-    // JJHNOTE: pivot support
-    // JJHNOTE:j documentation for handler
-    this.props.onToolAction(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y,
-      this.props.GridStore.keyList[this.props.GridStore.cursor.x],'CUTROW');
+    // JJHNOTE: pivot support needed.  Will reuse column add/cut when that is built.
+    this.props.GridStore.onRowCut(this.props.GridStore.cursor.x, this.props.GridStore.cursor.y,
+                                  this.props.GridStore.keyList[this.props.GridStore.cursor.x]);
   }
 
   render() {
