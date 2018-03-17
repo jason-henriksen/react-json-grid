@@ -12,7 +12,6 @@ class MenuPickerOverlay extends React.Component {
 
   endEdit()
   {  
-    console.log('end edit')
     this.props.GridStore.cursor.editX = -1;
     this.props.GridStore.cursor.editY = -1;
     this.props.GridStore.showMenuPicker = false;
@@ -20,7 +19,6 @@ class MenuPickerOverlay extends React.Component {
 
   updateValue(evt,val){
     this.props.GridStore.curEditingValue = val;
-    console.log(this.props.GridStore.cursor.editX, this.props.GridStore.cursor.editY, this.props.GridStore.cursor.editObjKey, this.props.GridStore.curEditingValue);
     this.props.GridStore.onChangePivotWrapper(this.props.GridStore.cursor.editX, this.props.GridStore.cursor.editY, this.props.GridStore.cursor.editObjKey, this.props.GridStore.curEditingValue);    
     this.endEdit();
   }
@@ -33,6 +31,10 @@ class MenuPickerOverlay extends React.Component {
     var listTarget = this.props.GridStore.colDefList[this.props.GridStore.cursor.editObjKey].easyMenu;
     if (Array.isArray(listTarget)){  // it's an array
       // JJH Needs a storybook test
+      itemList = listTarget.map((item,index) => { return (
+        <div key={'gridMenu'+index} id={'gridMenu'+index} style={{ padding: '2px',borderBottom:'1px solid lightgrey',paddingLeft:'15px' }} 
+             onClick={(e)=>saneThis.updateValue(e,item)}>{item}</div>)} 
+      );
     }
     else{  // or it's a pipe delimited string
       listTarget = ''+listTarget;

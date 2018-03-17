@@ -8,14 +8,14 @@ import { observer } from 'mobx-react';
   constructor(props) { super(props); autoBind(this); }
 
   render() {
-    if(this.props.GridStore.cursor.showAltX===-1 && this.props.GridStore.cursor.showAltY===-1){ return '';}
+    if(this.props.GridStore.cursor.showAltX===-1 && this.props.GridStore.cursor.showAltY===-1){ return null;}
     var targetX=this.props.GridStore.cursor.showAltX;
     var targetY=this.props.GridStore.cursor.showAltY;
     var idx = targetY;
     if(-1===targetY){ idx=targetX; }
 
     var objKey = this.props.GridStore.keyList[idx];
-    if(!this.props.GridStore.colDefList[objKey]){return '';}
+    if(!this.props.GridStore.colDefList[objKey]){return null;}
     var helpComp = this.props.GridStore.colDefList[objKey].altText
 
     var offsetY = this.props.uiMath.colHeaderHigh + ( (this.props.uiMath.borderWide+this.props.uiMath.rowHighWithPad) * (targetY+1) )+2 ;

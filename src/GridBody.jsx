@@ -67,6 +67,9 @@ const GridBody = observer( class GridBody extends React.Component {
 
   render() {
     var ui = this.uiMath.calcGridBody(this.props, (this.scrollBarWide||20));
+    if(this.props.debugGridMath){
+      console.log(ui);
+    }
 
     if(this.props.editAsText){
       // forget this complex grid nonsense.  Just make a big text area and edit the stuff that way.
@@ -138,6 +141,7 @@ const GridBody = observer( class GridBody extends React.Component {
                             display:'inline-block', 
                             marginLeft:marginOffset,
                             overflow:'hidden',
+                            boxSizing: 'content-box',
                             height:ui.colHeaderHigh+'px',
                             maxHeight:ui.colHeaderHigh+'px'}}>
                           {colTitle}

@@ -273,8 +273,8 @@ window.reactJsonGridFocusInput = function(elem){
 
   render() {
 
-    var style={...this.props.styleCell};
-    var styleIn={...this.props.styleInput};
+    var style={...this.props.styleCell,boxSizing: 'content-box'};
+    var styleIn={...this.props.styleInput,boxSizing: 'content-box'};
     
     if (this.props.GridStore.selectionBounds.l <= this.props.x &&
         this.props.GridStore.selectionBounds.r >= this.props.x &&
@@ -316,7 +316,9 @@ window.reactJsonGridFocusInput = function(elem){
     var assumeEditOk=true;
     if (this.props.GridStore.colDefList && 
         this.props.GridStore.colDefList[this.props.objKey] && 
-        this.props.GridStore.colDefList[this.props.objKey].easyBool===true)        // boolean doesn't need the editor
+        (this.props.GridStore.colDefList[this.props.objKey].easyBool===true || // boolean doesn't need the editor
+         this.props.GridStore.colDefList[this.props.objKey].easyMenu===true )  // menu doesn't need the editor
+    )        
     {
       assumeEditOk = false;
     }
@@ -373,15 +375,20 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
         renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }      
+      else if (this.props.GridStore.colDefList &&
+        this.props.GridStore.colDefList[this.props.objKey] &&
+        this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+        renderPlan=<div style={styleIn}>{curDisplayVal}</div>
+      }      
       else{
-        // use the normal text input editor
+        // use the normal text input editor  
         renderPlan = 
           <input value={curDisplayVal} 
                   onChange={this.valChange}
                   onKeyDown={this.onKeyDownWhenEditing}
                   id={this.props.id} style={styleIn}
                   ref={input => input && window.reactJsonGridFocusInput(input)}
-                  onBlur={this.endEdit}
+                  onBlur={this.endEdit}                  
             />
       }      
     } 
@@ -480,6 +487,7 @@ window.reactJsonGridFocusInput = function(elem){
                   disabled={disableEdit } 
                   onChange={this.props.GridStore.onChange}/></span>
         }       
+        
       }  
 
       renderPlan = <div tabIndex='0'

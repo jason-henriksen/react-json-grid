@@ -74,7 +74,7 @@ class GridMath
 
       var autoColCount=0;
       // look at the data to display and figure out what we need to do.
-      if(props.data && props.data.length>0){
+      if( (props.data && props.data.length>0) || (props.columnList && props.columnList.length>0) ){ // col def from colList or from data
         // ==== OBJECTS we have rows of objects to display ( check for an array )  
         if(props.pivotOn){  // pivot the data using this key as the col header
           //---- PIVOTED FLOW
@@ -82,16 +82,25 @@ class GridMath
           for(var pctr=0;pctr<props.data.length;pctr++){
             result.keyNames.push(props.data[pctr][props.pivotOn]);
           }
-          result.rowHeaderList = Object.keys(props.data[0]);
+          result.rowHeaderList = Object.keys(props.data[0]); // pull headers from data.  Should there be a colDef check here?
           result.fixedRowCount = result.rowHeaderList.length;
           result.saveColumnForRowHeader=1;
         }
         else{
           //---- NORMAL FLOW
-          result.keyNames = Object.keys(props.data[0]);
-          if (props.rowCount != props.data.length) {
+          if(props.columnList){   // pull key data from col def list first, but from data if cols are not defined
+            for(var cctr=0;cctr<props.columnList.length;cctr++){
+              result.keyNames.push(props.columnList[cctr]['key']);
+            }
+          }
+          else{
+            result.keyNames = Object.keys(props.data[0]);
+          }          
+
+          if (props.rowCount != props.data.length) { // figure out the item count.
             result.fixedRowCount = props.data.length;
           }          
+
         }  
         autoColCount = result.keyNames.length;
 

@@ -13,6 +13,8 @@ import TextParam from './TextParam';
 import CompactObjView from './CompactObjView';
 import DataMaker from './DataMaker';
 
+import DocStore from './DocStore';
+
 import DataNoiseMed from '../../stories/dataNoiseMedium.js'
 import DataNoiseSmall from '../../stories/dataNoiseSmall.js'
 import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
@@ -29,128 +31,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     this.rrjs = rrjsTool.createParser();
     this.printer = new rrjsTool.PrettyPrinter( rrjsTool.PrettyPrinter.Options.Companion.JsonPretty);
     this.dm = new DataMaker(this.updateDataText);
+    this.ds = new DocStore();
   }
 
-  @observable showOutline = false;
-  @action toggleOutline() { this.showOutline = !this.showOutline; }
-  
-  @observable showToolsAddCut = false;
-  @action toggleToolsAddCut() { this.showToolsAddCut = !this.showToolsAddCut; }
-
-  @observable showToolsPage = false;
-  @action toggleToolsPage() { this.showToolsPage = !this.showToolsPage; }
-
-  @observable showToolsImpExp = false;
-  @action toggleToolsImpExp() { this.showToolsImpExp = !this.showToolsImpExp; }
-
-  @observable showToolsCustom = false;
-  @action toggleToolsCustom() { this.showToolsCustom = !this.showToolsCustom; }
-
-  @observable editDisabled = false;
-  @action toggleEditDisabled() { this.editDisabled = !this.editDisabled; }
-  
-  @observable editAsText = false;
-  @action toggleEditAsText() { this.editAsText = !this.editAsText; }
-  
-  @observable propBorderWide = -1;
-  @action setBorderWidth(val) { this.propBorderWide = val; }
-
-  @observable propPadWide = -1;
-  @action setPadWidth(val) { this.propPadWide = val; }
-  
-  @observable propGridWide = -1;
-  @action setGridWide(val) { this.propGridWide = val; }
-  
-  @observable propGridHigh = -1;
-  @action setGridHigh(val) { this.propGridHigh = val; }
-
-  @observable propRowHigh = -1;
-  @action setRowHigh(val) { this.propRowHigh = val; }
-
-  @observable propRowHeaderHigh = -1;
-  @action setRowHeaderHigh(val) { this.propRowHeaderHigh = val; }
-
-  @observable propMinColWide = -1;
-  @action setMinColWide(val) { this.propMinColWide = val; }
-
-  @observable colHeaderHide = false;
-  @action toggleColHeaderHide() { this.colHeaderHide = !this.colHeaderHide; }
-
-  @observable pivotOn = false;
-  @action togglePivotOn() { this.pivotOn = !this.pivotOn; }
-
-  @observable pivotRowHeaderWide = -1;
-  @action setPivotRowHeaderWide(val) { this.pivotRowHeaderWide = val; }
-
-  @observable columnList = false;
-  @action toggleColumnList() { this.columnList = !this.columnList; }
-
-  @observable showSizeStuff = false;
-  @action toggleShowSizeStuff() { this.showSizeStuff = !this.showSizeStuff; }
-  @observable showFormatStuff = false;
-  @action toggleShowFormatStuff() { this.showFormatStuff = !this.showFormatStuff; }
-  @observable showStyleStuff = false;
-  @action toggleShowStyleStuff() { this.showStyleStuff = !this.showStyleStuff; }
-  @observable showClassStuff = false;
-  @action toggleShowClassStuff() { this.showClassStuff = !this.showClassStuff; }
-  @observable showPivotStuff = false;
-  @action toggleShowPivotStuff() { this.showPivotStuff = !this.showPivotStuff; }
-  @observable showEditStuff = false;
-  @action toggleShowEditStuff() { this.showEditStuff = !this.showEditStuff; }
-
-
-
-  @observable styleHeader = '';
-  @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
-  @observable styleRowHeader = '';
-  @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
-  @observable styleCell = '';
-  @action setCellStyle(evt) { this.styleCell = evt.target.value; }
-  @observable styleInput = '';
-  @action setInputStyle(evt) { this.styleInput = evt.target.value; }
-
-  @observable formatDate = '';
-  @action setFormatDate(evt) { this.formatDate = evt.target.value; }
-  @observable formatTime = '';
-  @action setFormatTime(evt) { this.formatTime = evt.target.value; }
-  
-
-
-  @observable colDef = 
-      [
-        {  
-          key: 'a',           title:'col A',        editDisabled: '',          widePct: '',          widePx: '',
-          easyBool:'',          easyInt: '',          easyFloat: '',          easyMoneyDollar: '',          easyMoneyEuro: '',          easyMoneyPound: '',
-        easyDate: '',easyDateTime: '',           easyMenu: '',altText: '',
-          styleHeader: '',          styleInput: '',                    styleCell: '',          
-          compHeader: '',          compInput: '',          compCell: '',displayFormatter:''
-        },       
-        {
-          key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
-          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '',easyDateTime: '', altText: '',
-          styleHeader: '', styleInput: '', styleCell: '',
-          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
-        },
-        {
-          key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
-          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '',easyDateTime: '', altText: '',
-          styleHeader: '', styleInput: '', styleCell: '',
-          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
-        },
-        {
-          key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
-          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '',easyDateTime: '', altText: '',
-          styleHeader: '', styleInput: '', styleCell: '',
-          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
-        }
-    
-                      ]
-  @action setColDefValue(x, y, objKey, newValue) {
-    this.colDef[y][objKey] = newValue;
-  }
   
   @action setValue(x,y,objKey,newValue)
   {
@@ -208,61 +91,13 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     return res;
   };  
 
-  @computed get outlineCSS() {
-    if (this.showOutline) { return '2px green dashed';}
-    else{return '';}
-  }
-
-  @computed get jsonHeaderStyleObject(){
-    var res={}
-    if(!this.styleHeader){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleHeader));
-    } catch(e) {
-      res={backgroundColor:'red',err:'invalid JSX Style'};
-    }
-    return res;
-  }
-  @computed get jsonRowHeaderStyleObject(){
-    var res={}
-    if(!this.styleRowHeader){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleRowHeader));
-    } catch(e) {
-      res={backgroundColor:'red',err:'invalid JSX Style'};
-    }
-    return res;
-  }
-  
-  @computed get jsonInputStyleObject(){
-    var res={}
-    if(!this.styleInput){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleInput));
-    } catch(e) {
-      res={backgroundColor:'red',err:'invalid JSX Style'};
-    }
-    return res;
-  }
-  @computed get jsonCellStyleObject(){
-    var res={}
-    if(!this.styleCell){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleCell));
-    } catch(e) {
-      res={backgroundColor:'red',err:'invalid JSX Style'};
-    }
-    return res;
-  }
-
-
 
 
   render() {
 
     var colListAsText=[];
-    for(var cctr=0;cctr<this.colDef.length;cctr++){
-      colListAsText.push(<CompactObjView target={this.colDef[cctr]} key={JSON.stringify(this.colDef[cctr])+cctr}/>);
+    for(var cctr=0;cctr<this.ds.colDef.length;cctr++){
+      colListAsText.push(<CompactObjView target={this.ds.colDef[cctr]} key={JSON.stringify(this.ds.colDef[cctr])+cctr}/>);
     }
 
     return (
@@ -272,28 +107,29 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
             <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
-              <ToggleFolder action={this.toggleShowSizeStuff} toggleValue={this.showSizeStuff} label='Size Features' help='display API for sizing' />
-              { this.showSizeStuff &&  
+              <ToggleFolder action={this.ds.toggleShowSizeStuff} toggleValue={this.ds.showSizeStuff} label='Size Features' help='display API for sizing' />
+              { this.ds.showSizeStuff &&  
               <div>
-                <Toggle action={this.toggleOutline} toggleValue={this.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
-                <Toggle action={this.toggleColHeaderHide} toggleValue={this.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
-                <NumWheel action={this.setBorderWidth} curValue={this.propBorderWide} label='borderWide' help='width of the border between cells' />
-                <NumWheel action={this.setPadWidth} curValue={this.propPadWide} label='padWide' help='width of the padding inside each cell' />
-                <NumWheel action={this.setGridWide} incr={100} curValue={this.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
-                <NumWheel action={this.setGridHigh} incr={100} curValue={this.propGridHigh} label='gridHigh' help={<div>Forced height of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
-                <NumWheel action={this.setRowHigh} curValue={this.propRowHigh} label='rowHigh' help='over-ride default row height' />
-                <NumWheel action={this.setRowHeaderHigh} curValue={this.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
-                <NumWheel action={this.setMinColWide} incr={5} curValue={this.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
+                <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
+                <Toggle action={this.ds.toggleDebugGridMath} toggleValue={this.ds.debugGridMath} label='debugGridMath' help='Look at the logs to see what the grid thinks sizes should be.  Used to debug external CSS issues.' />
+                <Toggle action={this.ds.toggleColHeaderHide} toggleValue={this.ds.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
+                <NumWheel action={this.ds.setBorderWidth} curValue={this.ds.propBorderWide} label='borderWide' help='width of the border between cells' />
+                <NumWheel action={this.ds.setPadWidth} curValue={this.ds.propPadWide} label='padWide' help='width of the padding inside each cell' />
+                <NumWheel action={this.ds.setGridWide} incr={100} curValue={this.ds.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
+                <NumWheel action={this.ds.setGridHigh} incr={100} curValue={this.ds.propGridHigh} label='gridHigh' help={<div>Forced height of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
+                <NumWheel action={this.ds.setRowHigh} curValue={this.ds.propRowHigh} label='rowHigh' help='over-ride default row height' />
+                <NumWheel action={this.ds.setRowHeaderHigh} curValue={this.ds.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
+                <NumWheel action={this.ds.setMinColWide} incr={5} curValue={this.ds.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
                 </div>
               }
 
-              <ToggleFolder action={this.toggleColumnList} toggleValue={this.columnList} label='Column Definition Features' help='define column meta data' />
-              {this.columnList &&
+              <ToggleFolder action={this.ds.toggleColumnList} toggleValue={this.ds.columnList} label='Column Definition Features' help='define column meta data' />
+              {this.ds.columnList &&
                 <div>
                 <Grid
-                  data={this.colDef}
+                  data={this.ds.colDef}
                   columnList={[
-                    { key: 'key', altText: 'key name (or index) of the data for this column' },
+                    { key: 'key', altText: 'key name (or index) of the data for this column.  You can re-order the key names to re-order the columns displayed.' },
                     { key: 'title', altText: 'text in the title bar of the column' },
                     { key: 'editDisabled', easyBool: true, altText: 'disable editing for this column' },
                     { key: 'widePct', easyFloat: true, altText: 'percent of grid width to make this column.  Too big will cause side scrolling!' },
@@ -311,7 +147,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                   ]}
                   pivotOn='title'
                   pivotRowHeaderWide={125}
-                  onChange={this.setColDefValue}
+                  onChange={this.ds.setColDefValue}
                   styleRowHeader={{ textAlign: 'left' }}
                   gridHigh={600}
                   gridWide={425}
@@ -319,47 +155,47 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 </div>
               }
 
-              <ToggleFolder action={this.toggleShowEditStuff} toggleValue={this.showEditStuff} label='Edit/Tools Features' help='display edit tools' />
-              {this.showEditStuff &&
+              <ToggleFolder action={this.ds.toggleShowEditStuff} toggleValue={this.ds.showEditStuff} label='Edit/Tools Features' help='display edit tools' />
+              {this.ds.showEditStuff &&
                 <div>
-                  <Toggle action={this.toggleToolsAddCut} toggleValue={this.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
-                  <Toggle action={this.toggleToolsPage} toggleValue={this.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
-                  <Toggle action={this.toggleToolsImpExp} toggleValue={this.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
-                  <Toggle action={this.toggleToolsCustom} toggleValue={this.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
-                  <Toggle action={this.toggleEditDisabled} toggleValue={this.editDisabled} label='editDisabled' help='disable all grid editing' />
-                  <Toggle action={this.toggleEditAsText} toggleValue={this.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
+                  <Toggle action={this.ds.toggleToolsAddCut} toggleValue={this.ds.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
+                  <Toggle action={this.ds.toggleToolsPage} toggleValue={this.ds.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
+                  <Toggle action={this.ds.toggleToolsImpExp} toggleValue={this.ds.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
+                  <Toggle action={this.ds.toggleToolsCustom} toggleValue={this.ds.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
+                  <Toggle action={this.ds.toggleEditDisabled} toggleValue={this.ds.editDisabled} label='editDisabled' help='disable all grid editing' />
+                  <Toggle action={this.ds.toggleEditAsText} toggleValue={this.ds.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
                 </div>
               }
-              <ToggleFolder action={this.toggleShowPivotStuff} toggleValue={this.showPivotStuff} label='Pivot Features' help='display data pivot' />
-              {this.showPivotStuff &&
+              <ToggleFolder action={this.ds.toggleShowPivotStuff} toggleValue={this.ds.showPivotStuff} label='Pivot Features' help='display data pivot' />
+              {this.ds.showPivotStuff &&
                 <div>
-                  <Toggle action={this.togglePivotOn} toggleValue={this.pivotOn} label='pivotOn' help='pivot the data on a key.' />
-                  <NumWheel action={this.setPivotRowHeaderWide} incr={25} curValue={this.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br />use this to set the pixel width of the row header</div>} />
+                  <Toggle action={this.ds.togglePivotOn} toggleValue={this.ds.pivotOn} label='pivotOn' help='pivot the data on a key.' />
+                  <NumWheel action={this.ds.setPivotRowHeaderWide} incr={25} curValue={this.ds.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br />use this to set the pixel width of the row header</div>} />
                 </div>
               }
-              <ToggleFolder action={this.toggleShowStyleStuff} toggleValue={this.showStyleStuff} label='Style Features' help='display API for style objects' />
-              {this.showStyleStuff &&  
+              <ToggleFolder action={this.ds.toggleShowStyleStuff} toggleValue={this.ds.showStyleStuff} label='Style Features' help='display API for style objects' />
+              {this.ds.showStyleStuff &&  
                 <div>
-                <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
-                <TextParam action={this.setRowHeaderStyle} curValue={this.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
-                <TextParam action={this.setInputStyle} curValue={this.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
-                <TextParam action={this.setCellStyle} curValue={this.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+                <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
                 </div>
               }
-              <ToggleFolder action={this.toggleShowClassStuff} toggleValue={this.showClassStuff} label='Class Features' help='display API for css class usage' />
-              {this.showClassStuff &&
+              <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class Features' help='display API for css class usage' />
+              {this.ds.showClassStuff &&
                 <div>
-                <TextParam action={this.setHeaderStyle} curValue={this.styleHeader} label='classHeader' help='style for header cells.  cannot control border or padding.' />
-                <TextParam action={this.setRowHeaderStyle} curValue={this.styleRowHeader} label='classRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
-                <TextParam action={this.setInputStyle} curValue={this.styleInput} label='classRow' help='style for default cells.  cannot control border or padding.' />
-                <TextParam action={this.setCellStyle} curValue={this.styleCell} label='classRowOdd' help='style for default input cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='classHeader' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='classRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+                <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='classRow' help='style for default cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='classRowOdd' help='style for default input cells.  cannot control border or padding.' />
                 </div>
               }              
-              <ToggleFolder action={this.toggleShowFormatStuff} toggleValue={this.showFormatStuff} label='Format Features' help='display API for date, time and other formatters' />
-              {this.showFormatStuff &&
+              <ToggleFolder action={this.ds.toggleShowFormatStuff} toggleValue={this.ds.showFormatStuff} label='Format Features' help='display API for date, time and other formatters' />
+              {this.ds.showFormatStuff &&
                 <div>
-                <TextParam action={this.setFormatDate} curValue={this.formatDate} label='formatDate' help='preferred date format.' />
-                <TextParam action={this.setFormatTime} curValue={this.formatTime} label='formatTime' help='preferred time format.' />
+                <TextParam action={this.ds.setFormatDate} curValue={this.ds.formatDate} label='formatDate' help='preferred date format.' />
+                <TextParam action={this.ds.setFormatTime} curValue={this.ds.formatTime} label='formatTime' help='preferred time format.' />
                 </div>
               }
               ?? Copy Paste Features ??<br/>
@@ -394,19 +230,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <br />
           <br />
       <Grid style={{outline:this.outlineCSS}}
-        gridHigh={this.propGridHigh}
-        gridWide={this.propGridWide}      
-        editDisabled={this.editDisabled}
-        editAsText={this.editAsText}
-        styleHeader={this.jsonHeaderStyleObject}
-        styleRowHeader={this.jsonRowHeaderStyleObject}
-        styleInput={this.jsonInputStyleObject}
-        styleCell={this.jsonCellStyleObject}        
-        rowHigh={this.propRowHigh}
-        colHeaderHigh={this.propRowHeaderHigh}
-        colHeaderHide={this.colHeaderHide}
-        borderWide={this.propBorderWide}
-        padWide={this.propPadWide}
+        gridHigh={this.ds.propGridHigh}
+        gridWide={this.ds.propGridWide}      
+        editDisabled={this.ds.editDisabled}
+        editAsText={this.ds.editAsText}
+        styleHeader={this.ds.jsonHeaderStyleObject}
+        styleRowHeader={this.ds.jsonRowHeaderStyleObject}
+        styleInput={this.ds.jsonInputStyleObject}
+        styleCell={this.ds.jsonCellStyleObject}        
+        rowHigh={this.ds.propRowHigh}
+        colHeaderHigh={this.ds.propRowHeaderHigh}
+        colHeaderHide={this.ds.colHeaderHide}
+        borderWide={this.ds.propBorderWide}
+        padWide={this.ds.propPadWide}
         data={this.dataAsObject.cleanData}
         onChange={this.setValue}
         onRowAdd={this.onRowAdd}
@@ -416,46 +252,48 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         onImport={this.onImport}
         onExport={this.onExport}
         onGotoPage={this.onGotoPage}
-        pivotOn={ this.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
-        pivotRowHeaderWide={this.pivotRowHeaderWide}
-        columnList={ this.columnList?this.colDef:null }
-        showToolsAddCut={this.showToolsAddCut}
-        showToolsPage={this.showToolsPage}
-        showToolsImpExp={this.showToolsImpExp}
+        pivotOn={ this.ds.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
+        pivotRowHeaderWide={this.ds.pivotRowHeaderWide}
+        columnList={ this.ds.columnList?this.ds.colDef:null }
+        showToolsAddCut={this.ds.showToolsAddCut}
+        showToolsPage={this.ds.showToolsPage}
+        showToolsImpExp={this.ds.showToolsImpExp}
         showToolsCustom={null}
-        formatDate={this.formatDate}
-        formatTime={this.formatTime}
+        formatDate={this.ds.formatDate}
+        formatTime={this.ds.formatTime}
+        debugGridMath={this.ds.debugGridMath}
       />
       <br/>
       <br />
       <br />
       <div style={{font:'20px monospace'}}>
           &lt;Grid
-          {this.propGridWide > -1 && <span><br />&nbsp;&nbsp;gridWide=&#123;{this.propGridWide}&#125;&nbsp;&nbsp;</span>}
-          {this.propGridHigh > -1 && <span><br />&nbsp;&nbsp;gridHigh=&#123;{this.propGridHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propRowHigh > -1 && <span><br />&nbsp;&nbsp;rowHigh=&#123;{this.propRowHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.editDisabled && <span><br />&nbsp;&nbsp;editDisabled=&#123;{''+this.editDisabled}&#125;&nbsp;&nbsp;</span>}
-          {this.editAsText && <span><br />&nbsp;&nbsp;editAsText=&#123;{''+this.editAsText}&#125;&nbsp;&nbsp;</span>}
-          {this.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
-          {this.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.propBorderWide}&#125;&nbsp;&nbsp;</span>}
-          {this.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
-          {this.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}          
-          {this.showToolsAddCut && <span><br />&nbsp;&nbsp;showToolsAddCut=&#123;{''+this.showToolsAddCut}&#125;&nbsp;&nbsp;</span>}
-          {this.showToolsImpExp && <span><br />&nbsp;&nbsp;showToolsImpExp=&#123;{'' + this.showToolsImpExp}&#125;&nbsp;&nbsp;</span>}
-          {this.showToolsPage && <span><br />&nbsp;&nbsp;showToolsPage=&#123;{'' + this.showToolsPage}&#125;&nbsp;&nbsp;</span>}
-          {this.showToolsCustom && <span><br />&nbsp;&nbsp;showToolsCustom=&#123;{'' + this.showToolsCustom}&#125;&nbsp;&nbsp;</span>}
-          {this.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.propPadWide}&#125;&nbsp;&nbsp;</span>}
-          {this.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
-          {this.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.styleHeader}&#125;</span>}
-          {this.styleRowHeader && <span><br />&nbsp;&nbsp;styleRowHeader=&#123;{this.styleRowHeader}&#125;</span>}
-          {this.styleInput && <span><br />&nbsp;&nbsp;styleInput=&#123;{this.styleInput}&#125;</span>}
-          {this.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.styleCell}&#125;</span>}
-          {this.formatDate && <span><br />&nbsp;&nbsp;formatDate=&#123;{this.formatDate}&#125;</span>}
-          {this.formatTime && <span><br />&nbsp;&nbsp;formatTime=&#123;{this.formatTime}&#125;</span>}
-          {this.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{colListAsText}&nbsp;&nbsp;]&#125;</span>}          
+          {this.ds.propGridWide > -1 && <span><br />&nbsp;&nbsp;gridWide=&#123;{this.ds.propGridWide}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.propGridHigh > -1 && <span><br />&nbsp;&nbsp;gridHigh=&#123;{this.ds.propGridHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.propRowHigh > -1 && <span><br />&nbsp;&nbsp;rowHigh=&#123;{this.ds.propRowHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.editDisabled && <span><br />&nbsp;&nbsp;editDisabled=&#123;{''+this.ds.editDisabled}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.editAsText && <span><br />&nbsp;&nbsp;editAsText=&#123;{''+this.ds.editAsText}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.ds.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.ds.propBorderWide}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
+          {this.ds.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.ds.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}          
+          {this.ds.showToolsAddCut && <span><br />&nbsp;&nbsp;showToolsAddCut</span>}
+          {this.ds.showToolsImpExp && <span><br />&nbsp;&nbsp;showToolsImpExp</span>}
+          {this.ds.showToolsPage && <span><br />&nbsp;&nbsp;showToolsPage</span>}
+          {this.ds.showToolsCustom && <span><br />&nbsp;&nbsp;showToolsCustom=&#123;{'<YourCustomComponent/>'}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.ds.propPadWide}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.ds.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.styleHeader && <span><br />&nbsp;&nbsp;styleHeader=&#123;{this.ds.styleHeader}&#125;</span>}
+          {this.ds.styleRowHeader && <span><br />&nbsp;&nbsp;styleRowHeader=&#123;{this.ds.styleRowHeader}&#125;</span>}
+          {this.ds.styleInput && <span><br />&nbsp;&nbsp;styleInput=&#123;{this.ds.styleInput}&#125;</span>}
+          {this.ds.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.ds.styleCell}&#125;</span>}
+          {this.ds.formatDate && <span><br />&nbsp;&nbsp;formatDate=&#123;{this.ds.formatDate}&#125;</span>}
+          {this.ds.formatTime && <span><br />&nbsp;&nbsp;formatTime=&#123;{this.ds.formatTime}&#125;</span>}
+          {this.ds.debugGridMath && <span><br />&nbsp;&nbsp;debugGridMath</span>}                    
+          {this.ds.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{this.ds.colListAsText}&nbsp;&nbsp;]&#125;</span>}          
           <br/>&nbsp;&nbsp;data=&#123;this.data&#125;
           <br/>&nbsp;&nbsp;onChange=&#123;(x,y,objKey,value)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;
-          {this.showTools && <span><br />&nbsp;&nbsp;onToolAction=&#123;(x,y,objKey,toolName)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;</span>}
+          
           <br />/&gt;
       </div>
     </div>

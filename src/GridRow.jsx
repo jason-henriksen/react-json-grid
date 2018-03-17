@@ -87,8 +87,6 @@ import ReactTooltip from 'react-tooltip';
 
     var inputStyleFirst = Object.assign(sharedBaseStyleLeftCol, (this.props.styleCell||{}));      
     var inputStyleLocal = Object.assign(sharedBaseStyleInput, (this.props.styleInput || {}));
-    inputStyleLocal.marginTop = '-4';
-    
 
     var keyName = null;  // used for pivoted data only
 

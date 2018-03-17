@@ -1,0 +1,180 @@
+
+
+import { observable, computed, action } from 'mobx';
+import autoBind from 'react-autobind';
+
+
+class DocStore {           // Just a class.  Nothing fancy here.
+  constructor() { 
+    autoBind(this); 
+  }
+
+  @observable showOutline = false;
+  @action toggleOutline() { this.showOutline = !this.showOutline; }
+
+  @observable showToolsAddCut = false;
+  @action toggleToolsAddCut() { this.showToolsAddCut = !this.showToolsAddCut; }
+
+  @observable showToolsPage = false;
+  @action toggleToolsPage() { this.showToolsPage = !this.showToolsPage; }
+
+  @observable showToolsImpExp = false;
+  @action toggleToolsImpExp() { this.showToolsImpExp = !this.showToolsImpExp; }
+
+  @observable showToolsCustom = false;
+  @action toggleToolsCustom() { this.showToolsCustom = !this.showToolsCustom; }
+
+  @observable editDisabled = false;
+  @action toggleEditDisabled() { this.editDisabled = !this.editDisabled; }
+  
+  @observable editAsText = false;
+  @action toggleEditAsText() { this.editAsText = !this.editAsText; }
+  
+  @observable propBorderWide = -1;
+  @action setBorderWidth(val) { this.propBorderWide = val; }
+
+  @observable propPadWide = -1;
+  @action setPadWidth(val) { this.propPadWide = val; }
+  
+  @observable propGridWide = -1;
+  @action setGridWide(val) { this.propGridWide = val; }
+  
+  @observable propGridHigh = -1;
+  @action setGridHigh(val) { this.propGridHigh = val; }
+
+  @observable propRowHigh = -1;
+  @action setRowHigh(val) { this.propRowHigh = val; }
+
+  @observable propRowHeaderHigh = -1;
+  @action setRowHeaderHigh(val) { this.propRowHeaderHigh = val; }
+
+  @observable propMinColWide = -1;
+  @action setMinColWide(val) { this.propMinColWide = val; }
+
+  @observable colHeaderHide = false;
+  @action toggleColHeaderHide() { this.colHeaderHide = !this.colHeaderHide; }
+
+  @observable pivotOn = false;
+  @action togglePivotOn() { this.pivotOn = !this.pivotOn; }
+
+  @observable pivotRowHeaderWide = -1;
+  @action setPivotRowHeaderWide(val) { this.pivotRowHeaderWide = val; }
+
+  @observable columnList = false;
+  @action toggleColumnList() { this.columnList = !this.columnList; }
+
+  @observable showSizeStuff = false;
+  @action toggleShowSizeStuff() { this.showSizeStuff = !this.showSizeStuff; }
+  @observable showFormatStuff = false;
+  @action toggleShowFormatStuff() { this.showFormatStuff = !this.showFormatStuff; }
+  @observable showStyleStuff = false;
+  @action toggleShowStyleStuff() { this.showStyleStuff = !this.showStyleStuff; }
+  @observable showClassStuff = false;
+  @action toggleShowClassStuff() { this.showClassStuff = !this.showClassStuff; }
+  @observable showPivotStuff = false;
+  @action toggleShowPivotStuff() { this.showPivotStuff = !this.showPivotStuff; }
+  @observable showEditStuff = false;
+  @action toggleShowEditStuff() { this.showEditStuff = !this.showEditStuff; }
+
+  @observable debugGridMath = false;
+  @action toggleDebugGridMath() { this.debugGridMath = !this.debugGridMath; }
+
+
+  @observable styleHeader = '';
+  @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
+  @observable styleRowHeader = '';
+  @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
+  @observable styleCell = '';
+  @action setCellStyle(evt) { this.styleCell = evt.target.value; }
+  @observable styleInput = '';
+  @action setInputStyle(evt) { this.styleInput = evt.target.value; }
+
+  @observable formatDate = '';
+  @action setFormatDate(evt) { this.formatDate = evt.target.value; }
+  @observable formatTime = '';
+  @action setFormatTime(evt) { this.formatTime = evt.target.value; }
+  
+
+
+  @observable colDef = 
+      [
+        {  
+          key: 'a',           title:'col A',        editDisabled: '',          widePct: '',          widePx: '',
+          easyBool:'',          easyInt: '',          easyFloat: '',          easyMoneyDollar: '',          easyMoneyEuro: '',          easyMoneyPound: '',
+        easyDate: '',easyDateTime: '',           easyMenu: '',altText: '',
+          styleHeader: '',          styleInput: '',                    styleCell: '',          
+          compHeader: '',          compInput: '',          compCell: '',displayFormatter:''
+        },       
+        {
+          key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
+          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+          easyDate: '',easyDateTime: '', altText: '',
+          styleHeader: '', styleInput: '', styleCell: '',
+          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+        },
+        {
+          key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
+          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+          easyDate: '',easyDateTime: '', altText: '',
+          styleHeader: '', styleInput: '', styleCell: '',
+          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+        },
+        {
+          key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
+          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+          easyDate: '',easyDateTime: '', altText: '',
+          styleHeader: '', styleInput: '', styleCell: '',
+          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+        }
+    
+                      ]
+  @action setColDefValue(x, y, objKey, newValue) {
+    this.colDef[y][objKey] = newValue;
+  }
+
+  @computed get outlineCSS() {
+    if (this.showOutline) { return '2px green dashed';}
+    else{return '';}
+  }
+
+  @computed get jsonHeaderStyleObject(){
+    var res={}
+    if(!this.styleHeader){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.styleHeader));
+    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'};
+    }
+    return res;
+  }
+  @computed get jsonRowHeaderStyleObject(){
+    var res={}
+    if(!this.styleRowHeader){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.styleRowHeader));
+    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+    return res;
+  }
+  
+  @computed get jsonInputStyleObject(){
+    var res={}
+    if(!this.styleInput){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.styleInput));
+    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+    return res;
+  }
+  @computed get jsonCellStyleObject(){
+    var res={}
+    if(!this.styleCell){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.styleCell));
+    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+    return res;
+  }
+
+
+
+
+}
+
+export default DocStore;
