@@ -89,9 +89,9 @@ class GridMath
       // grid height
       var testStyleHeight = null;
       if(props.style){ testStyleHeight = props.style.height}; // needed for null safety on props.style.  Needs to remove trailing px or % !!! 
-      result.gridHigh = testStyleHeight || props.gridHigh || 300;  // read from style, read from attributes, read from gridHigh attribute, default to 300
+      result.gridHigh = testStyleHeight || props.gridHigh || 400;  // read from style, read from attributes, read from gridHigh attribute, default to 300
       if (result.gridHigh === -1) {
-        result.gridHigh = 300;
+        result.gridHigh = 400;
       }
 
       // header height
@@ -110,8 +110,6 @@ class GridMath
 
       // collapsed grid height
       result.collapseAmount=0;
-
-
 
       result.formatDate = props.formatDate||'YYYY-MM-DD';
       result.formatTime = props.formatTime||'HH:mm';
@@ -164,12 +162,21 @@ class GridMath
               result.dataWide = props.columnList.length;      // column definition count => data width. (data high handled later)
             }
             else{                                             // no column defs, inspect the first object.
-              result.keyNames = Object.keys(props.data[0]);   // pull the key names
-              result.colHeaderKeyList = result.keyNames;      // keys => columns here
-              result.dataWide = result.keyNames.length;       // keynames is width  (data high handled later)
+              if(props.data[0].length){ // probably an array-look-alike.  Use indexes
+                for (var ictr = 0; ictr < props.data[0].length;ictr++){
+                  result.keyNames.push(ictr);
+                }
+                result.colHeaderKeyList = result.keyNames;      // keys => columns here
+                result.dataWide = props.data[0].length;       // keynames is width  (data high handled later)
+              }
+              else{                     // likely an object.  Treat it normally.
+                result.keyNames = Object.keys(props.data[0]);   // pull the key names
+                result.colHeaderKeyList = result.keyNames;      // keys => columns here
+                result.dataWide = result.keyNames.length;       // keynames is width  (data high handled later)
+              }
             }          
 
-            result.fixedRowCount = props.rowCount || props.data.length; // allow over-ride item count.
+            result.fixedRowCount = props.data.length; // allow over-ride item count.
             result.dataHigh = result.fixedRowCount;            
           }  
         }
@@ -222,25 +229,38 @@ class GridMath
         result.autoColWide -= (result.padWide);      // each column minus left pad amount
         result.autoColWide -= (result.padWide);      // each column minus right pad amount
 
-        // check wether to show the bottom line
-        result.actualDisplayHigh = result.dataHigh*result.rowHighWithPad;
-        result.availableDisplayHigh = result.gridHigh-result.headerUsage-result.toolUsage;
-        if(result.actualDisplayHigh < result.availableDisplayHigh){
-          result.showBottomGridLine=false;
+        // How high should the grid be?
+        result.dataFullHigh = result.dataHigh * (result.rowHighWithPad + result.borderWide);
+        result.dataAvailableHigh = result.gridHigh-result.headerUsage-result.toolUsage; // this is the virtList height.
+        
+        if(result.dataFullHigh > result.dataAvailableHigh){
+          result.showBottomGridLine=true;  // less data than space: no bottom line is needed.
         }             
         else{
-          result.showBottomGridLine=true;
+          result.showBottomGridLine=false;
+          result.dataAvailableHigh -= (result.borderWide)
         }
+        result.bottomGridLineWide = (result.keyNames.length * (result.autoColWide + result.borderWide + result.padWide + result.padWide))-result.borderWide;
 
-        // check wether to shrink the grid if there is not enough data to fill it.
-        result.collapseAmount = 0;
-        if(props.gridHighCollapse){
-          result.collapseAmount = result.availableDisplayHigh - result.actualDisplayHigh - 6;
-          if(result.collapseAmount<0){result.collapseAmount = 0}
+        result.bottomLineUsage=0;
+        if (result.showBottomGridLine) {
+          result.bottomLineUsage = result.borderWide;
+          result.dataAvailableHigh -= result.bottomLineUsage;
         }
         
-      
 
+        // check wether to shrink the grid if there is not enough data to fill it.
+        result.collapseAvailable = result.gridHigh - result.headerUsage 
+                                      - result.dataFullHigh 
+                                      - result.bottomLineUsage 
+                                      - (result.borderWide*2)
+                                      - result.toolUsage ;       // amount to fill
+
+        if(result.collapseAvailable < 0) { result.collapseAvailable = 0 }  // amount to shrink by
+        result.dataAvailableHigh -= result.collapseAvailable; // don't let the grid consume needless space.
+        if (props.gridHighCollapse){
+          result.gridHigh -= result.collapseAvailable; // shrink whole component if requested
+        }
 
       }
       else if(props.getRowData){

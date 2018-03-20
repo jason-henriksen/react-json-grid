@@ -1,5 +1,3 @@
-
-
 import { observable, computed, action } from 'mobx';
 import autoBind from 'react-autobind';
 

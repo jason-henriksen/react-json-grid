@@ -60,14 +60,24 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     }
   }
 
+  cleanClone(){
+    var target={};
+    Object.assign(target,this.cleanData[0]);
+    var keyList = Object.keys(this.cleanData[0]);
+    for (var kc = 0; kc < keyList.length; kc++) {
+      target[keyList[kc]]='';
+    }
+    return target;
+  }
+
   @action onRowAdd(x, y, objKey) {
     if(!this.ds.hideEditor){
       this.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
-      this.cleanData.splice(y + 1, 0, {});
+      this.cleanData.splice(y + 1, 0, this.cleanClone());
       this.data = JSON.stringify(this.cleanData);
     }
     else{
-      this.cleanData.splice(y + 1, 0, {});
+      this.cleanData.splice(y + 1, 0, this.cleanClone());
     }
   }
 
@@ -237,8 +247,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               { this.ds.showDebugStuff &&  
               <div>
                 <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
-                <Toggle action={this.ds.toggleEditor} toggleValue={this.ds.hideEditor} label='Hide text editor' help='Not grid related.  Keeping the data text editor in sync with the grid costs more performance than the grid does.  When running large data test, this editor is disabled.' />
                 <Toggle action={this.ds.toggleDebugGridMath} toggleValue={this.ds.debugGridMath} label='debugGridMath' help='Look at the logs to see what the grid thinks sizes should be.  Used to debug external CSS issues.' />
+                <Toggle action={this.ds.toggleEditor} toggleValue={this.ds.hideEditor} label='Hide text editor' help='Not grid related.  Keeping the data text editor in sync with the grid costs more performance than the grid does.  When running large data test, this editor is disabled.' />
+                ( The editor has bad performance over a few 100 objects,<br/> however it is not part of the Grid code, it's just a sample.)
               </div>}              
               <br/>
               ?? Copy Paste Features ??<br/>
@@ -274,8 +285,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <br />
           <br />
           <br />
-          <div style={{outline:this.ds.outlineCSS}}>
-      <Grid 
+      <Grid style={{ outline: this.ds.outlineCSS }}
         gridHigh={this.ds.propGridHigh}
         gridWide={this.ds.propGridWide}      
         editDisabled={this.ds.editDisabled}
@@ -299,7 +309,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         onImport={this.onImport}
         onExport={this.onExport}
         onGotoPage={this.onGotoPage}
-        pivotOn={ this.ds.pivotOn? ( Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] ) :null}
+        pivotOn={ this.ds.pivotOn? ( Object.keys( (this.cleanData[0]||{a:5}) )[0] ) :null}
         pivotRowHeaderWide={this.ds.pivotRowHeaderWide}
         columnList={ this.ds.columnList?this.ds.colDef:null }
         showToolsAddCut={this.ds.showToolsAddCut}
@@ -310,10 +320,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         formatTime={this.ds.formatTime}
         debugGridMath={this.ds.debugGridMath}
       />
-      </div>
       <br/>
-      <br />
-      <br />
       <div style={{font:'20px monospace'}}>
           &lt;Grid
           {this.ds.propGridWide > -1 && <span><br />&nbsp;&nbsp;gridWide=&#123;{this.ds.propGridWide}&#125;&nbsp;&nbsp;</span>}
@@ -323,7 +330,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.ds.editAsText && <span><br />&nbsp;&nbsp;editAsText=&#123;{''+this.ds.editAsText}&#125;&nbsp;&nbsp;</span>}
           {this.ds.propRowHeaderHigh > -1 && <span><br />&nbsp;&nbsp;colHeaderHigh=&#123;{this.ds.propRowHeaderHigh}&#125;&nbsp;&nbsp;</span>}
           {this.ds.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.ds.propBorderWide}&#125;&nbsp;&nbsp;</span>}
-          {this.ds.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.dataAsObject.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
+          {this.ds.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
           {this.ds.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.ds.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}          
           {this.ds.showToolsAddCut && <span><br />&nbsp;&nbsp;showToolsAddCut</span>}
           {this.ds.showToolsImpExp && <span><br />&nbsp;&nbsp;showToolsImpExp</span>}

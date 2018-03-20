@@ -165,8 +165,12 @@ const GridBody = observer( class GridBody extends React.Component {
         borderTopStyle: 'solid', borderTopWidth: ui.borderWide, height: '0px' }} />);
     }
 
-    var retVal=
-        <div style={{height:ui.gridHigh-ui.collapseAmount,width:ui.gridWide+'px'}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
+    return(
+        <div style={{...this.props.style,
+                     height:ui.gridHigh,
+                     marginRight: ui.borderWide*5,
+                     width:ui.gridWide}} 
+                     onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
@@ -184,8 +188,8 @@ const GridBody = observer( class GridBody extends React.Component {
 
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
-            width={ui.gridWide+'px'}
-            height={ui.gridHigh - ui.headerUsage - ui.toolUsage - ui.collapseAmount }
+            width={ui.gridWide}
+            height={ui.dataAvailableHigh}
             itemCount={ui.fixedRowCount}
             itemSize={ui.rowHighWithPad+ui.borderWide} 
             renderItem={({ index, style }) => 
@@ -202,10 +206,23 @@ const GridBody = observer( class GridBody extends React.Component {
                 />
               </div>}
           />                    
+        {this.props.gridHighCollapse === false && ui.collapseAvailable>0 &&
+          <div style={{
+          minWidth: ui.bottomGridLineWide,
+          minWidth: ui.bottomGridLineWide,
+          width: ui.bottomGridLineWide,
+          marginTop: (-1 * ui.borderWide),
+            height: (ui.collapseAvailable) ,
+            minHeight: (ui.collapseAvailable),
+            borderStyle: 'solid',
+            borderWidth: ui.borderWide,
+            borderColor: 'black',
+            backgroundColor:'white'}}/>
+        }
           
         {ui.showBottomGridLine &&
         <div style={{ ...this.props.styleHeader,
-                      width: (ui.rowWide+ 'px'),
+          width: (ui.borderWide + (ui.keyNames.length * (ui.autoColWide + ui.borderWide + ui.padWide + ui.padWide)) + 'px'),
                       borderTopStyle: 'solid',                      
                       borderTopWidth: ui.borderWide,
                       height:'0px'}}/>
@@ -225,8 +242,7 @@ const GridBody = observer( class GridBody extends React.Component {
         }
       </div>        
     </div>
-    
-    return(retVal);
+    );
   }
 })
 
