@@ -22,40 +22,64 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
 @observer class DocUI extends React.Component {
 
-  @observable data = DataNoiseSmall;
-  @action updateData(evt) { this.data = evt.target.value;}
-  @action updateDataText(txt) { this.data = txt;}
-
   constructor(props) { 
     super(props); autoBind(this); 
     this.rrjs = rrjsTool.createParser();
     this.printer = new rrjsTool.PrettyPrinter( rrjsTool.PrettyPrinter.Options.Companion.JsonPretty);
     this.dm = new DataMaker(this.updateDataText);
     this.ds = new DocStore();
+    this.dataAsObject();
   }
+
+  @observable data = DataNoiseSmall;  // the data AS A STRING for the test editor
+  @observable cleanData = {};         // the data AS JSON for the fast editor
+  @observable dataErr = '';
+
+  @action updateData(evt) { 
+    this.data = evt.target.value;
+    this.dataAsObject();
+  }
+  @action updateDataText(txt) { 
+    this.data = txt;
+    this.dataAsObject();
+  }
+
 
   
   @action setValue(x,y,objKey,newValue)
   {
     // this is just for the test UI.  By making the "source of truth" the text file, i keep things in sync
     // cost is that I lose update performance for this test UI.  Try another test gui for perf testing.
-    var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));    
-    cleanData[y][objKey]=newValue;
-    this.data = JSON.stringify(cleanData);
+    if(!this.ds.hideEditor){
+      this.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));    
+      this.cleanData[y][objKey]=newValue;
+      this.data = JSON.stringify(this.cleanData);
+    }
+    else{
+      this.cleanData[y][objKey]=newValue;
+    }
   }
 
   @action onRowAdd(x, y, objKey) {
-    console.log('onRowAdd');
-    debugger;
-    var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
-    cleanData.splice(y + 1, 0, {});
-    this.data = JSON.stringify(cleanData);
+    if(!this.ds.hideEditor){
+      this.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
+      this.cleanData.splice(y + 1, 0, {});
+      this.data = JSON.stringify(this.cleanData);
+    }
+    else{
+      this.cleanData.splice(y + 1, 0, {});
+    }
   }
 
   @action onRowCut(x, y, objKey) {
-    var cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
-    cleanData.splice(y, 1);
-    this.data = JSON.stringify(cleanData);
+    if(!this.ds.hideEditor){
+      this.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));
+      this.cleanData.splice(y, 1);
+      this.data = JSON.stringify(this.cleanData);
+    }
+    else{
+      this.cleanData.splice(y, 1);
+    }
   }
 
   @action onColAdd(x, y, objKey) { }// not implemented yet.  
@@ -70,26 +94,38 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
   @observable curParamHelp = "";
 
-  @computed get dataAsObject(){
-    var res={};
-    res.cleanData=[];
-    res.dataErr="";
+  dataAsObject(){
+    this.cleanData=[];
+    this.dataErr="";
     try {
-      res.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));          
-      if (res.cleanData && typeof res.cleanData === "object") { res.dataErr="";}
-      else{res.cleanData=[];res.dataErr="Invalid JSON."}
+      this.cleanData = JSON.parse(this.rrjs.stringToJson(this.data));          
+      if (this.cleanData && typeof this.cleanData === "object") { this.dataErr="";}
+      else{this.cleanData=[];this.dataErr="Invalid JSON."}
     }
     catch (e) { 
       try{
-      res.cleanData = JSON.parse(this.data);          
+        this.cleanData = JSON.parse(this.data);          
       }
       catch(e2){
-        res.dataErr="Invalid JSON.  Keys and values need to be in quotes.";  console.log(e);
+        this.dataErr="Invalid JSON.  Keys and values need to be in quotes.";  console.log(e);
       }
     }
-
-    return res;
   };  
+
+  goMakeL(){
+    this.dataErr="Building 50K objects...  Disabling text data editor for performance.";
+    this.ds.hideEditor=true;
+    this.ds.showDebugStuff=true;
+    var saneThis = this;
+    setTimeout(function(){ saneThis.dm.makeL(); saneThis.dataErr=''; }, 100);
+  }
+  goMakeLA(){
+    this.dataErr="Building 50K arrays...  Disabling text data editor for performance.";
+    this.ds.hideEditor=true;
+    this.ds.showDebugStuff=true;
+    var saneThis = this;
+    setTimeout(function(){ saneThis.dm.makeLA(); saneThis.dataErr=''; }, 100);
+  }
 
 
 
@@ -110,9 +146,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               <ToggleFolder action={this.ds.toggleShowSizeStuff} toggleValue={this.ds.showSizeStuff} label='Size Features' help='display API for sizing' />
               { this.ds.showSizeStuff &&  
               <div>
-                <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
-                <Toggle action={this.ds.toggleDebugGridMath} toggleValue={this.ds.debugGridMath} label='debugGridMath' help='Look at the logs to see what the grid thinks sizes should be.  Used to debug external CSS issues.' />
-                <Toggle action={this.ds.toggleColHeaderHide} toggleValue={this.ds.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
                 <NumWheel action={this.ds.setBorderWidth} curValue={this.ds.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.ds.setPadWidth} curValue={this.ds.propPadWide} label='padWide' help='width of the padding inside each cell' />
                 <NumWheel action={this.ds.setGridWide} incr={100} curValue={this.ds.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
@@ -120,6 +153,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <NumWheel action={this.ds.setRowHigh} curValue={this.ds.propRowHigh} label='rowHigh' help='over-ride default row height' />
                 <NumWheel action={this.ds.setRowHeaderHigh} curValue={this.ds.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
                 <NumWheel action={this.ds.setMinColWide} incr={5} curValue={this.ds.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
+                <Toggle action={this.ds.toggleColHeaderHide} toggleValue={this.ds.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
+                <Toggle action={this.ds.toggleGridHighCollapse} toggleValue={this.ds.gridHighCollapse} label='gridHighCollapse' help='If there are fewer rows than needed by the gridHigh setting, shrink the height of the grid.  Otherwise, use the full space.' />
                 </div>
               }
 
@@ -198,19 +233,27 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <TextParam action={this.ds.setFormatTime} curValue={this.ds.formatTime} label='formatTime' help='preferred time format.' />
                 </div>
               }
+              <ToggleFolder action={this.ds.toggleShowDebugStuff} toggleValue={this.ds.showDebugStuff} label='Debug Features' help='grid tools to help you debug your grid usage.' />
+              { this.ds.showDebugStuff &&  
+              <div>
+                <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
+                <Toggle action={this.ds.toggleEditor} toggleValue={this.ds.hideEditor} label='Hide text editor' help='Not grid related.  Keeping the data text editor in sync with the grid costs more performance than the grid does.  When running large data test, this editor is disabled.' />
+                <Toggle action={this.ds.toggleDebugGridMath} toggleValue={this.ds.debugGridMath} label='debugGridMath' help='Look at the logs to see what the grid thinks sizes should be.  Used to debug external CSS issues.' />
+              </div>}              
+              <br/>
               ?? Copy Paste Features ??<br/>
               ?? Multi-Select Features ??<br />
               ?? Component Examples ??<br />
               </div>
             </div>
-          <br/><br/><br/>Example Data (this.data)<br/>
+          <br/><br/><br/>Example Data &#123;this.data&#125;<br/>
           <button style={{width:'90px'}} onClick={this.dm.makeS}>5 objects</button>
           <button style={{width:'90px'}} onClick={this.dm.makeM}>150 objects</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeL}>50K objects</button>
+          <button style={{width:'90px'}} onClick={this.goMakeL}>50K objects</button>
           <br/>
           <button style={{width:'90px'}} onClick={this.dm.makeSA}>5 arrays</button>
           <button style={{width:'90px'}} onClick={this.dm.makeMA}>150 arrays</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeLA}>50K arrays</button>
+          <button style={{width:'90px'}} onClick={this.goMakeLA}>50K arrays</button>
           <br/>
           <button style={{width:'90px'}} onClick={this.dm.makeAInt}>int[]</button>
           <button style={{width:'90px'}} onClick={this.dm.makeAWords}>word[]</button>
@@ -219,8 +262,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <button style={{width:'90px'}} onClick={this.dm.makeCSV}>CSV</button>
           <button style={{width:'90px'}} onClick={this.dm.makePSV}>PSV</button>
           <button style={{width:'90px'}} onClick={this.dm.makeKVE}>key=value[]</button><br />
-          <span style={{ color: 'red' }}>{this.dataAsObject.dataErr}</span><br />
-          <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
+          <span style={{ color: 'red' }}>{this.dataErr}</span><br />
+          {!this.ds.hideEditor &&
+            <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
+          }
           
 
         </div>
@@ -229,7 +274,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <br />
           <br />
           <br />
-      <Grid style={{outline:this.outlineCSS}}
+          <div style={{outline:this.ds.outlineCSS}}>
+      <Grid 
         gridHigh={this.ds.propGridHigh}
         gridWide={this.ds.propGridWide}      
         editDisabled={this.ds.editDisabled}
@@ -241,9 +287,10 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         rowHigh={this.ds.propRowHigh}
         colHeaderHigh={this.ds.propRowHeaderHigh}
         colHeaderHide={this.ds.colHeaderHide}
+        gridHighCollapse={this.ds.gridHighCollapse}
         borderWide={this.ds.propBorderWide}
         padWide={this.ds.propPadWide}
-        data={this.dataAsObject.cleanData}
+        data={this.cleanData}
         onChange={this.setValue}
         onRowAdd={this.onRowAdd}
         onRowCut={this.onRowCut}
@@ -263,6 +310,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         formatTime={this.ds.formatTime}
         debugGridMath={this.ds.debugGridMath}
       />
+      </div>
       <br/>
       <br />
       <br />
@@ -289,6 +337,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.ds.styleCell && <span><br />&nbsp;&nbsp;styleCell=&#123;{this.ds.styleCell}&#125;</span>}
           {this.ds.formatDate && <span><br />&nbsp;&nbsp;formatDate=&#123;{this.ds.formatDate}&#125;</span>}
           {this.ds.formatTime && <span><br />&nbsp;&nbsp;formatTime=&#123;{this.ds.formatTime}&#125;</span>}
+          {this.ds.gridHighCollapse && <span><br />&nbsp;&nbsp;gridHighCollapse</span>}
           {this.ds.debugGridMath && <span><br />&nbsp;&nbsp;debugGridMath</span>}                    
           {this.ds.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{this.ds.colListAsText}&nbsp;&nbsp;]&#125;</span>}          
           <br/>&nbsp;&nbsp;data=&#123;this.data&#125;

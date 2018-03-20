@@ -7,7 +7,6 @@ import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
 import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
-import GridMath from './GridMath';
 import GridTextBox from './GridTextBox';
 import ReactTooltip from 'react-tooltip';
 
@@ -27,15 +26,18 @@ const GridBody = observer( class GridBody extends React.Component {
     super(props); 
     autoBind(this); 
     this.componentWillReceiveProps(props);    // first call needs to set up the data store
-    this.uiMath = new GridMath();
   }
 
   @observable scrollBarWide = 0;              // keep track of how wide the scroll bar will be
-  @action setScrollBarWide(exp) { this.scrollBarWide = exp.scrollbarWidth+2; } // account for rounding error
+  @action setScrollBarWide(exp) { this.props.GridStore.scrollBarWide = exp.scrollbarWidth+2; } // account for rounding error
 
 
   componentWillReceiveProps(nextProps)
   {
+    if(nextProps.debugGridMath){
+      console.log('componentWillReceiveProps');
+    }
+    
     if (this.props.GridStore) {
       this.props.GridStore.prepSelectionField(nextProps);
     }
@@ -66,8 +68,9 @@ const GridBody = observer( class GridBody extends React.Component {
   }
 
   render() {
-    var ui = this.uiMath.calcGridBody(this.props, (this.scrollBarWide||20));
+    var ui = this.props.GridStore.uiMath; 
     if(this.props.debugGridMath){
+      console.log('render grid');
       console.log(ui);
     }
 
@@ -79,22 +82,22 @@ const GridBody = observer( class GridBody extends React.Component {
     if(ui.notReady){
       
       return( 
-      <div>
+      <div style={{backgroundColor:'#ffcea0',outline:'4px dashed red',padding:'5px'}}>
           <ScrollbarSize                               
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
           /> 
-          Loading...               
+          Sorry, this grid is not ready to display.<br/><br/>
+          {ui.notReady}
       </div>);
     }
 
     var header=[];
     var marginOffset=0;
-    var headerUsage=0;
-    if (!this.props.colHeaderHide) {     // provide a header row.
-      for(var ctr=0;ctr<ui.keyNames.length;ctr++){
+    if (!this.props.colHeaderHide && !ui.forceColHeaderHide) {     // provide a header row.
+      for(var ctr=0;ctr<ui.colHeaderKeyList.length;ctr++){
 
-        var keyName = ui.keyNames[ctr]; // what key am I on?
+        var keyName = ui.colHeaderKeyList[ctr]; // what key am I on?
         var colTitle = keyName;
         var curColWide=ui.autoColWide;
         var helpComp=null;
@@ -154,25 +157,23 @@ const GridBody = observer( class GridBody extends React.Component {
                       </a>);
         marginOffset=-1*ui.borderWide;
       }
-      headerUsage=(ui.colHeaderHigh+(2*ui.padWide)+(2*ui.borderWide));
     }
     else{  // header is hidden so provide a top border line.
       header.push(<div style={{
         ...this.props.styleHeader,
         width: (ui.borderWide + (ui.keyNames.length*(ui.autoColWide+ui.borderWide+ui.padWide+ui.padWide)) + 'px'),
         borderTopStyle: 'solid', borderTopWidth: ui.borderWide, height: '0px' }} />);
-      headerUsage=1;
     }
 
     var retVal=
-        <div style={{height:ui.gridHigh,width:ui.gridWide+'px'}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
+        <div style={{height:ui.gridHigh-ui.collapseAmount,width:ui.gridWide+'px'}} onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
             onChange={this.setScrollBarWide}
           /> 
           {/* put the header in place */}
-          <div style={{padding:'0px',margin:'0px',maxHeight:''+headerUsage+'px',minHeight:''+headerUsage+'px',height:''+headerUsage+'px'}}>
+          <div style={{padding:'0px',margin:'0px',maxHeight:''+ui.headerUsage+'px',minHeight:''+ui.headerUsage+'px',height:''+ui.headerUsage+'px'}}>
             {header}
           </div>
 
@@ -183,8 +184,8 @@ const GridBody = observer( class GridBody extends React.Component {
 
           {/* VirtualList renders only the rows that are visible */ }
           <VirtualList
-            width='100%'            
-            height={ui.gridHigh - headerUsage }
+            width={ui.gridWide+'px'}
+            height={ui.gridHigh - ui.headerUsage - ui.toolUsage - ui.collapseAmount }
             itemCount={ui.fixedRowCount}
             itemSize={ui.rowHighWithPad+ui.borderWide} 
             renderItem={({ index, style }) => 
@@ -199,22 +200,31 @@ const GridBody = observer( class GridBody extends React.Component {
                           onChange={this.props.onChange}
                           index={index} 
                 />
-              </div>
-            }
+              </div>}
           />                    
-      {ui.showBottomGridLine &&
+          
+        {ui.showBottomGridLine &&
         <div style={{ ...this.props.styleHeader,
                       width: (ui.rowWide+ 'px'),
                       borderTopStyle: 'solid',                      
                       borderTopWidth: ui.borderWide,
                       height:'0px'}}/>
       }
+      <div>      
         {this.props.showToolsAddCut &&
-          <div>
-          <button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button>
-          </div>
+          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
         }
-      </div>
+        {this.props.showToolsImpExp &&
+          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+        }
+        {this.props.showToolsPage &&
+          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+        }
+        {this.props.showToolsCustom &&
+          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+        }
+      </div>        
+    </div>
     
     return(retVal);
   }

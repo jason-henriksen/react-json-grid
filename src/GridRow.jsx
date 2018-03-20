@@ -146,13 +146,7 @@ import ReactTooltip from 'react-tooltip';
       }
       else{
 
-        var cellData = '';
-        if(this.props.pivotOn){
-          cellData = this.props.data[ctr][keyName];
-        }
-        else{
-          cellData = this.props.data[this.props.index][this.props.uiMath.keyNames[ctr]];
-        }
+        var cellData = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr,this.props.index);
 
         cellArray.push(
         <GridCell 

@@ -125,7 +125,7 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.cursor.editX = this.props.x;
         this.props.GridStore.cursor.editY = this.props.y;
         this.props.GridStore.cursor.editObjKey = this.props.objKey;
-        this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);        
+        this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivotAtEditCursor(this.props.data);        
         // pop overlay editors if needed
         if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
           this.props.GridStore.showDatePicker=true;
@@ -223,7 +223,7 @@ window.reactJsonGridFocusInput = function(elem){
       // start editing new location
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-      this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);
+      this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivotAtEditCursor(this.props.data);
     }
     else if (e.keyCode == '9') { // tab
       // commit the value
@@ -256,7 +256,7 @@ window.reactJsonGridFocusInput = function(elem){
       // start editing the next one
       this.props.GridStore.cursor.editX = this.props.GridStore.cursor.x;
       this.props.GridStore.cursor.editY = this.props.GridStore.cursor.y;
-      this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivot(this.props.data);;
+      this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivotAtEditCursor(this.props.data);
       this.props.GridStore.autoFocus=true;
       e.stopPropagation();
       e.preventDefault();        

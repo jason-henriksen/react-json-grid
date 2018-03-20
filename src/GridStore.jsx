@@ -1,7 +1,9 @@
 import { observable, computed, action } from 'mobx';
+import GridMath from './GridMath';
 
 class GridStore {           // Just a class.  Nothing fancy here.
   constructor() { 
+    this.uiMathInst = new GridMath();
   }
 
   @observable cursor = {x:0,y:0,                         // cursor x and y values
@@ -66,23 +68,11 @@ class GridStore {           // Just a class.  Nothing fancy here.
   */
   @action prepSelectionField(props)
   {
-    var dataWide = 0;
-    var dataHigh = 0;
-    if (props.data && props.data.length > 0) {
+    this.uiMath = this.uiMathInst.calcGridBody(props, (this.scrollBarWide||20));    
+    this.keyList = this.uiMath.keyNames;
+    var dataWide = this.uiMath.dataWide;
+    var dataHigh = this.uiMath.dataHigh;
 
-      this.keyList = Object.keys(props.data[0]);
-
-      if (props.pivotOn) {  // pivot the data using this key as the col header
-        //---- PIVOTED FLOW
-        dataWide = props.data.length;
-        dataHigh = Object.keys(props.data[0]).length;
-      }
-      else {
-        //---- NORMAL FLOW
-        dataWide = Object.keys(props.data[0]).length;
-        dataHigh = props.data.length;
-      }
-    }
     if (this.cursor.maxX !== dataWide - 1 || this.cursor.maxY !== dataHigh - 1) {
       // ensure that we only set the values if they've actuallly changed.
       this.cursor.maxX = dataWide-1;
@@ -187,15 +177,50 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return (!isNaN(t));
   }
 
-  getDataRespectingPivot(clientData){
-    if(this.pivotOn){
-      return clientData[this.cursor.editX][this.keyList[this.cursor.editY]]; // y is rows down / outer array
+  getDataRespectingPivotAtEditCursor(clientData){
+    if(this.uiMath.isPrimitiveData){
+      // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
+      if(this.pivotOn){
+        return clientData[this.cursor.editY]; // y is rows down / outer array
+      }
+      else{
+        return clientData[this.cursor.editX];
+      }
+    }
+    else{    
+      if(this.pivotOn){
+        return clientData[this.cursor.editX][this.keyList[this.cursor.editY]]; // y is rows down / outer array
+      }
+      else{
+        return clientData[this.cursor.editY][this.keyList[this.cursor.editX]];
+      }
+    }
+  }
+
+  renderZero(tval) {if (0===tval){return '0';}else{return tval}}
+
+  getDataRespectingPivotAtLocation(clientData,x,y)
+  {
+    if(this.uiMath.isPrimitiveData){
+      // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
+      if(this.pivotOn){
+        return this.renderZero(clientData[x]); // y is rows down / outer array
+      }
+      else{
+        return this.renderZero(clientData[y]);
+      }
     }
     else{
-      return clientData[this.cursor.editY][this.keyList[this.cursor.editX]];
+      // object data.  Use the real stuff.
+      if(this.pivotOn){
+        return this.renderZero(clientData[x][this.keyList[y]]); // y is rows down / outer array
+      }
+      else{
+        return this.renderZero(clientData[y][this.keyList[x]]);
+      }
     }
-    
   }
+  
 
   @observable jsonAsTxtError = '';
   @observable textDataLinesLength=0;

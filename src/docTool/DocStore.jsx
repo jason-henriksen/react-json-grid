@@ -12,6 +12,12 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @observable showOutline = false;
   @action toggleOutline() { this.showOutline = !this.showOutline; }
 
+  @observable hideEditor = false;
+  @action toggleEditor() { this.hideEditor = !this.hideEditor; }
+
+  // determine which onChangeHandler help and variables to use
+  @observable onChangeHandlerType = 'normal'; // fast,primitive, rowReplace
+  
   @observable showToolsAddCut = false;
   @action toggleToolsAddCut() { this.showToolsAddCut = !this.showToolsAddCut; }
 
@@ -41,6 +47,9 @@ class DocStore {           // Just a class.  Nothing fancy here.
   
   @observable propGridHigh = -1;
   @action setGridHigh(val) { this.propGridHigh = val; }
+
+  @observable gridHighCollapse = false;
+  @action toggleGridHighCollapse(val) { this.gridHighCollapse = !this.gridHighCollapse; }
 
   @observable propRowHigh = -1;
   @action setRowHigh(val) { this.propRowHigh = val; }
@@ -75,6 +84,8 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @action toggleShowPivotStuff() { this.showPivotStuff = !this.showPivotStuff; }
   @observable showEditStuff = false;
   @action toggleShowEditStuff() { this.showEditStuff = !this.showEditStuff; }
+  @observable showDebugStuff = false;
+  @action toggleShowDebugStuff() { this.showDebugStuff = !this.showDebugStuff; }
 
   @observable debugGridMath = false;
   @action toggleDebugGridMath() { this.debugGridMath = !this.debugGridMath; }

@@ -20,6 +20,12 @@ import { observer } from 'mobx-react';
 
   defVal() { this.props.action(-1); } // account for rounding error
 
+  onChange(evt){
+    var val = Number(evt.target.value);
+    if(!val){ val=-1; }
+    this.props.action(val);
+  }
+
   more1() {        
     this.props.action(this.props.curValue + 1);  
   }
@@ -58,7 +64,7 @@ import { observer } from 'mobx-react';
         <CloseOctagonOutline onClick={this.defVal}/>
         <ArrowLeftThick onClick={this.lessVal}/>
         <ArrowLeft onClick={this.less1}/>
-        <div style={{display:'inline-block',minWidth:'40px',textAlign:'center'}}>{displayVal}</div>
+        <input style={{display:'inline-block',minWidth:'40px',maxWidth:'40px',textAlign:'center'}} value={displayVal} onChange={this.onChange}/>
         <ArrowRight onClick={this.more1}/> 
         <ArrowRightThick onClick={this.moreVal}/> 
       </div>
