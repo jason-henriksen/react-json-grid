@@ -197,7 +197,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
   }
 
-  renderZero(tval) {if (0===tval){return '0';}else{return tval}}
+  renderZero(tval) {if (0===tval){return '0';} else if (false===tval){return 'false';} else{return tval}}
 
   getDataRespectingPivotAtLocation(clientData,x,y)
   {

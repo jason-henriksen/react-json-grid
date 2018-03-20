@@ -148,14 +148,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
     return (
         <div style={{ overflowY: 'hidden',height:(window.innerHeight-20)+'px'}}>
-          <div style={{marginLeft:'30px',position:'absolute',top:'0px',bottom:'0px',left:'0px',width:'475px',overflow:'auto',
+          <div style={{marginLeft:'30px',position:'absolute',top:'0px',bottom:'0px',left:'0px',width:'550px',overflow:'auto',
                        borderRight:'2px solid grey',verticalAlign:'top'}}>
             <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
               <ToggleFolder action={this.ds.toggleShowSizeStuff} toggleValue={this.ds.showSizeStuff} label='Size Features' help='display API for sizing' />
               { this.ds.showSizeStuff &&  
-              <div>
+              <div style={{marginLeft:'40px'}}>
                 <NumWheel action={this.ds.setBorderWidth} curValue={this.ds.propBorderWide} label='borderWide' help='width of the border between cells' />
                 <NumWheel action={this.ds.setPadWidth} curValue={this.ds.propPadWide} label='padWide' help='width of the padding inside each cell' />
                 <NumWheel action={this.ds.setGridWide} incr={100} curValue={this.ds.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
@@ -170,8 +170,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
               <ToggleFolder action={this.ds.toggleColumnList} toggleValue={this.ds.columnList} label='Column Definition Features' help='define column meta data' />
               {this.ds.columnList &&
-                <div>
-                <Grid
+                <div style={{marginLeft:'40px'}}>
+                  <Grid
                   data={this.ds.colDef}
                   columnList={[
                     { key: 'key', altText: 'key name (or index) of the data for this column.  You can re-order the key names to re-order the columns displayed.' },
@@ -187,7 +187,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                     { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
                     { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
                     { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
-                    { key: 'easyMenu', altText: 'render and validate this column as a menu' },
+                    { key: 'easyMenu', altText: 'render and validate this column as a menu. supply an array of values easyMenu={[a,b,c,d]} or a pipe separated list easyMenu={"a|b|c|d"}' },
                     { key: 'altText', altText: 'provide help text when mousing over the column header' },
                   ]}
                   pivotOn='title'
@@ -202,7 +202,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
               <ToggleFolder action={this.ds.toggleShowEditStuff} toggleValue={this.ds.showEditStuff} label='Edit/Tools Features' help='display edit tools' />
               {this.ds.showEditStuff &&
-                <div>
+                <div style={{marginLeft:'40px'}}>
                   <Toggle action={this.ds.toggleToolsAddCut} toggleValue={this.ds.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
                   <Toggle action={this.ds.toggleToolsPage} toggleValue={this.ds.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
                   <Toggle action={this.ds.toggleToolsImpExp} toggleValue={this.ds.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
@@ -213,14 +213,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               }
               <ToggleFolder action={this.ds.toggleShowPivotStuff} toggleValue={this.ds.showPivotStuff} label='Pivot Features' help='display data pivot' />
               {this.ds.showPivotStuff &&
-                <div>
+                <div style={{marginLeft:'40px'}}>
                   <Toggle action={this.ds.togglePivotOn} toggleValue={this.ds.pivotOn} label='pivotOn' help='pivot the data on a key.' />
                   <NumWheel action={this.ds.setPivotRowHeaderWide} incr={25} curValue={this.ds.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br />use this to set the pixel width of the row header</div>} />
                 </div>
               }
               <ToggleFolder action={this.ds.toggleShowStyleStuff} toggleValue={this.ds.showStyleStuff} label='Style Features' help='display API for style objects' />
               {this.ds.showStyleStuff &&  
-                <div>
+              <div style={{marginLeft:'40px'}}>
                 <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
                 <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
@@ -229,7 +229,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               }
               <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class Features' help='display API for css class usage' />
               {this.ds.showClassStuff &&
-                <div>
+                <div style={{marginLeft:'40px'}}>
                 <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='classHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='classRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
                 <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='classRow' help='style for default cells.  cannot control border or padding.' />
@@ -238,18 +238,18 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               }              
               <ToggleFolder action={this.ds.toggleShowFormatStuff} toggleValue={this.ds.showFormatStuff} label='Format Features' help='display API for date, time and other formatters' />
               {this.ds.showFormatStuff &&
-                <div>
+              <div style={{marginLeft:'40px'}}>
                 <TextParam action={this.ds.setFormatDate} curValue={this.ds.formatDate} label='formatDate' help='preferred date format.' />
                 <TextParam action={this.ds.setFormatTime} curValue={this.ds.formatTime} label='formatTime' help='preferred time format.' />
                 </div>
               }
               <ToggleFolder action={this.ds.toggleShowDebugStuff} toggleValue={this.ds.showDebugStuff} label='Debug Features' help='grid tools to help you debug your grid usage.' />
               { this.ds.showDebugStuff &&  
-              <div>
+              <div style={{marginLeft:'40px'}}>
                 <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
                 <Toggle action={this.ds.toggleDebugGridMath} toggleValue={this.ds.debugGridMath} label='debugGridMath' help='Look at the logs to see what the grid thinks sizes should be.  Used to debug external CSS issues.' />
                 <Toggle action={this.ds.toggleEditor} toggleValue={this.ds.hideEditor} label='Hide text editor' help='Not grid related.  Keeping the data text editor in sync with the grid costs more performance than the grid does.  When running large data test, this editor is disabled.' />
-                ( The editor has bad performance over a few 100 objects,<br/> however it is not part of the Grid code, it's just a sample.)
+                ( The documentation sample editor has worse performance than react-json-grid.<br/>Use "Hide text editor" to disable it while doing performance tests. )
               </div>}              
               <br/>
               ?? Copy Paste Features ??<br/>
@@ -281,7 +281,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
         </div>
 
-  <div style={{marginLeft:'30px',position:'absolute',top:'0px',bottom:'0px',left:'500px',right:'0px',overflow:'auto'}}>
+  <div style={{marginLeft:'30px',position:'absolute',top:'0px',bottom:'0px',left:'575px',right:'0px',overflow:'auto'}}>
           <br />
           <br />
           <br />
@@ -346,7 +346,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.ds.formatTime && <span><br />&nbsp;&nbsp;formatTime=&#123;{this.ds.formatTime}&#125;</span>}
           {this.ds.gridHighCollapse && <span><br />&nbsp;&nbsp;gridHighCollapse</span>}
           {this.ds.debugGridMath && <span><br />&nbsp;&nbsp;debugGridMath</span>}                    
-          {this.ds.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{this.ds.colListAsText}&nbsp;&nbsp;]&#125;</span>}          
+          {this.ds.columnList && <span><br />&nbsp;&nbsp;columnList=&#123;[{colListAsText}&nbsp;&nbsp;]&#125;</span>}          
           <br/>&nbsp;&nbsp;data=&#123;this.data&#125;
           <br/>&nbsp;&nbsp;onChange=&#123;(x,y,objKey,value)=&gt;&#123;&#125;&#125;&nbsp;&nbsp;
           

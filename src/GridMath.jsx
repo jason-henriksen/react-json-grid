@@ -48,8 +48,6 @@ class GridMath
       if(props.data.length===0 && !props.columnList){  result.notReady = "No sample data supplied and no column definition list supplied.  To start with an empty array, please define the columns."; return result; }
       if(props.data.length>0 && !props.columnList &&
          (props.data[0]===null || typeof props.data[0] === 'undefined')){ 
-        console.log( typeof props.data[0]);
-        console.log( props.data[0]);
         result.notReady = "Falsey sample data supplied with no column definition list supplied."; return result; 
       }
 
@@ -125,7 +123,12 @@ class GridMath
             result.fixedRowCount = 1;                   // one row
             result.saveColumnForRowHeader=1;            // will have a row header.
             result.forceColHeaderHide=true;             // no column headers allowed on pivoted primitives.
+            result.headerUsage=1;
             result.colHeaderKeyList=[];                 // I mean it: no column headers allowed!
+            result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
+            for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
+              result.colHeaderKeyList.push(pctr);       // key (or maybe value) for the column header.  Only used for autoColWide calculation
+            }
             result.dataWide = props.data.length;        // length => width
             result.dataHigh = 1;                        // 1 row hight
           }
@@ -225,9 +228,13 @@ class GridMath
             result.borderWide        // minus left most border bar
                                      // scrollbar already handled by basin on rowWide.
           ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
+        result.autoColWideWithBorderAndPad = result.autoColWide;
         result.autoColWide -= (result.borderWide);   // each column minus right border amount
         result.autoColWide -= (result.padWide);      // each column minus left pad amount
         result.autoColWide -= (result.padWide);      // each column minus right pad amount
+
+        // calculate the used row width
+        result.rowWide= fixedWide + (result.autoColWideWithBorderAndPad * autoColCount) - result.borderWide;
 
         // How high should the grid be?
         result.dataFullHigh = result.dataHigh * (result.rowHighWithPad + result.borderWide);
@@ -240,7 +247,8 @@ class GridMath
           result.showBottomGridLine=false;
           result.dataAvailableHigh -= (result.borderWide)
         }
-        result.bottomGridLineWide = (result.keyNames.length * (result.autoColWide + result.borderWide + result.padWide + result.padWide))-result.borderWide;
+        //result.bottomGridLineWide = (result.keyNames.length * (result.autoColWide + result.borderWide + result.padWide + result.padWide))-result.borderWide;
+        result.bottomGridLineWide = result.rowWide;
 
         result.bottomLineUsage=0;
         if (result.showBottomGridLine) {

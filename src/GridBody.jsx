@@ -131,7 +131,7 @@ const GridBody = observer( class GridBody extends React.Component {
 
         header.push(  
           <a data-tip data-for={'dataTip' + ctr} key={ctr} >
-                        <div
+                        <div  key={'k'+ctr}
                           style={{
                             backgroundColor: '#F3F3F3',     // default, may be over ridden by styleHeader. Order matters.
                             textAlign:'center',             // default, may be over ridden by styleHeader. Order matters.
@@ -158,11 +158,16 @@ const GridBody = observer( class GridBody extends React.Component {
         marginOffset=-1*ui.borderWide;
       }
     }
-    else{  // header is hidden so provide a top border line.
-      header.push(<div style={{
-        ...this.props.styleHeader,
-        width: (ui.borderWide + (ui.keyNames.length*(ui.autoColWide+ui.borderWide+ui.padWide+ui.padWide)) + 'px'),
-        borderTopStyle: 'solid', borderTopWidth: ui.borderWide, height: '0px' }} />);
+    else{  // header is hidden so provide a top border line.  The 2x borderWide extra width is needed because this is a top only border
+      if(!ui.forceColHeaderHide){
+        header.push(<div style={{
+          key:'headerLine',
+          ...this.props.styleHeader,
+          width: ui.rowWide + (2 * ui.borderWide),
+          minWidth: ui.rowWide + (2 * ui.borderWide),
+          width: ui.rowWide + (2 * ui.borderWide),
+          borderTopStyle: 'solid', borderTopWidth: ui.borderWide, height: '0px' }} />);
+      }
     }
 
     return(
@@ -170,7 +175,7 @@ const GridBody = observer( class GridBody extends React.Component {
                      height:ui.gridHigh,
                      marginRight: ui.borderWide*5,
                      width:ui.gridWide}} 
-                     onKeyPress={this.onKeyPress} onBlur={this.blurControl}>
+                     onKeyPress={this.onKeyPress} onBlur={this.blurControl} key='scrollSize'>
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize
             onLoad={this.setScrollBarWide}
@@ -208,9 +213,9 @@ const GridBody = observer( class GridBody extends React.Component {
           />                    
         {this.props.gridHighCollapse === false && ui.collapseAvailable>0 &&
           <div style={{
-          minWidth: ui.bottomGridLineWide,
-          minWidth: ui.bottomGridLineWide,
-          width: ui.bottomGridLineWide,
+          minWidth: ui.rowWide,
+          minWidth: ui.rowWide,
+          width: ui.rowWide,
           marginTop: (-1 * ui.borderWide),
             height: (ui.collapseAvailable) ,
             minHeight: (ui.collapseAvailable),
@@ -220,9 +225,11 @@ const GridBody = observer( class GridBody extends React.Component {
             backgroundColor:'white'}}/>
         }
           
-        {ui.showBottomGridLine &&
+        {ui.showBottomGridLine &&  // needs the 2x border wide added because this is only a top border
         <div style={{ ...this.props.styleHeader,
-          width: (ui.borderWide + (ui.keyNames.length * (ui.autoColWide + ui.borderWide + ui.padWide + ui.padWide)) + 'px'),
+                      width: ui.rowWide + (2 * ui.borderWide),
+                      minWidth: ui.rowWide + (2 * ui.borderWide),
+                      width: ui.rowWide + (2 * ui.borderWide),
                       borderTopStyle: 'solid',                      
                       borderTopWidth: ui.borderWide,
                       height:'0px'}}/>

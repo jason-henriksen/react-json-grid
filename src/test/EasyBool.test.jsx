@@ -15,14 +15,12 @@ Enzyme.configure({ adapter: new Adapter() });
 
 it('shows the correct icon when true', () => {
   const wrapper = shallow(<Toggle toggleValue={true}/>);
-  console.log(wrapper.debug());  // debug the html to figure out what you're looking at
   expect(wrapper.find(CheckboxMarkedOutlineIcon)).toHaveLength(1);
   expect(wrapper.find(CheckboxBlankOutlineIcon)).toHaveLength(0);
 });
 
 it('shows the correct icon when false', () => {
   const wrapper = shallow(<Toggle toggleValue={false}/>);
-  console.log(wrapper.debug());
   expect(wrapper.find(CheckboxMarkedOutlineIcon)).toHaveLength(0);
   expect(wrapper.find(CheckboxBlankOutlineIcon)).toHaveLength(1);
 });

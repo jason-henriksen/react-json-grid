@@ -20,6 +20,14 @@ class EasyBool extends React.Component {
     }
   }
 
+  isThisActuallyFalse(val){
+    if(val){
+      if('false'===val || 'FALSE'===val){ return false; } // javascript sucks.  So much good stuff wrapped in layers on layers of #FACEPALM
+      return true;
+    }
+    return false;
+  }
+
   render() {
     if(this.props.trueText){
 
@@ -35,7 +43,8 @@ class EasyBool extends React.Component {
       if(this.props.cellData || this.props.trueText || this.props.falseText ){rval='scale(0.8) rotate(00deg)';} // don't rotate selected, or when text is set.
 
       return (
-        <div  onClick={this.toggle} id={this.props.id} style={{...this.props.style,marginTop:'-3px',width:'24px',transform: rval,transition: '0.2s'}}>{this.props.cellData?
+        <div  onClick={this.toggle} id={this.props.id} style={{...this.props.style,marginTop:'-3px',width:'24px',transform: rval,transition: '0.2s'}}>
+          {this.isThisActuallyFalse(this.props.cellData)?
               (this.props.trueText ||<CheckFull/>):
               (this.props.falseText ||<CheckEmpty/>) }</div>      
       );

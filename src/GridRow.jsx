@@ -37,13 +37,15 @@ import ReactTooltip from 'react-tooltip';
     var cellArray = [];
     var marginOffset = Math.floor(-1 * this.props.uiMath.borderWide);
 
+
+    var topBorder = this.props.pivotOn ? this.props.uiMath.borderWide+'px':'0px';
+
     var sharedBaseStyleLeftCol = {
       width: this.props.uiMath.autoColWide,
       borderStyle: 'solid',
       borderColor: 'black',
-      borderWidth: this.props.uiMath.borderWide,
       padding: (this.props.uiMath.padWide || 0) + 'px',
-      borderTop: '0px',
+      borderWidth: this.props.uiMath.borderWide, 
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block',
       outline: outline,
@@ -62,7 +64,6 @@ import ReactTooltip from 'react-tooltip';
       borderWidth: this.props.uiMath.borderWide, 
       backgroundColor: '#fffef4',
       padding: (this.props.uiMath.padWide||0)+'px', 
-      borderTop: '0px',
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block', 
       outline: outline,
@@ -74,7 +75,6 @@ import ReactTooltip from 'react-tooltip';
       borderColor: 'black',
       borderWidth: this.props.uiMath.borderWide, 
       padding: (this.props.uiMath.padWide||0)+'px', 
-      borderTop: '0px',
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block', 
       outline: outline,
