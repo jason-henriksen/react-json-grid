@@ -13,6 +13,7 @@ class GridMath
       var res = (inputVal||defaultVal);  // use a default instead of null.
       if(inputVal===0){res=inputVal;}    // zero is clearly indistinguishabel from null, so if you meant zero, use zero not the default.
       if(res<0){ res = defaultVal; }     // but negative numbers are just daft.  Us the default after all.
+      if( (''+res).includes('px') ){ console.log('Please pass numbers to Grid.  You do not need to add "px" to anything. This number will be ignored.  Using '+defaultVal+' instead.'); return defaultVal;}
       return Number(res);                // oh, and make sure it's actully a number
     }
 
@@ -101,7 +102,7 @@ class GridMath
       // grid height
       var testStyleHeight = null;
       if(props.style){ testStyleHeight = props.style.height}; // needed for null safety on props.style.  Needs to remove trailing px or % !!! 
-      result.gridHigh = testStyleHeight || props.gridHigh || 400;  // read from style, read from attributes, read from gridHigh attribute, default to 300
+      result.gridHigh = testStyleHeight || this.makeValidInt(props.gridHigh) || 400;  // read from style, read from attributes, read from gridHigh attribute, default to 300
       if (result.gridHigh === -1) {
         result.gridHigh = 400;
       }
@@ -157,9 +158,18 @@ class GridMath
           // ==== OBJECTS we have rows of objects to display
           if(props.pivotOn){  // pivot the data using this key as the col header
             //---- PIVOTED FLOW
-            result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
-            for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
-              result.colHeaderKeyList.push(props.data[pctr][props.pivotOn]);  // key (or maybe value) for the column header
+            if(props.columnList){                             // pull key data from col def list first, but from data if cols are not defined
+              result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
+              for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
+                result.colHeaderKeyList.push(props.data[pctr][props.pivotOn]);  // key (or maybe value) for the column header
+              }
+            }
+            else{              
+              result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
+              var temp = Object.keys(props.data[0]);
+              for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
+                result.colHeaderKeyList.push(temp[pctr]);
+              }
             }
 
             result.rowHeaderList = Object.keys(props.data[0]);   // pull headers from data.  Should there be a colDef check here?
@@ -211,24 +221,27 @@ class GridMath
         var fixedWide = 0;                          // becomes the new rowWide is all columns are specified
         var change = 0;
         if (props.columnList && result.colHeaderKeyList.length && !props.pivotOn){ // only autosize allowed on pivoted data
-          autoColCount = result.colHeaderKeyList.length;  // number of columns that need auto width
+          autoColCount = 0; // number of columns that need auto width, i.e. column defs without a pct or px
           for (var cctr = 0; cctr < result.colHeaderKeyList.length;cctr++){
             change=0;
             
             if (result.colDefList[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
               if (result.colDefList[result.colHeaderKeyList[cctr]].widePx) {
                 change = Number(result.colDefList[result.colHeaderKeyList[cctr]].widePx);
+                result.colDefList[result.colHeaderKeyList[cctr]].forceColWide = change; // do this before considering the pad and border.
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide+=change;
                 availableWide -= change;
-                autoColCount--;
               }
               else if (result.colDefList[result.colHeaderKeyList[cctr]].widePct) {
                 change = (Number(result.rowWide) * (Number(result.colDefList[result.colHeaderKeyList[cctr]].widePct) / 100));
+                result.colDefList[result.colHeaderKeyList[cctr]].forceColWide = change;  // do this before considering the pad and border.
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide += change;
                 availableWide -= change;
-                autoColCount--;
+              }
+              else{
+                autoColCount++;
               }
             }
           }
@@ -240,11 +253,14 @@ class GridMath
         //if(autoColCount===0 && fixedWide<result.rowWide){ result.rowWide=fixedWide; } // all columns have a fixed width & smaller than available space.  This basically moves the scroll bar;
 
         //--- no column width data
-        result.autoColWide = Math.floor(
-          ( availableWide -          // total width
-            result.borderWide        // minus left most border bar
-                                     // scrollbar already handled by basin on rowWide.
-          ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
+        if(autoColCount>0){
+          result.autoColWide = Math.floor(
+            ( availableWide -          // total width
+              result.borderWide        // minus left most border bar
+                                      // scrollbar already handled by basin on rowWide.
+            ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
+        }
+        else{ result.autoColWide=0; }
         result.autoColWideWithBorderAndPad = result.autoColWide;
         result.autoColWide -= (result.borderWide);   // each column minus right border amount
         result.autoColWide -= (result.padWide);      // each column minus left pad amount
@@ -271,6 +287,13 @@ class GridMath
         if (result.showBottomGridLine) {
           result.bottomLineUsage = result.borderWide;
           result.dataAvailableHigh -= result.bottomLineUsage;
+        }
+
+        // fix a degenerate case
+        if(result.dataAvailableHigh<0){
+          result.dataAvailableHigh=100;
+          result.gridHigh=150;
+          result.showBottomGridLine=false;
         }
         
 

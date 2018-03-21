@@ -299,14 +299,8 @@ window.reactJsonGridFocusInput = function(elem){
     // over ride width if needed
     if (this.props.GridStore.colDefList[this.props.objKey]) { // is there a colDef that uses this key?
       var curColWide = style.width;
-      console.log(curColWide);
-      if (this.props.GridStore.colDefList[this.props.objKey].widePx) {
-        curColWide = this.props.GridStore.colDefList[this.props.objKey].widePx;
-        console.log(']> ' + curColWide);
-      }
-      else if (this.props.GridStore.colDefList[this.props.objKey].widePct) {
-        curColWide = (this.props.uiMath.rowWide * (this.props.GridStore.colDefList[this.props.objKey].widePct / 100)) ;
-        console.log('>> ' + curColWide, this.props.uiMath.rowWide, this.props.GridStore.colDefList[this.props.objKey].widePct , (this.props.GridStore.colDefList[this.props.objKey].widePct / 100));
+      if(this.props.GridStore.colDefList[this.props.objKey].forceColWide){
+        curColWide = this.props.GridStore.colDefList[this.props.objKey].forceColWide;
       }
       style.width = curColWide;
     }

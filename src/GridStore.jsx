@@ -194,6 +194,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
 
   getDataRespectingPivotAtLocation(clientData,x,y)
   {
+    if(typeof clientData !== "object"){ console.log('Remember that the first parameter of this method must be the user client data.  Currently it is '+clientData);}
     if(this.uiMath.isPrimitiveData){
       // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
       if(this.pivotOn){
@@ -206,10 +207,10 @@ class GridStore {           // Just a class.  Nothing fancy here.
     else{
       // object data.  Use the real stuff.
       if(this.pivotOn){
-        return this.renderZero(clientData[x][this.uiMath.colHeaderKeyList[y]]); // y is rows down / outer array
+        return this.renderZero(clientData[x][this.uiMath.colHeaderKeyList[y+1]]); // x data items into outer list.  Y+1 adjusts for the "/" column heading
       }
       else{
-        return this.renderZero(clientData[y][this.uiMath.colHeaderKeyList[x]]);
+        return this.renderZero(clientData[y][this.uiMath.colHeaderKeyList[x]]);  // y is depth in outer list, x is the column into the inner list/object
       }
     }
   }

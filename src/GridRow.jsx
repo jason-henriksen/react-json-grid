@@ -38,7 +38,8 @@ import ReactTooltip from 'react-tooltip';
     var marginOffset = Math.floor(-1 * this.props.uiMath.borderWide);
 
 
-    var topBorder = this.props.pivotOn ? this.props.uiMath.borderWide+'px':'0px';
+    
+    var topBorder = (this.props.colHeaderHide || this.props.uiMath.forceColHeaderHide) ? this.props.uiMath.borderWide:0;
 
     var sharedBaseStyleLeftCol = {
       width: this.props.uiMath.autoColWide,
@@ -48,7 +49,7 @@ import ReactTooltip from 'react-tooltip';
       borderLeftWidth: this.props.uiMath.borderWide, 
       borderRightWidth: this.props.uiMath.borderWide, 
       borderBottomWidth: this.props.uiMath.borderWide, 
-      borderTopWidth: 0, 
+      borderTopWidth: topBorder, 
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block',
       outline: outline,
@@ -67,7 +68,7 @@ import ReactTooltip from 'react-tooltip';
       borderLeftWidth: this.props.uiMath.borderWide,
       borderRightWidth: this.props.uiMath.borderWide,
       borderBottomWidth: this.props.uiMath.borderWide,
-      borderTopWidth: 0, 
+      borderTopWidth: topBorder, 
       backgroundColor: '#fffef4',
       padding: (this.props.uiMath.padWide||0)+'px', 
       height: this.props.uiMath.rowHighNoPad,
@@ -82,7 +83,7 @@ import ReactTooltip from 'react-tooltip';
       borderLeftWidth: this.props.uiMath.borderWide,
       borderRightWidth: this.props.uiMath.borderWide,
       borderBottomWidth: this.props.uiMath.borderWide,
-      borderTopWidth: 0, 
+      borderTopWidth: topBorder, 
       padding: (this.props.uiMath.padWide||0)+'px', 
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block', 

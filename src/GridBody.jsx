@@ -122,12 +122,30 @@ const GridBody = observer( class GridBody extends React.Component {
             if (this.props.GridStore.colDefList[keyName].altText) { helpComp = this.props.GridStore.colDefList[keyName].altText; }
           }
         }
+        else{ // no column defs.  if using pivotOn, get the pivot data for use as the title.
+          if(this.props.pivotOn){ 
+            if(ctr>0){
+              // find the index of the colDefList item for the pivotOn target:
+              var targetCol=0;
+              for(var tctr=0;tctr<ui.colHeaderKeyList.length;tctr++){
+                if(ui.colHeaderKeyList[tctr]===this.props.pivotOn){ targetCol=tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
+              }
+
+              colTitle = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr-1,targetCol-1);// both -1 are to account for the '/' in the header row.
+            }
+          }
+          else{// handle alt text.  Note that the 'text' could be a component.  regular header
+            if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { helpComp = this.props.GridStore.colDefList[keyName].altText; }
+          }
+        }
         // NOTE: check for header components here.
         if (ctr===0 && this.props.pivotOn && ui.pivotRowHeaderWide) {
           curColWide = Number(ui.pivotRowHeaderWide);
         }
-        
-        curColWide=curColWide+'px';
+        if(this.props.GridStore.colDefList && this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].forceColWide){
+          curColWide = this.props.GridStore.colDefList[keyName].forceColWide;
+        }
+        curColWide=curColWide;
 
         header.push(  
           <a data-tip data-for={'dataTip' + ctr} key={ctr} >
@@ -220,8 +238,11 @@ const GridBody = observer( class GridBody extends React.Component {
             height: (ui.collapseAvailable) ,
             minHeight: (ui.collapseAvailable),
             borderStyle: 'solid',
-            borderWidth: ui.borderWide,
-            borderColor: 'black',
+            borderLeftWidth: ui.borderWide,
+            borderRightWidth: ui.borderWide,
+            borderBottomWidth: ui.borderWide,
+            borderTopWidth: 0, 
+                  borderColor: 'black',
             backgroundColor:'white'}}/>
         }
           
