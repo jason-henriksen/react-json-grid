@@ -32,6 +32,18 @@ class GridMath
       result.colHeaderKeyList=[];         // when pivoted, this will NOT match the keyNames list.
       result.saveColumnForRowHeader=0;
 
+      // math needs access to columns by key name.
+      if (props.columnList) {
+        result.colDefList = {};
+        // make a map of keys to objects for easy access later.
+        for (var clctr = 0; clctr < props.columnList.length; clctr++) {
+          result.colDefList[props.columnList[clctr].key] = props.columnList[clctr];
+        }
+      }
+      else {
+        result.colDefList = {};
+      }    
+
       // empty object checking & data cleanup
       if(!scrollBarWide){   result.notReady='missing scrollbar size'; return result       }
       if(!props){           result.notReady='missing grid props';     return result       }
@@ -50,6 +62,8 @@ class GridMath
          (props.data[0]===null || typeof props.data[0] === 'undefined')){ 
         result.notReady = "Falsey sample data supplied with no column definition list supplied."; return result; 
       }
+
+      // add validation that "px" should not be used, and only numbers should be passed as parameters.
 
       if(props.data[0] && typeof props.data[0] === 'object' && props.data[0].constructor === RegExp){ result.notReady = "Grids of RegExp objects are not supported."; return result; }
       if(typeof props.data[0] === 'symbol'){ result.notReady = "Grids of Symbol objects are not supported."; return result; }
@@ -162,7 +176,7 @@ class GridMath
                 result.colHeaderKeyList.push(props.columnList[cctr]['key']);  // column for each definition
               }
               result.keyNames = Object.keys(props.data[0]);   // hang on to the key names.
-              result.dataWide = props.columnList.length;      // column definition count => data width. (data high handled later)
+              result.dataWide = result.colHeaderKeyList.length;      // column definition count => data width. (data high handled later)
             }
             else{                                             // no column defs, inspect the first object.
               if(props.data[0].length){ // probably an array-look-alike.  Use indexes
@@ -191,23 +205,26 @@ class GridMath
         result.rowWide = result.gridWide - (scrollBarWide||16);   // how wide is each row.
         autoColCount = result.colHeaderKeyList.length;
 
+        //==== now calculate column actual sizes and autocol size
+
         var availableWide = result.rowWide;         // amount of space to allocate evenly
         var fixedWide = 0;                          // becomes the new rowWide is all columns are specified
         var change = 0;
-        if (props.columnList && props.columnList.length && !props.pivotOn){ // only autosize allowed on pivoted data
-          autoColCount = props.columnList.length;  // number of columns that need auto width
-          for (var cctr = 0; cctr<props.columnList.length;cctr++){
+        if (props.columnList && result.colHeaderKeyList.length && !props.pivotOn){ // only autosize allowed on pivoted data
+          autoColCount = result.colHeaderKeyList.length;  // number of columns that need auto width
+          for (var cctr = 0; cctr < result.colHeaderKeyList.length;cctr++){
             change=0;
-            if (props.columnList[cctr]) { // is there a colDef that uses this key?
-              if (props.columnList[cctr].widePx) {
-                change = Number(props.columnList[cctr].widePx);
+            
+            if (result.colDefList[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
+              if (result.colDefList[result.colHeaderKeyList[cctr]].widePx) {
+                change = Number(result.colDefList[result.colHeaderKeyList[cctr]].widePx);
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide+=change;
                 availableWide -= change;
                 autoColCount--;
               }
-              else if (props.columnList[cctr].widePct) {
-                change = (Number(result.rowWide) * (Number(props.columnList[cctr].widePct) / 100));
+              else if (result.colDefList[result.colHeaderKeyList[cctr]].widePct) {
+                change = (Number(result.rowWide) * (Number(result.colDefList[result.colHeaderKeyList[cctr]].widePct) / 100));
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide += change;
                 availableWide -= change;

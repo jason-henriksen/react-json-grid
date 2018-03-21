@@ -40,10 +40,13 @@ storiesOf('object[] - small data', module)
 .addWithJSX('null values mixed',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 
 storiesOf('object[] - small data,column def sizes', module)
-.addWithJSX('col widths px,noScroll,missing defs',()=>(<Grid gridHighCollapse={false} showToolsAddCut 
+.addWithJSX('col wide auto,noScroll,missing defs', () => (<Grid gridHighCollapse={false} showToolsAddCut debugGridMath
+    columnList={[{ key: 'a', title: 'col A' }, { key: 'c', title: 'col C' }, { key: 'b', title: 'col B' }]}
+    data={[{ r: null, a: true, b: 6, c: null, d: 90 }, { r: 4, a: false, b: 6, c: 8, d: 90 }, { r: 3, a: true, b: 6, c: null, d: 90 }, { r: 2, a: false, b: 6, c: 8, d: 90 }, { r: 1, a: true, b: 6, c: 8, d: 90 }]} />))
+.addWithJSX('col wide px,noScroll,missing defs',()=>(<Grid gridHighCollapse={false} showToolsAddCut debugGridMath 
                                 columnList={[{key:'a',title:'col A',widePct:'75'},{key:'b',title:'col B',widePct:'10'},{key:'c',title:'col C',widePct:'5'}]} 
                                 data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths pcs,noScroll,all defs',()=>(<Grid  gridHighCollapse={false} showToolsAddCut 
+.addWithJSX('col wide pct,noScroll,defs out of order',()=>(<Grid  gridHighCollapse={false} showToolsAddCut 
                                 columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R'}]} 
                                 data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('col widths mix,noScroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))

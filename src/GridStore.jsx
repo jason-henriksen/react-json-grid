@@ -20,7 +20,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable inst = '';                          // if true, rendering a selected cell will cause that cell to take focus
   @observable pivotOn = '';                       // from props.  Here for easy cell access.
 
-  @observable colDefList = {};                    // column definition meta data
+  @observable colDefList = {};                    // column definition meta data accessible by keyName
   @observable keyList=[]                          // list of the keys in the given data object.
 
   @observable showDatePicker = false;             // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
@@ -68,13 +68,17 @@ class GridStore {           // Just a class.  Nothing fancy here.
   */
   @action prepSelectionField(props)
   {
+    // make the calculations
     this.uiMath = this.uiMathInst.calcGridBody(props, (this.scrollBarWide||20));    
+
+    // ease of access
+    this.colDefList = this.uiMath.colDefList;
     this.keyList = this.uiMath.keyNames;
     var dataWide = this.uiMath.dataWide;
     var dataHigh = this.uiMath.dataHigh;
 
+    // ensure that we only set the values if they've actuallly changed.
     if (this.cursor.maxX !== dataWide - 1 || this.cursor.maxY !== dataHigh - 1) {
-      // ensure that we only set the values if they've actuallly changed.
       this.cursor.maxX = dataWide-1;
       this.cursor.maxY = dataHigh-1;
     }
@@ -88,17 +92,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
     this.onImport = (props.onImport     || this.logNoOnImportHandlerMessage); 
 
     this.pivotOn = props.pivotOn;    // easy availability to cells
-
-    if (props.columnList){
-      this.colDefList = {};
-      // make a map of keys to objects for easy access later.
-      for(var clctr=0;clctr<props.columnList.length;clctr++){
-        this.colDefList[props.columnList[clctr].key] = props.columnList[clctr];
-      }
-    }
-    else{
-      this.colDefList = {};
-    }
   }
 
 
@@ -188,11 +181,11 @@ class GridStore {           // Just a class.  Nothing fancy here.
       }
     }
     else{    
-      if(this.pivotOn){
-        return clientData[this.cursor.editX][this.keyList[this.cursor.editY]]; // y is rows down / outer array
+      if(this.pivotOn){        
+        return clientData[this.cursor.editX][this.uiMath.colHeaderKeyList[this.cursor.editY]]; // y is rows down / outer array
       }
       else{
-        return clientData[this.cursor.editY][this.keyList[this.cursor.editX]];
+        return clientData[this.cursor.editY][this.uiMath.colHeaderKeyList[this.cursor.editX]];
       }
     }
   }
@@ -213,10 +206,10 @@ class GridStore {           // Just a class.  Nothing fancy here.
     else{
       // object data.  Use the real stuff.
       if(this.pivotOn){
-        return this.renderZero(clientData[x][this.keyList[y]]); // y is rows down / outer array
+        return this.renderZero(clientData[x][this.uiMath.colHeaderKeyList[y]]); // y is rows down / outer array
       }
       else{
-        return this.renderZero(clientData[y][this.keyList[x]]);
+        return this.renderZero(clientData[y][this.uiMath.colHeaderKeyList[x]]);
       }
     }
   }

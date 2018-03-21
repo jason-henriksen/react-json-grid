@@ -45,7 +45,10 @@ import ReactTooltip from 'react-tooltip';
       borderStyle: 'solid',
       borderColor: 'black',
       padding: (this.props.uiMath.padWide || 0) + 'px',
-      borderWidth: this.props.uiMath.borderWide, 
+      borderLeftWidth: this.props.uiMath.borderWide, 
+      borderRightWidth: this.props.uiMath.borderWide, 
+      borderBottomWidth: this.props.uiMath.borderWide, 
+      borderTopWidth: 0, 
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block',
       outline: outline,
@@ -61,7 +64,10 @@ import ReactTooltip from 'react-tooltip';
     var sharedBaseStyleInput={  width: this.props.uiMath.autoColWide, 
       borderStyle: 'solid',
       borderColor: 'black',
-      borderWidth: this.props.uiMath.borderWide, 
+      borderLeftWidth: this.props.uiMath.borderWide,
+      borderRightWidth: this.props.uiMath.borderWide,
+      borderBottomWidth: this.props.uiMath.borderWide,
+      borderTopWidth: 0, 
       backgroundColor: '#fffef4',
       padding: (this.props.uiMath.padWide||0)+'px', 
       height: this.props.uiMath.rowHighNoPad,
@@ -73,7 +79,10 @@ import ReactTooltip from 'react-tooltip';
     var sharedBaseStyle2={  width: this.props.uiMath.autoColWide, 
       borderStyle: 'solid',
       borderColor: 'black',
-      borderWidth: this.props.uiMath.borderWide, 
+      borderLeftWidth: this.props.uiMath.borderWide,
+      borderRightWidth: this.props.uiMath.borderWide,
+      borderBottomWidth: this.props.uiMath.borderWide,
+      borderTopWidth: 0, 
       padding: (this.props.uiMath.padWide||0)+'px', 
       height: this.props.uiMath.rowHighNoPad,
       display: 'inline-block', 
@@ -146,6 +155,7 @@ import ReactTooltip from 'react-tooltip';
       }
       else{
 
+        var curColKey = this.props.uiMath.colHeaderKeyList[ctr];
         var cellData = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr,this.props.index);
 
         cellArray.push(
@@ -154,7 +164,7 @@ import ReactTooltip from 'react-tooltip';
           id={this.props.index+'-'+ctr}
           x={ctr}
           y={this.props.index}
-          objKey={keyName||this.props.uiMath.keyNames[ctr]}
+          objKey={curColKey||keyName||this.props.uiMath.keyNames[ctr]}
           styleInput={inputStyleLocal}
           styleCell={cellStyleLocal}
           isFirstColumn={isFirst}
