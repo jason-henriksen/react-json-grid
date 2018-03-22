@@ -13,8 +13,68 @@ import DataNoiseGiant from './dataNoiseGiant.js'
 import JSXAddon from 'storybook-addon-jsx';
 setAddon(JSXAddon);
 
+
+const colDef =
+  [
+    {
+      key: 'a', title: 'col A', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyDate: '', easyDateTime: '', easyMenu: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', displayFormatter: ''
+    },
+    {
+      key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyDate: '', easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+    },
+    {
+      key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyDate: '', easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+    },
+    {
+      key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyDate: '', easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+    }
+  ];
+
+
 storiesOf('Grid', module)
   .addWithJSX('Interactive Documentation', () => (<DocUI/>))
+  .addWithJSX('Col Def Debug',()=>
+    (<Grid debugGridMath
+      data={colDef}
+      columnList={[
+        { key: 'key', altText: 'key name (or index) of the data for this column.  You can re-order the key names to re-order the columns displayed.' },
+        { key: 'title', altText: 'text in the title bar of the column' },
+        { key: 'editDisabled', easyBool: true, altText: 'disable editing for this column' },
+        { key: 'widePct', easyFloat: true, altText: 'percent of grid width to make this column.  Too big will cause side scrolling!' },
+        { key: 'widePx', easyInt: true, altText: 'width in pixels to make this column.  Too big will cause side scrolling!' },
+        { key: 'easyBool', easyBool: true, altText: 'render this column as a check box' },
+        { key: 'easyInt', easyBool: true, altText: 'render and validate this column as an integer' },
+        { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float' },
+        { key: 'easyMoneyDollar', easyBool: true, altText: 'render and validate this column as dollars' },
+        { key: 'easyMoneyEuro', easyBool: true, altText: 'render and validate this column as euros' },
+        { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
+        { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
+        { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
+        { key: 'easyMenu', altText: 'render and validate this column as a menu. supply an array of values easyMenu={[a,b,c,d]} or a pipe separated list easyMenu={"a|b|c|d"}' },
+        { key: 'altText', altText: 'provide help text when mousing over the column header' },
+      ]}
+      pivotOn='title'
+      pivotRowHeaderWide={125}
+      styleRowHeader={{ textAlign: 'left' }}
+      gridHigh={600}
+      gridWide={425}
+    />))
 ;
 
 // addWithJSX is useful for good data, but looses nuance with deliberatly invalid data.

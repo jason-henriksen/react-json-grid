@@ -117,8 +117,8 @@ import ReactTooltip from 'react-tooltip';
         if(this.props.uiMath.rowHeaderList && this.props.uiMath.rowHeaderList.length > this.props.index) {
           var keyName = this.props.uiMath.rowHeaderList[this.props.index]; // what key am I on?
           var titleText = keyName;
-          if (this.props.GridStore.colDefList[keyName]) { // is there a colDef that uses this key?
-            titleText = this.props.GridStore.colDefList[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
+          if (this.props.GridStore.colDefListByKey[keyName]) { // is there a colDef that uses this key?
+            titleText = this.props.GridStore.colDefListByKey[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
           }
 
           if(this.props.uiMath.pivotRowHeaderWide){
@@ -127,8 +127,8 @@ import ReactTooltip from 'react-tooltip';
           isFirst=false;
           
           var helpComp=null;
-          if (this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { 
-            helpComp = this.props.GridStore.colDefList[keyName].altText; 
+          if (this.props.GridStore.colDefListByKey[keyName] && this.props.GridStore.colDefListByKey[keyName].altText) { 
+            helpComp = this.props.GridStore.colDefListByKey[keyName].altText; 
           }
 
           // add in the row header style
@@ -156,7 +156,18 @@ import ReactTooltip from 'react-tooltip';
       }
       else{
 
-        var curColKey = this.props.uiMath.colHeaderKeyList[ctr];
+        var curColKey = this.props.uiMath.colHeaderKeyList[ctr]; // the xth column defined in the colHeaderKey list
+        if (this.props.pivotOn) {          
+          if (this.props.GridStore.colDefListByIdx){
+            // pvt ON, colDef ON
+            //console.log(this.props.index, this.props.GridStore.colDefListByIdx[this.props.index]);
+            curColKey = this.props.uiMath.rowHeaderList[this.props.index];
+          }
+          else{
+            curColKey = this.props.uiMath.colHeaderKeyList[this.props.index + 1]; // use Y instead of X and ofset for the row header.  this seems like it could be smoother.
+            //curColKey = this.props.index; // use Y instead of X and ofset for the row header.  this seems like it could be smoother.
+          }
+        }
         var cellData = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr,this.props.index);
 
         cellArray.push(
@@ -165,7 +176,7 @@ import ReactTooltip from 'react-tooltip';
           id={this.props.index+'-'+ctr}
           x={ctr}
           y={this.props.index}
-          objKey={curColKey||keyName||this.props.uiMath.keyNames[ctr]}
+          objKey={curColKey}
           styleInput={inputStyleLocal}
           styleCell={cellStyleLocal}
           isFirstColumn={isFirst}

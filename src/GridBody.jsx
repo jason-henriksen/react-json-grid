@@ -101,49 +101,63 @@ const GridBody = observer( class GridBody extends React.Component {
         var colTitle = keyName;
         var curColWide=ui.autoColWide;
         var helpComp=null;
-        if(this.props.GridStore.colDefList[keyName]){ // is there a colDef that uses this key?
-          colTitle = this.props.GridStore.colDefList[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
-          
-          if (this.props.GridStore.colDefList[keyName].widePx) {        // width by px
-            curColWide = this.props.GridStore.colDefList[keyName].widePx;
-          }
-          else if (this.props.GridStore.colDefList[keyName].widePct) {  // width by pct
-            curColWide = ui.rowWide * (this.props.GridStore.colDefList[keyName].widePct/100);
-          }
-
-          if(this.props.pivotOn){                  // handle pivoted alt text.  Note that the 'text' could be a component.  regular header
+        if(this.props.GridStore.colDefListByKey[keyName]){ // is there a colDef that uses this key?
+          if(this.props.pivotOn){                  
+            //== Pivot, With ColDefs
             if(ctr>0){
-              if (this.props.GridStore.colDefList[ this.props.GridStore.keyList[ctr-1] ].altText) { 
-                helpComp = this.props.GridStore.colDefList[ this.props.GridStore.keyList[ctr-1] ].altText; 
+              if (this.props.GridStore.colDefListByKey[ this.props.GridStore.keyList[ctr-1] ].altText) { 
+                helpComp = this.props.GridStore.colDefListByKey[ this.props.GridStore.keyList[ctr-1] ].altText; 
               }
             }
+            var targetCol = 0;
+            for (var tctr = 0; tctr < ui.colHeaderKeyList.length; tctr++) {
+              if (ui.colHeaderKeyList[tctr] === this.props.pivotOn) { targetCol = tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
+            }
+            colTitle = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data, ctr - 1, targetCol - 1);// both -1 are to account for the '/' in the header row.
+            
           }
-          else{// handle alt text.  Note that the 'text' could be a component.  regular header
-            if (this.props.GridStore.colDefList[keyName].altText) { helpComp = this.props.GridStore.colDefList[keyName].altText; }
+          else{
+            //== NonPivot, With ColDefs
+            if (this.props.GridStore.colDefListByKey[keyName].widePx) {        // width by px
+              curColWide = this.props.GridStore.colDefListByKey[keyName].widePx;
+            }
+            else if (this.props.GridStore.colDefListByKey[keyName].widePct) {  // width by pct
+              curColWide = ui.rowWide * (this.props.GridStore.colDefListByKey[keyName].widePct / 100);
+            }
+
+            colTitle = this.props.GridStore.colDefListByKey[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
+            if (this.props.GridStore.colDefListByKey[keyName].altText) { 
+              // handle alt text.  Note that the 'text' could be a component.  regular header
+              helpComp = this.props.GridStore.colDefListByKey[keyName].altText; 
+            }
           }
         }
-        else{ // no column defs.  if using pivotOn, get the pivot data for use as the title.
+        else{ 
           if(this.props.pivotOn){ 
+            // no column defs, Pivot On
             if(ctr>0){
-              // find the index of the colDefList item for the pivotOn target:
+              // find the index of the colDefListByKey item for the pivotOn target:
               var targetCol=0;
               for(var tctr=0;tctr<ui.colHeaderKeyList.length;tctr++){
                 if(ui.colHeaderKeyList[tctr]===this.props.pivotOn){ targetCol=tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
               }
-
               colTitle = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr-1,targetCol-1);// both -1 are to account for the '/' in the header row.
             }
           }
-          else{// handle alt text.  Note that the 'text' could be a component.  regular header
-            if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].altText) { helpComp = this.props.GridStore.colDefList[keyName].altText; }
+          else{
+            // no column defs, Pivot OFF
+            if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[keyName] && this.props.GridStore.colDefListByKey[keyName].altText) { 
+              helpComp = this.props.GridStore.colDefListByKey[keyName].altText; 
+            }
           }
         }
+
         // NOTE: check for header components here.
         if (ctr===0 && this.props.pivotOn && ui.pivotRowHeaderWide) {
           curColWide = Number(ui.pivotRowHeaderWide);
         }
-        if(this.props.GridStore.colDefList && this.props.GridStore.colDefList[keyName] && this.props.GridStore.colDefList[keyName].forceColWide){
-          curColWide = this.props.GridStore.colDefList[keyName].forceColWide;
+        if(this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[keyName] && this.props.GridStore.colDefListByKey[keyName].forceColWide){
+          curColWide = this.props.GridStore.colDefListByKey[keyName].forceColWide;
         }
         curColWide=curColWide;
 

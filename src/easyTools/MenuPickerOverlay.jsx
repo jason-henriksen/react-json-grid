@@ -28,7 +28,7 @@ class MenuPickerOverlay extends React.Component {
     var saneThis=this;
 
     var itemList=[];
-    var listTarget = this.props.GridStore.colDefList[this.props.GridStore.cursor.editObjKey].easyMenu;
+    var listTarget = this.props.GridStore.colDefListByKey[this.props.GridStore.cursor.editObjKey].easyMenu;
     if (Array.isArray(listTarget)){  // it's an array
       // JJH Needs a storybook test
       itemList = listTarget.map((item,index) => { return (

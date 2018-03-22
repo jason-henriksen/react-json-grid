@@ -35,14 +35,14 @@ class GridMath
 
       // math needs access to columns by key name.
       if (props.columnList) {
-        result.colDefList = {};
+        result.colDefListByKey = {};
         // make a map of keys to objects for easy access later.
         for (var clctr = 0; clctr < props.columnList.length; clctr++) {
-          result.colDefList[props.columnList[clctr].key] = props.columnList[clctr];
+          result.colDefListByKey[props.columnList[clctr].key] = props.columnList[clctr];
         }
       }
       else {
-        result.colDefList = {};
+        result.colDefListByKey = {};
       }    
 
       // empty object checking & data cleanup
@@ -158,19 +158,21 @@ class GridMath
           // ==== OBJECTS we have rows of objects to display
           if(props.pivotOn){  // pivot the data using this key as the col header
             //---- PIVOTED FLOW
+            /*
             if(props.columnList){                             // pull key data from col def list first, but from data if cols are not defined
               result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
-              for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
-                result.colHeaderKeyList.push(props.data[pctr][props.pivotOn]);  // key (or maybe value) for the column header
+              for (var pctr = 0; pctr < props.columnList.length;pctr++){                    // pivot uses pivotOn key for column header keys
+                result.colHeaderKeyList.push(props.columnList[pctr].key);  // key (or maybe value) for the column header
               }
             }
             else{              
+              */
               result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
               var temp = Object.keys(props.data[0]);
               for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
                 result.colHeaderKeyList.push(temp[pctr]);
               }
-            }
+            //}
 
             result.rowHeaderList = Object.keys(props.data[0]);   // pull headers from data.  Should there be a colDef check here?
             result.keyNames = result.rowHeaderList;              // object props are row headers
@@ -225,17 +227,17 @@ class GridMath
           for (var cctr = 0; cctr < result.colHeaderKeyList.length;cctr++){
             change=0;
             
-            if (result.colDefList[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
-              if (result.colDefList[result.colHeaderKeyList[cctr]].widePx) {
-                change = Number(result.colDefList[result.colHeaderKeyList[cctr]].widePx);
-                result.colDefList[result.colHeaderKeyList[cctr]].forceColWide = change; // do this before considering the pad and border.
+            if (result.colDefListByKey[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
+              if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx) {
+                change = Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx);
+                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change; // do this before considering the pad and border.
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide+=change;
                 availableWide -= change;
               }
-              else if (result.colDefList[result.colHeaderKeyList[cctr]].widePct) {
-                change = (Number(result.rowWide) * (Number(result.colDefList[result.colHeaderKeyList[cctr]].widePct) / 100));
-                result.colDefList[result.colHeaderKeyList[cctr]].forceColWide = change;  // do this before considering the pad and border.
+              else if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) {
+                change = (Number(result.rowWide) * (Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) / 100));
+                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;  // do this before considering the pad and border.
                 change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
                 fixedWide += change;
                 availableWide -= change;

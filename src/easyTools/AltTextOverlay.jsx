@@ -15,8 +15,8 @@ import { observer } from 'mobx-react';
     if(-1===targetY){ idx=targetX; }
 
     var objKey = this.props.GridStore.keyList[idx];
-    if(!this.props.GridStore.colDefList[objKey]){return null;}
-    var helpComp = this.props.GridStore.colDefList[objKey].altText
+    if(!this.props.GridStore.colDefListByKey[objKey]){return null;}
+    var helpComp = this.props.GridStore.colDefListByKey[objKey].altText
 
     var offsetY = this.props.uiMath.colHeaderHigh + ( (this.props.uiMath.borderWide+this.props.uiMath.rowHighWithPad) * (targetY+1) )+2 ;
     var offsetX = this.props.uiMath.pivotRowHeaderWide || this.props.uiMath.autoColWide;

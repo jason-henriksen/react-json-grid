@@ -9,23 +9,24 @@ import CheckFull from 'mdi-react/CheckboxMarkedOutlineIcon';
 class EasyBool extends React.Component {
   constructor(props) { super(props); autoBind(this); }
 
+  makeBoolVal(val) {
+    if (val) {
+      if ('false' === val || 'FALSE' === val) { return false; } // javascript sucks.  So much good stuff wrapped in layers on layers of #FACEPALM
+      return true;
+    }
+    return false;
+  }
+
+
   toggle(){
     if(!this.props.disabled){
-      if(this.props.cellData){
+      if (this.makeBoolVal(this.props.cellData)){
         this.props.onChange( this.props.x, this.props.y, this.props.objKey, false);
       }
       else{
         this.props.onChange(this.props.x, this.props.y, this.props.objKey, true);
       }
     }
-  }
-
-  isThisActuallyFalse(val){
-    if(val){
-      if('false'===val || 'FALSE'===val){ return false; } // javascript sucks.  So much good stuff wrapped in layers on layers of #FACEPALM
-      return true;
-    }
-    return false;
   }
 
   render() {
@@ -44,7 +45,7 @@ class EasyBool extends React.Component {
 
       return (
         <div  onClick={this.toggle} id={this.props.id} style={{...this.props.style,marginTop:'-3px',width:'24px',transform: rval,transition: '0.2s'}}>
-          {this.isThisActuallyFalse(this.props.cellData)?
+          {this.makeBoolVal(this.props.cellData)?
               (this.props.trueText ||<CheckFull/>):
               (this.props.falseText ||<CheckEmpty/>) }</div>      
       );

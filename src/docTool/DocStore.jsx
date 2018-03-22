@@ -135,8 +135,8 @@ class DocStore {           // Just a class.  Nothing fancy here.
           styleHeader: '', styleInput: '', styleCell: '',
           compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
         }
+    ]
     
-                      ]
   @action setColDefValue(x, y, objKey, newValue) {
     this.colDef[y][objKey] = newValue;
   }

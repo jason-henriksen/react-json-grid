@@ -27,9 +27,9 @@ window.reactJsonGridFocusInput = function(elem){
 
   @action isEditDisabled(){
     var ed=(this.props.uiMath.editDisabled === true);
-    if( (this.props.GridStore.colDefList &&
-         this.props.GridStore.colDefList[this.props.objKey] &&              // edit disabled by column
-         this.props.GridStore.colDefList[this.props.objKey].editDisabled === true)){
+    if( (this.props.GridStore.colDefListByKey &&
+         this.props.GridStore.colDefListByKey[this.props.objKey] &&              // edit disabled by column
+         this.props.GridStore.colDefListByKey[this.props.objKey].editDisabled === true)){
       ed=true;
     }
     return ed;
@@ -49,16 +49,16 @@ window.reactJsonGridFocusInput = function(elem){
       this.props.GridStore.curEditingValue = this.props.cellData;
 
       // check for dates and menus
-      if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
+      if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDate){
         this.props.GridStore.showDatePicker=true;
       }
-      else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
+      else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime){
         this.props.GridStore.showDateTimePicker=true;
       }
-      else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+      else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyMenu) {
         this.props.GridStore.showMenuPicker = true;
       }
-      else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].overlayComp) {
+      else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].overlayComp) {
         this.props.GridStore.showOverlayComp = true;
       }          
     }
@@ -127,16 +127,16 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.cursor.editObjKey = this.props.objKey;
         this.props.GridStore.curEditingValue = this.props.GridStore.getDataRespectingPivotAtEditCursor(this.props.data);        
         // pop overlay editors if needed
-        if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
+        if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDate){
           this.props.GridStore.showDatePicker=true;
         }
-        else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
+        else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime){
           this.props.GridStore.showDateTimePicker=true;
         }          
-        else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+        else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyMenu) {
           this.props.GridStore.showMenuPicker = true;
         }          
-        else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].overlayComp) {
+        else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].overlayComp) {
           this.props.GridStore.showOverlayComp = true;
         }          
       }
@@ -149,10 +149,10 @@ window.reactJsonGridFocusInput = function(elem){
           this.props.GridStore.cursor.editX = this.props.x;
           this.props.GridStore.cursor.editY = this.props.y;
           this.props.GridStore.cursor.editObjKey = this.props.objKey;
-          if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDate){
+          if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDate){
             this.props.GridStore.showDatePicker=true;
           }
-          else if (this.props.GridStore.colDefList && this.props.GridStore.colDefList[this.props.objKey] && this.props.GridStore.colDefList[this.props.objKey].easyDateTime){
+          else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime){
             this.props.GridStore.showDateTimePicker=true;
           }          
           else{            
@@ -177,14 +177,14 @@ window.reactJsonGridFocusInput = function(elem){
 
   @action endEdit()
   {
-    if (this.props.GridStore.colDefList &&
-      this.props.GridStore.colDefList[this.props.objKey]) {
+    if (this.props.GridStore.colDefListByKey &&
+      this.props.GridStore.colDefListByKey[this.props.objKey]) {
       if (
-        (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
-        (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-        ( (this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar || 
-           this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
-           this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound)
+        (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
+        (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
+        ( (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar || 
+           this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
+           this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound)
           && !this.props.GridStore.curEditIsValidFor.isValidFloat)
       ) {
         // value is not valid for the field definition.  Do not make the change.
@@ -270,6 +270,14 @@ window.reactJsonGridFocusInput = function(elem){
   }  
 
 
+  renderZero(tval) { 
+    if (0 === tval) { return '0'; } 
+    else if ('false' === ''+tval) { return 'false'; } 
+    else if ('true'  === ''+tval) { return 'true'; } 
+    else { return tval } 
+  }
+
+
 
   render() {
 
@@ -297,10 +305,10 @@ window.reactJsonGridFocusInput = function(elem){
   
 
     // over ride width if needed
-    if (this.props.GridStore.colDefList[this.props.objKey]) { // is there a colDef that uses this key?
+    if (this.props.GridStore.colDefListByKey[this.props.objKey]) { // is there a colDef that uses this key?
       var curColWide = style.width;
-      if(this.props.GridStore.colDefList[this.props.objKey].forceColWide){
-        curColWide = this.props.GridStore.colDefList[this.props.objKey].forceColWide;
+      if(this.props.GridStore.colDefListByKey[this.props.objKey].forceColWide){
+        curColWide = this.props.GridStore.colDefListByKey[this.props.objKey].forceColWide;
       }
       style.width = curColWide;
     }
@@ -311,10 +319,10 @@ window.reactJsonGridFocusInput = function(elem){
 
     
     var assumeEditOk=true;
-    if (this.props.GridStore.colDefList && 
-        this.props.GridStore.colDefList[this.props.objKey] && 
-        (this.props.GridStore.colDefList[this.props.objKey].easyBool===true || // boolean doesn't need the editor
-         this.props.GridStore.colDefList[this.props.objKey].easyMenu===true )  // menu doesn't need the editor
+    if (this.props.GridStore.colDefListByKey && 
+        this.props.GridStore.colDefListByKey[this.props.objKey] && 
+        (this.props.GridStore.colDefListByKey[this.props.objKey].easyBool===true || // boolean doesn't need the editor
+         this.props.GridStore.colDefListByKey[this.props.objKey].easyMenu===true )  // menu doesn't need the editor
     )        
     {
       assumeEditOk = false;
@@ -332,27 +340,27 @@ window.reactJsonGridFocusInput = function(elem){
       styleIn.width = style.width;  // use the column defined width override if needed.
 
       // check for easy column tools
-      if(this.props.GridStore.colDefList &&
-          this.props.GridStore.colDefList[this.props.objKey]){
+      if(this.props.GridStore.colDefListByKey &&
+          this.props.GridStore.colDefListByKey[this.props.objKey]){
 
         // check validation
         if (
-            (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
-            (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-          ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
-            this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
-            this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+            (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
+            (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
+          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound) && !this.props.GridStore.curEditIsValidFor.isValidFloat)
           ){
           styleIn.outline="5px red dashed";
         }
 
         // check right alignment
         if (
-          (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
-          (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
-          ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
-            this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
-            this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound))
+          (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt) ||
+          (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat) ||
+          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound))
         ) {
           styleIn.textAlign = "right";
         }          
@@ -362,19 +370,19 @@ window.reactJsonGridFocusInput = function(elem){
       if(null === curDisplayVal){ curDisplayVal = this.props.cellData;}
 
       // check for easy Date
-      if (this.props.GridStore.colDefList &&
-          this.props.GridStore.colDefList[this.props.objKey] &&
-          this.props.GridStore.colDefList[this.props.objKey].easyDate){
+      if (this.props.GridStore.colDefListByKey &&
+          this.props.GridStore.colDefListByKey[this.props.objKey] &&
+          this.props.GridStore.colDefListByKey[this.props.objKey].easyDate){
         renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }
-      else if (this.props.GridStore.colDefList &&
-        this.props.GridStore.colDefList[this.props.objKey] &&
-        this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
+      else if (this.props.GridStore.colDefListByKey &&
+        this.props.GridStore.colDefListByKey[this.props.objKey] &&
+        this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime) {
         renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }      
-      else if (this.props.GridStore.colDefList &&
-        this.props.GridStore.colDefList[this.props.objKey] &&
-        this.props.GridStore.colDefList[this.props.objKey].easyMenu) {
+      else if (this.props.GridStore.colDefListByKey &&
+        this.props.GridStore.colDefListByKey[this.props.objKey] &&
+        this.props.GridStore.colDefListByKey[this.props.objKey].easyMenu) {
         renderPlan=<div style={styleIn}>{curDisplayVal}</div>
       }      
       else{
@@ -392,47 +400,47 @@ window.reactJsonGridFocusInput = function(elem){
     else{
       //===== VIEW SIDE
 
-      var renderVal = '' + (this.props.cellData||'');
-      if (this.props.GridStore.colDefList && 
-          this.props.GridStore.colDefList[this.props.objKey]
+      var renderVal = '' + (this.renderZero(this.props.cellData)||'');
+      if (this.props.GridStore.colDefListByKey && 
+          this.props.GridStore.colDefListByKey[this.props.objKey]
       ){
         // we have a custom view component.  Render it.
         // it may want to change values directly, so give it everything it needs
 
         // check right alignment
         if (
-          (this.props.GridStore.colDefList[this.props.objKey].easyInt) ||
-          (this.props.GridStore.colDefList[this.props.objKey].easyFloat) ||
-          (this.props.GridStore.colDefList[this.props.objKey].easyDate) ||
-          (this.props.GridStore.colDefList[this.props.objKey].easyDateTime) ||
-          ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
-            this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
-            this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound))
+          (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt) ||
+          (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat) ||
+          (this.props.GridStore.colDefListByKey[this.props.objKey].easyDate) ||
+          (this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime) ||
+          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound))
         ) {
           style.textAlign = "right";
           // check validation
           if (
-            (this.props.GridStore.colDefList[this.props.objKey].easyInt && !this.props.GridStore.checkValidInt(this.props.cellData) ) ||
-            (this.props.GridStore.colDefList[this.props.objKey].easyFloat && !this.props.GridStore.checkValidFloat(this.props.cellData) ) ||
-            ((this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar ||
-              this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro ||
-              this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) && !this.props.GridStore.checkValidFloat(this.props.cellData) )
+            (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt && !this.props.GridStore.checkValidInt(this.props.cellData) ) ||
+            (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat && !this.props.GridStore.checkValidFloat(this.props.cellData) ) ||
+            ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
+              this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
+              this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound) && !this.props.GridStore.checkValidFloat(this.props.cellData) )
           ) {
             style.outline = "3px orange dashed";
           }          
 
           // since we're here: format the money:
-          if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyDollar) {
+          if (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar) {
             renderVal = accounting.formatMoney(this.props.cellData, "$", 2, ",", ".");
           }
-          else if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyEuro) {
+          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro) {
             renderVal = accounting.formatMoney(this.props.cellData, "€", 2, ".", ",");
           }
-          else if (this.props.GridStore.colDefList[this.props.objKey].easyMoneyPound) {
+          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound) {
             renderVal = accounting.formatMoney(this.props.cellData, "£", 2, ".", ",");
           }
           // since we're here: highlight invalid dates & times
-          if (this.props.GridStore.colDefList[this.props.objKey].easyDate) {
+          if (this.props.GridStore.colDefListByKey[this.props.objKey].easyDate) {
             var parsed = moment(this.props.cellData, this.props.uiMath.formatDate);
             if(!parsed.isValid){
               style.outline = "3px orange dashed";
@@ -441,7 +449,7 @@ window.reactJsonGridFocusInput = function(elem){
               renderVal = parsed.format(this.props.uiMath.formatDate);
             }
           }
-          else if (this.props.GridStore.colDefList[this.props.objKey].easyDateTime) {
+          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime) {
             var parsed = moment(this.props.cellData, this.props.uiMath.formatDate+' '+this.props.uiMath.formatTime);
             if(!parsed.isValid){
               style.outline = "3px orange dashed";
@@ -454,10 +462,10 @@ window.reactJsonGridFocusInput = function(elem){
         }
         
         // check for custom renders
-        if (this.props.GridStore.colDefList[this.props.objKey].compCell){
+        if (this.props.GridStore.colDefListByKey[this.props.objKey].compCell){
           renderVal = <span>{
             React.cloneElement(
-                this.props.GridStore.colDefList[this.props.objKey].compCell,
+                this.props.GridStore.colDefListByKey[this.props.objKey].compCell,
                 {
                   x: this.props.GridStore.pivotOn ? this.props.y : this.props.x,
                   y: this.props.GridStore.pivotOn ? this.props.x : this.props.x,
@@ -471,7 +479,7 @@ window.reactJsonGridFocusInput = function(elem){
         }
 
         // handle easyBool
-        if (this.props.GridStore.colDefList[this.props.objKey].easyBool) {
+        if (this.props.GridStore.colDefListByKey[this.props.objKey].easyBool) {
 
           var disableEdit = this.isEditDisabled();
 
@@ -486,6 +494,8 @@ window.reactJsonGridFocusInput = function(elem){
         }       
         
       }  
+
+      
 
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 

@@ -20,7 +20,8 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable inst = '';                          // if true, rendering a selected cell will cause that cell to take focus
   @observable pivotOn = '';                       // from props.  Here for easy cell access.
 
-  @observable colDefList = {};                    // column definition meta data accessible by keyName
+  @observable colDefListByKey = {};               // column definition meta data accessible by keyName
+  @observable colDefListByIdx = [];               // column definition meta data accessible by ordered index
   @observable keyList=[]                          // list of the keys in the given data object.
 
   @observable showDatePicker = false;             // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
@@ -49,8 +50,8 @@ class GridStore {           // Just a class.  Nothing fancy here.
   // call this to ensure that the pivot variables get swizzled correctly.
   onChangePivotWrapper(x,y,objKey,val){
     if(val===null) return; // cannot set null via the UI.  prevents unintended changes.
-
     if (this.pivotOn) {
+      console.log(x,y,objKey,val);
       this.onChange(y, x, objKey, val);
     }
     else {
@@ -72,7 +73,8 @@ class GridStore {           // Just a class.  Nothing fancy here.
     this.uiMath = this.uiMathInst.calcGridBody(props, (this.scrollBarWide||20));    
 
     // ease of access
-    this.colDefList = this.uiMath.colDefList;
+    this.colDefListByKey = this.uiMath.colDefListByKey;
+    this.colDefListByIdx = props.columnList;
     this.keyList = this.uiMath.keyNames;
     var dataWide = this.uiMath.dataWide;
     var dataHigh = this.uiMath.dataHigh;
@@ -182,7 +184,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
     else{    
       if(this.pivotOn){        
-        return clientData[this.cursor.editX][this.uiMath.colHeaderKeyList[this.cursor.editY]]; // y is rows down / outer array
+        return clientData[this.cursor.editX][this.uiMath.rowHeaderList[this.cursor.editY]]; // y is rows down / outer array        
       }
       else{
         return clientData[this.cursor.editY][this.uiMath.colHeaderKeyList[this.cursor.editX]];
@@ -190,27 +192,25 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
   }
 
-  renderZero(tval) {if (0===tval){return '0';} else if (false===tval){return 'false';} else{return tval}}
-
   getDataRespectingPivotAtLocation(clientData,x,y)
   {
     if(typeof clientData !== "object"){ console.log('Remember that the first parameter of this method must be the user client data.  Currently it is '+clientData);}
     if(this.uiMath.isPrimitiveData){
       // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
       if(this.pivotOn){
-        return this.renderZero(clientData[x]); // y is rows down / outer array
+        return clientData[x]; // y is rows down / outer array
       }
       else{
-        return this.renderZero(clientData[y]);
+        return clientData[y];
       }
     }
     else{
       // object data.  Use the real stuff.
       if(this.pivotOn){
-        return this.renderZero(clientData[x][this.uiMath.colHeaderKeyList[y+1]]); // x data items into outer list.  Y+1 adjusts for the "/" column heading
+        return clientData[x][this.uiMath.rowHeaderList[y]]; // x data items into outer list.  Y+1 adjusts for the "/" column heading
       }
       else{
-        return this.renderZero(clientData[y][this.uiMath.colHeaderKeyList[x]]);  // y is depth in outer list, x is the column into the inner list/object
+        return clientData[y][this.uiMath.colHeaderKeyList[x]];  // y is depth in outer list, x is the column into the inner list/object
       }
     }
   }
