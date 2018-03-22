@@ -222,32 +222,54 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @action convertJSONtoTXT(data){
     this.textDataLinesLength=0;
     this.keyList=[];
-    if(!Array.isArray(data)){
+    /*
+    if(!data || !data.length || !data[0]){ // many things are arrays that don't look like arrays.  Array.isArray cannot be trusted.
       this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or objects with a single attribute';
       console.log(this.jsonAsTxtError);
-      return '### Invalid Data ###';
+      return '### Invalid Data ###\nThis data does not appear ';
     }
-    if(data.length===0){
+    */
+    if(!data || data.length===0){
       return '';
     }    
     this.textDataLinesLength = data.length;
 
-    if(typeof data[0] === 'object'){
+    if (typeof data[0] === 'object' || typeof data[0] === 'array'){
       this.textDataLinesLength = data.length;
       this.keyList = Object.keys(data[0]);
-      if(this.keyList.length!==1){
-        this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or an array of objects with a single attribute';
-        console.log(this.jsonAsTxtError);
-        return '### Invalid Data ###';
+      if(this.keyList.length===0){
+        // fake object.  Treat it as an array
+        if(data[0].length){
+          for(var fi=0;fi<data[0].length;fi++){
+            this.keyList.push(fi);
+          }
+        }
       }
+
+      var res = '';
       this.cursor.objKey =this.keyList[0];
-      return data.map(x=>x[this.cursor.objKey]).join('\n');  // get the "objKey"th item from each object into an array of primitives then newline-join it together for the response.
+      for(var y=0;y<data.length;y++){
+        var line = '';
+        for(var x=0;x<this.keyList.length;x++){
+          line+=data[y][this.keyList[x]]+'|';
+        }
+        res+= line.substring(0,line.length-1)+'\n';
+      }
+      return res
+      //return data.map(x=>x[this.cursor.objKey]).join('\n');  // get the "objKey"th item from each object into an array of primitives then newline-join it together for the response.
     }
     else{
       return data.join('\n');
     }    
   }
 
+  // TODO
+  // - Make this return a full, reconstituted data object.
+  // - tool button to switch between editor types.
+  // - header that shows key order
+  // - remember if the input was obj, array, or prim array and use it to convert back
+  // - make the tools show when editing as text
+  // - ALSO: Get components working everywhere, then close to ready to ship it!
   @action convertTXTtoJSON(txt){
     var lines = txt.split('\n');
     // bonehead implementation.  this is intended for lists of less than 200 items.

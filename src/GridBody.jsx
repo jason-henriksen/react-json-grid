@@ -13,6 +13,12 @@ import ReactTooltip from 'react-tooltip';
 import PlaylistRemoveIcon from 'mdi-react/PlaylistRemoveIcon';
 import PlaylistPlusIcon from 'mdi-react/PlaylistPlusIcon';
 
+import PackageUpIcon from 'mdi-react/PackageUpIcon';
+import PackageDownIcon from 'mdi-react/PackageDownIcon';
+
+import ChevronLeftIcon from 'mdi-react/ChevronLeftIcon';
+import ChevronRightIcon from 'mdi-react/ChevronRightIcon';
+
 import DatePickerOverlay from './easyTools/DatePickerOverlay';
 import MenuPickerOverlay from './easyTools/MenuPickerOverlay';
 import AltTextOverlay from './easyTools/AltTextOverlay';
@@ -271,16 +277,30 @@ const GridBody = observer( class GridBody extends React.Component {
       }
       <div>      
         {this.props.showToolsAddCut &&
-          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+          <div style={{display:'inline-block',marginRight:'15px'}}>
+          <button onClick={this.addRow}><PlaylistPlusIcon/></button>
+          <button onClick={this.cutRow}><PlaylistRemoveIcon/></button>
+          </div>
         }
         {this.props.showToolsImpExp &&
-          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+            <div style={{ display: 'inline-block', marginRight: '15px' }}>
+            <button onClick={this.addRow}><PackageUpIcon /></button>
+            <button onClick={this.cutRow}><PackageDownIcon /></button>
+            </div>
         }
         {this.props.showToolsPage &&
-          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+            <div style={{ display: 'inline-block', marginRight: '15px' }}>
+              <button onClick={this.addRow}><ChevronLeftIcon /></button>
+              <button onClick={this.addRow}><ChevronLeftIcon /></button>
+              <input style={{ verticalAlign:'top',display: 'inline-block', minWidth: '40px', maxWidth: '40px', height: '26px', textAlign: 'center' }} value={(this.props.curPage || 0)} onChange={this.onChange} />
+              <button onClick={this.cutRow}><ChevronRightIcon /></button>
+              <button onClick={this.cutRow}><ChevronRightIcon /></button>
+            </div>
         }
         {this.props.showToolsCustom &&
-          <div style={{display:'inline-block'}}><button onClick={this.addRow}><PlaylistPlusIcon/></button><button onClick={this.cutRow}><PlaylistRemoveIcon/></button></div>
+            <div style={{ display: 'inline-block', marginRight: '15px'}}>
+              {this.props.showToolsCustom}
+            </div>
         }
       </div>        
     </div>

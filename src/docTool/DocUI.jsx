@@ -315,7 +315,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         showToolsAddCut={this.ds.showToolsAddCut}
         showToolsPage={this.ds.showToolsPage}
         showToolsImpExp={this.ds.showToolsImpExp}
-        showToolsCustom={null}
+        showToolsCustom={this.ds.showToolsCustom && <div>Some Funky Thing</div>}
         formatDate={this.ds.formatDate}
         formatTime={this.ds.formatTime}
         debugGridMath={this.ds.debugGridMath}
