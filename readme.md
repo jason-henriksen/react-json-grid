@@ -12,30 +12,30 @@ This project is under active development, however an API exploration tool will b
 
 ## Features
 - Accepts input data formatted as
--- array of javascript objects
--- array of arrays
--- array of primitivs
--- Comma Seperated Values string ( next month )
--- Pipe Seperated Values string ( next month )
--- Name Value Pairs ( next month )
+  - array of javascript objects
+  - array of arrays
+  - array of primitivs
+  - Comma Seperated Values string ( next month )
+  - Pipe Seperated Values string ( next month )
+  - Name Value Pairs ( next month )
 
 - Very Fast manipulation of 10s of Thousands of Items
--- Built In Test UI allows test of 50K items at a button press
--- Editing of items is still quite smooth
+  - Built In Test UI allows test of 50K items at a button press
+  - Editing of items is still quite smooth
 
 - Built in editor for editing the grid
--- Cells can be edited by default
--- Various editors may be used by table or by column
+  - Cells can be edited by default
+  - Various editors may be used by table or by column
 
 - Built in formatters & validations for
--- Ints / Floats
--- Dollars / Euros / Pounds
--- Checkboxes
--- Menus
--- Date Picker / DateTime Picker
--- email addresses ( next month )
--- snail mail addresses ( next month )
--- IP addresses ( next month )
+  - Ints / Floats
+  - Dollars / Euros / Pounds
+  - Checkboxes
+  - Menus
+  - Date Picker / DateTime Picker
+  - email addresses ( next month )
+  - snail mail addresses ( next month )
+  - IP addresses ( next month )
 
 - Pivoted Tables
 
@@ -50,19 +50,19 @@ This project is under active development, however an API exploration tool will b
 - Component replacements for cells, headers and inputs (this month)
 
 - Built In Tool Hooks:
--- Add/Remove Rows
--- Import/Export Data
--- Page Controls
--- Custom Component Controls
+  - Add/Remove Rows
+  - Import/Export Data
+  - Page Controls
+  - Custom Component Controls
 
 - Multiple data manipulation styles
--- onChange / onRowAdd / onRowCut
--- onDataReplacement
+  - onChange / onRowAdd / onRowCut
+  - onDataReplacement
 
 - Multiple data input styles styles
--- supply entire data set a property
--- supply a row level get method (next month)
--- supply a MobX observable object and let the grid manipulate the data for you (next month)
+  - supply entire data set a property
+  - supply a row level get method (next month)
+  - supply a MobX observable object and let the grid manipulate the data for you (next month)
 
 
 
@@ -71,7 +71,7 @@ This project is under active development, however an API exploration tool will b
 
 ## Install
 ```bash
-npm i --save react-json-grid
+npm i   -save react-json-grid
 ```
 
 ## Usage
