@@ -52,7 +52,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
   onChangePivotWrapper(x,y,objKey,val){
     if(val===null) return; // cannot set null via the UI.  prevents unintended changes.
     if (this.pivotOn) {
-      console.log(x,y,objKey,val);
       this.onChange(y, x, objKey, val);
     }
     else {
