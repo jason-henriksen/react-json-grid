@@ -22,6 +22,16 @@ This project is under active development, however an API exploration tool will b
 - Very Fast manipulation of 10s of Thousands of Items
   - Built In Test UI allows test of 50K items at a button press
   - Editing of items is still quite smooth
+  - Intended for large scale, prodution use in line-of-business applications
+
+- Modern ES6 Component Code
+  - built to react 16.2 and will be kept up to date as react grows
+  - No runtime warnings
+  - includes comprehensive storybook testing
+  - built for extensibility
+  - built for easy maintenance
+  - Written with the observer/observable pattern of data management
+  - HEAVILY commented for you to edit and contribute
 
 - Built in editor for editing the grid
   - Cells can be edited by default
