@@ -39,12 +39,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return Number(res);
   }
 
-  @action logNoChangeHandlerMessage()     {console.log('no onChange handler supplied.');}
-  @action logNoOnRowAddHandlerMessage()   { console.log('no onRowAdd handler supplied.'); }
-  @action logNoOnRowCutHandlerMessage()   { console.log('no onRowCut handler supplied.'); }
-  @action logNoOnGotoPageHandlerMessage() { console.log('no onGotoPage handler supplied.'); }
-  @action logNoOnImportHandlerMessage()   { console.log('no onImport handler supplied.'); }
-  @action logNoOnExportHandlerMessage()   { console.log('no onExport handler supplied.'); }
+  @action logNoChangeHandlerMessage()         {console.log('no onChange handler supplied.');}
+  @action logNoOnRowAddHandlerMessage()       { console.log('no onRowAdd handler supplied.'); }
+  @action logNoOnRowCutHandlerMessage()       { console.log('no onRowCut handler supplied.'); }
+  @action logNoOnGotoPageHandlerMessage()     { console.log('no onGotoPage handler supplied.'); }
+  @action logNoOnImportHandlerMessage()       { console.log('no onImport handler supplied.'); }
+  @action logNoOnExportHandlerMessage()       { console.log('no onExport handler supplied.'); }
+  @action logNoOnReplaceDataHandlerMessage()  { console.log('no onReplaceData handler supplied. (Required for text mode editing)'); }
 
   // don't call the user supplied on change directly.  
   // call this to ensure that the pivot variables get swizzled correctly.
@@ -86,12 +87,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
 
     // make handlers easily available and log messages if they're missing.
-    this.onChange   = (props.onChange   || this.logNoChangeHandlerMessage );  
-    this.onRowAdd   = (props.onRowAdd   || this.logNoOnRowAddHandlerMessage); 
-    this.onRowCut   = (props.onRowCut   || this.logNoOnRowCutHandlerMessage); 
-    this.onGotoPage = (props.onGotoPage || this.logNoGotoPageHandlerMessage); 
-    this.onExport = (props.onExport     || this.logNoOnExportHandlerMessage); 
-    this.onImport = (props.onImport     || this.logNoOnImportHandlerMessage); 
+    this.onChange       = (props.onChange       || this.logNoChangeHandlerMessage );  
+    this.onRowAdd       = (props.onRowAdd       || this.logNoOnRowAddHandlerMessage); 
+    this.onRowCut       = (props.onRowCut       || this.logNoOnRowCutHandlerMessage); 
+    this.onGotoPage     = (props.onGotoPage     || this.logNoGotoPageHandlerMessage); 
+    this.onExport       = (props.onExport       || this.logNoOnExportHandlerMessage); 
+    this.onImport       = (props.onImport       || this.logNoOnImportHandlerMessage); 
+    this.onReplaceData  = (props.onReplaceData  || this.logNoOnReplaceDataHandlerMessage); 
 
     this.pivotOn = props.pivotOn;    // easy availability to cells
   }
@@ -218,27 +220,26 @@ class GridStore {           // Just a class.  Nothing fancy here.
 
   @observable jsonAsTxtError = '';
   @observable textDataLinesLength=0;
+  @observable textGoalFormat = '';
 
   @action convertJSONtoTXT(data){
     this.textDataLinesLength=0;
     this.keyList=[];
-    /*
-    if(!data || !data.length || !data[0]){ // many things are arrays that don't look like arrays.  Array.isArray cannot be trusted.
-      this.jsonAsTxtError = 'Text mode should only be used on an array of primitives or objects with a single attribute';
-      console.log(this.jsonAsTxtError);
-      return '### Invalid Data ###\nThis data does not appear ';
-    }
-    */
+    var res = '';
+    
     if(!data || data.length===0){
       return '';
     }    
     this.textDataLinesLength = data.length;
 
     if (typeof data[0] === 'object' || typeof data[0] === 'array'){
+
+      this.textGoalFormat=typeof data[0];
       this.textDataLinesLength = data.length;
       this.keyList = Object.keys(data[0]);
       if(this.keyList.length===0){
         // fake object.  Treat it as an array
+        this.textGoalFormat='array';
         if(data[0].length){
           for(var fi=0;fi<data[0].length;fi++){
             this.keyList.push(fi);
@@ -246,7 +247,6 @@ class GridStore {           // Just a class.  Nothing fancy here.
         }
       }
 
-      var res = '';
       this.cursor.objKey =this.keyList[0];
       for(var y=0;y<data.length;y++){
         var line = '';
@@ -255,39 +255,52 @@ class GridStore {           // Just a class.  Nothing fancy here.
         }
         res+= line.substring(0,line.length-1)+'\n';
       }
-      return res
+      return res.trim();
       //return data.map(x=>x[this.cursor.objKey]).join('\n');  // get the "objKey"th item from each object into an array of primitives then newline-join it together for the response.
     }
     else{
-      return data.join('\n');
+      this.textGoalFormat='prims'; // single array of primitives
+      return data.join('\n').trim();
     }    
   }
 
   // TODO
   // - Make this return a full, reconstituted data object.
   // - tool button to switch between editor types.
-  // - header that shows key order
   // - remember if the input was obj, array, or prim array and use it to convert back
-  // - make the tools show when editing as text
   // - ALSO: Get components working everywhere, then close to ready to ship it!
   @action convertTXTtoJSON(txt){
     var lines = txt.split('\n');
     // bonehead implementation.  this is intended for lists of less than 200 items.
-    if (lines.length > this.textDataLinesLength){
-      var lim = lines.length - this.textDataLinesLength;
-      for (var x=0;x<lim;x++){
-        this.onRowAdd(0,0,'na');
-      }
-    }
-    if (lines.length < this.textDataLinesLength) {
-      var lim = this.textDataLinesLength - lines.length;
-      for (var y = 0; y < lim; y++) {
-        this.onRowCut(0, 0, 'na');
-      }
-    }
+    var result = [];
     for(var ctr=0;ctr<lines.length;ctr++){
-      this.onChange(0, ctr, this.keyList[0], lines[ctr]);    
+      if(this.textGoalFormat==='prims'){ 
+        result.push(lines[ctr]); 
+      }
+      else if(this.textGoalFormat==='array'){ 
+        var items=lines[ctr].split('|');
+        result.push(items); 
+      }
+      else if(this.textGoalFormat==='object'){ 
+        var curObj = {}
+        var items=lines[ctr].split('|');
+        for(var kctr=0;kctr<this.keyList.length;kctr++){
+          if(items.length>kctr){
+            curObj[ this.keyList[kctr] ]=items[kctr];
+          }
+          else{
+            curObj[ this.keyList[kctr] ]='';
+          }
+        }
+        result.push(curObj); 
+      }
     }
+    
+    if(this.uiMath.debugGridMath){
+      console.log(result);
+    }
+    this.onReplaceData(result);    
+    
   }  
 
 }

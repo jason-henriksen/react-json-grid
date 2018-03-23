@@ -56,12 +56,6 @@ import ReactTooltip from 'react-tooltip';
       overflow:'hidden',
     };
 
-    if (this.props.uiMath.rowHeaderList && this.props.uiMath.rowHeaderList.length>0){ // if pivoted or rowHeadered, make the row headers have header style
-      sharedBaseStyleLeftCol.backgroundColor= '#F3F3F3';
-      sharedBaseStyleLeftCol.textAlign = 'center';
-    }
-
-    
     var sharedBaseStyleInput={  width: this.props.uiMath.autoColWide, 
       borderStyle: 'solid',
       borderColor: 'black',
@@ -98,6 +92,7 @@ import ReactTooltip from 'react-tooltip';
     var inputStyleFirst = Object.assign(sharedBaseStyleLeftCol, (this.props.styleCell||{}));      
     var inputStyleLocal = Object.assign(sharedBaseStyleInput, (this.props.styleInput || {}));
 
+
     var keyName = null;  // used for pivoted data only
 
     var columnCount = this.props.GridStore.cursor.maxX+1;
@@ -114,6 +109,22 @@ import ReactTooltip from 'react-tooltip';
 
       // row header / pivot work
       if(ctr===-1){
+        cellStyleFirst =       {width: this.props.uiMath.autoColWide,
+          borderStyle: 'solid',
+          borderColor: 'black',
+          padding: (this.props.uiMath.padWide || 0) + 'px',
+          borderLeftWidth: this.props.uiMath.borderWide, 
+          borderRightWidth: this.props.uiMath.borderWide, 
+          borderBottomWidth: this.props.uiMath.borderWide, 
+          borderTopWidth: topBorder, 
+          height: this.props.uiMath.rowHighNoPad,
+          display: 'inline-block',
+          outline: outline,
+          backgroundColor:'#F3F3F3',
+          textAlign:'center',
+          overflow:'hidden'}
+        ; // don't add global cell style on row headers
+            
         if(this.props.uiMath.rowHeaderList && this.props.uiMath.rowHeaderList.length > this.props.index) {
           var keyName = this.props.uiMath.rowHeaderList[this.props.index]; // what key am I on?
           var titleText = keyName;
@@ -132,7 +143,12 @@ import ReactTooltip from 'react-tooltip';
           }
 
           // add in the row header style
-          var rowHeaderStyle={...cellStyleFirst,...this.props.styleRowHeader};
+          var gridColLocalStyle = {};
+          if(this.props.GridStore.colDefListByKey[keyName]){ 
+            gridColLocalStyle = (this.props.GridStore.colDefListByKey[keyName].styleHeader || {});
+          }
+
+          var rowHeaderStyle={...cellStyleFirst,...this.props.styleHeader,...this.props.styleRowHeader,...gridColLocalStyle};
 
           cellArray.push(
             <a onMouseEnter={(e)=>this.showRowHeaderAltText(e,ctr,this.props.index)}  onMouseLeave={(e)=>this.hideRowHeaderAltText(e,ctr,this.props.index)}   

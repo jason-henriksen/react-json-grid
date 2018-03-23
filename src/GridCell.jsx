@@ -302,7 +302,6 @@ window.reactJsonGridFocusInput = function(elem){
       style.marginLeft=0;
       styleIn.marginLeft=0;
     }
-  
 
     // over ride width if needed
     if (this.props.GridStore.colDefListByKey[this.props.objKey]) { // is there a colDef that uses this key?
@@ -406,6 +405,11 @@ window.reactJsonGridFocusInput = function(elem){
       ){
         // we have a custom view component.  Render it.
         // it may want to change values directly, so give it everything it needs
+  
+        var styleByCol={};
+        if(this.props.x>=0){
+          styleByCol = (this.props.GridStore.colDefListByKey[this.props.objKey].styleCell||{})
+        }
 
         // check right alignment
         if (
@@ -499,7 +503,7 @@ window.reactJsonGridFocusInput = function(elem){
 
       renderPlan = <div tabIndex='0'
                         onClick={this.onClick} 
-                        id={this.props.id} style={style}                        
+                        id={this.props.id} style={{...style,...styleByCol}}                        
                         ref={div => div && isFocusNeeded && div.focus() }
                         onKeyDown={this.onKeyDownWhenViewing}>
             {renderVal}

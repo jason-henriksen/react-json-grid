@@ -32,6 +32,7 @@ class GridMath
       result.rowHeaderList=[];
       result.colHeaderKeyList=[];         // when pivoted, this will NOT match the keyNames list.
       result.saveColumnForRowHeader=0;
+      result.debugGridMath = props.debugGridMath;
 
       // math needs access to columns by key name.
       if (props.columnList) {

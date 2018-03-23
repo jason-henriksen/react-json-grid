@@ -91,6 +91,8 @@ storiesOf('Error Handlers', module)
 .addWithJSX('array of RegExp',()=>(<div><Grid data={[new RegExp(),new RegExp()]}/><br/>{'<Grid data={[new RegExp(),new RegExp()]}/>'}</div>))
 .addWithJSX('array of Functions',()=>(<div><Grid data={[()=>{console.log('fail')},()=>{console.log('fail')}]}/><br/>{'<Grid data={[()=>{console.log("fail")},()=>{console.log("fail")}]}/>'}</div>))
 
+
+
 storiesOf('object[] - small data', module)
 .addWithJSX('numeric values',()=>(<Grid data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros',()=>(<Grid data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0}]}/>))
@@ -99,6 +101,7 @@ storiesOf('object[] - small data', module)
 .addWithJSX('bool values mixed',()=>(<Grid data={[{r:5,a:true,b:6,c:8,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:8,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed padded',()=>(<Grid borderWide={15} padWide={15} data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
+
 
 storiesOf('object[] - small data,column def sizes', module)
 .addWithJSX('col wide auto,noScroll,missing defs', () => (<Grid gridHighCollapse={false} showToolsAddCut debugGridMath
@@ -110,12 +113,70 @@ storiesOf('object[] - small data,column def sizes', module)
 .addWithJSX('col wide pct,noScroll,defs out of order',()=>(<Grid  gridHighCollapse={false} showToolsAddCut 
                                 columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R'}]} 
                                 data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths mix,noScroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths too big,noScroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths px,scroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths pcs,scroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths mix,scroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col widths too big,scroll',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
+.addWithJSX('col data types, in cell editors',()=>(<Grid 
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',easyBool:true},{key:'b',title:'col B',widePct:'15',easyMoneyDollar:true},{key:'c',title:'col C',widePct:'5',easyMoneyEuro:true},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R',easyMoneyPound:true}]} 
+  />))
+.addWithJSX('col data types, overlay editors',()=>(<Grid 
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',easyMenu:'a|b|c|d'},{key:'b',title:'col B',widePct:'15',easyMenu:['asdf','qwer','zxcv']},{key:'c',title:'col C',widePct:'5',easyMoneyEuro:true},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))
+  .addWithJSX('col data types, style headers all',()=>(<Grid 
+    styleHeader={{backgroundColor:'pink'}}
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))  
+  .addWithJSX('col data types, style headers all,pivot',()=>(<Grid 
+    styleHeader={{backgroundColor:'pink'}}
+    pivotOn='b'
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))  
+  .addWithJSX('col data types, style headers all,pivot, with rowHeaderStyle',()=>(<Grid 
+    styleHeader={{backgroundColor:'pink'}}
+    styleRowHeader={{backgroundColor:'green'}}
+    pivotOn='b'
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))  
+  .addWithJSX('col data types, style headers by column',()=>(<Grid 
+    styleHeader={{backgroundColor:'pink'}}
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',styleHeader:{backgroundColor:'red'}},{key:'b',title:'col B',widePct:'15',styleHeader:{backgroundColor:'green'}},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />)) 
+  .addWithJSX('col data types, style headers by column with pivot',()=>(<Grid 
+    styleHeader={{backgroundColor:'pink'}}
+    styleRowHeader={{backgroundColor:'green'}}
+    pivotOn='b'
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',styleHeader:{backgroundColor:'red'}},{key:'b',title:'col B',widePct:'15',styleHeader:{backgroundColor:'green'}},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))
+
+
+  .addWithJSX('col data types, style cell',()=>(<Grid 
+    styleCell={{backgroundColor:'teal'}}
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))
+  .addWithJSX('col data types, style cell by Column',()=>(<Grid 
+    styleCell={{backgroundColor:'teal'}}
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',styleCell:{backgroundColor:'pink'}},{key:'b',title:'col B',widePct:'15',styleCell:{backgroundColor:'green'}},{key:'c',title:'col C',widePct:'5',styleCell:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))
+  .addWithJSX('col data types, style cell by Column, with pivot',()=>(<Grid 
+    pivotOn='b'
+    styleCell={{backgroundColor:'teal'}}
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',styleCell:{backgroundColor:'pink'},easyBool:true},{key:'b',title:'col B',widePct:'15',styleCell:{backgroundColor:'green'}},{key:'c',title:'col C',widePct:'5',styleCell:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))
+
+
+
+  .addWithJSX('col data types, style input',()=>(<Grid 
+    styleInput={{backgroundColor:'teal'}}
+    data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
+    columnList={[{key:'a',title:'col A',widePct:'15',styleInput:{backgroundColor:'pink'}},{key:'b',title:'col B',widePct:'15',styleInput:{backgroundColor:'green'}},{key:'c',title:'col C',widePct:'5',styleInput:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+  />))
 .addWithJSX('col widths too big,scroll,padded',()=>(<Grid borderWide={15} padWide={15} data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 
 
@@ -161,8 +222,6 @@ storiesOf('object[] - medium data,big grid,autoColWide', module)
 .addWithJSX('empty string values mixed narrow',()=>(<Grid showToolsAddCut gridHigh={400} gridWide={100}  data={[{r:'asdf',a:'',b:0,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:'',b:0,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('bool values mixed collapsed',()=>(<Grid showToolsAddCut gridHigh={400} gridWide={400}  data={[{r:5,a:true,b:6,c:8,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:8,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed fullHigh',()=>(<Grid showToolsAddCut gridHighCollapse={false} gridHigh={400} gridWide={400}  data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
-
-
 
 storiesOf('array[] - small data', module)
 .addWithJSX('numeric values',()=>(<Grid data={[[5,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90]]}/>))
@@ -252,6 +311,15 @@ storiesOf('primitive[] - formatted,pivotOn', module)
 .addWithJSX('strings - edit disabled',()=>(<Grid pivotOn data={['arnold','bernard','clementine','dolores']}  columnList={[{key:'data', title:'My List', editDisabled:true, }]}/>))
 .addWithJSX('bool primitive - easyBool',()=>(<Grid pivotOn data={[true,false,true,false]} columnList={[{key:'data', title:'My List', easyBool:true, }]}/>))
 .addWithJSX('bool primitive leading 0 - easyBool',()=>(<Grid pivotOn data={[false,true,false,true]} columnList={[{key:'data', title:'My List', easyBool:true, }]}/>))
+
+storiesOf('text mode edit', module)
+.addWithJSX('numeric object values',()=>(<Grid editAsText data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
+.addWithJSX('numeric array values',()=>(<Grid editAsText data={[[5,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90],[4,5,6,8,90],[3,5,6,8,90],[2,5,6,8,90],[1,5,6,8,90]]}/>))
+.addWithJSX('numeric prim values',()=>(<Grid editAsText data={[0,1,2,3,4,5,6,7,8,9,0,1]}/>))
+.addWithJSX('hide header',()=>(<Grid colHeaderHide editAsText data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
+.addWithJSX('show tools',()=>(<Grid editAsText showToolsAddCut showToolsPage data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
+.addWithJSX('sizing',()=>(<Grid editAsText  borderWide={15} padWide={15} data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
+
 
 
 storiesOf('Easy Tools - EasyBool', module)

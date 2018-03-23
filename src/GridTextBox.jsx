@@ -4,6 +4,10 @@ import { observable,action,trace } from 'mobx';
 import { observer } from 'mobx-react';
 import autoBind from 'react-autobind';
 
+import GridHeader from './GridHeader';
+import GridTools from './GridTools';
+
+
 // Wrapper for the grid
 // This grid allows deep styling via style objects, 
 // but retains control of border and padding to ensure that the grid lines up.
@@ -43,10 +47,29 @@ import autoBind from 'react-autobind';
   }
   
   render(){
+    var ui = this.props.uiMath;
+
     return(
-      <textarea style={{width:this.props.uiMath.gridWide,height:this.props.uiMath.gridHigh}} 
-                onChange={this.onChange} value={this.txt} disabled={this.props.editDisabled}>        
-      </textarea>
+      <div>
+          {/* put the header in place */}
+          <GridHeader uiMath={ui} {...this.props} />
+
+          {/* render the text area */}
+          <textarea style={{width:ui.rowWide - ((ui.padWide||0)*2),
+                                  height:ui.gridHigh,
+                                  borderStyle: 'solid',
+                                  borderColor: 'black',
+                                  padding: (ui.padWide || 0) + 'px',
+                                  borderLeftWidth: ui.borderWide, 
+                                  borderRightWidth: ui.borderWide, 
+                                  borderBottomWidth: ui.borderWide, 
+                          }} 
+                    onChange={this.onChange} value={this.txt} disabled={this.props.editDisabled}>        
+          </textarea>
+
+          {/* put the tools in place */}
+          <GridTools uiMath={ui} {...this.props} />
+        </div>
     );
   }
 }

@@ -92,6 +92,17 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     }
   }
 
+  @action onReplaceData(newData) {
+    if(!this.ds.hideEditor){
+      this.cleanData = newData;
+      this.data = JSON.stringify(this.cleanData);
+    }
+    else{
+      this.cleanData = newData;
+    }
+  }
+  
+
   @action onColAdd(x, y, objKey) { }// not implemented yet.  
   @action onColCut(x, y, objKey) { }// not implemented yet.
   @action onDataClear(x, y, objKey) { }// not implemented yet.
@@ -249,7 +260,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
                 <Toggle action={this.ds.toggleDebugGridMath} toggleValue={this.ds.debugGridMath} label='debugGridMath' help='Look at the logs to see what the grid thinks sizes should be.  Used to debug external CSS issues.' />
                 <Toggle action={this.ds.toggleEditor} toggleValue={this.ds.hideEditor} label='Hide text editor' help='Not grid related.  Keeping the data text editor in sync with the grid costs more performance than the grid does.  When running large data test, this editor is disabled.' />
-                ( The documentation sample editor has worse performance than react-json-grid.<br/>Use "Hide text editor" to disable it while doing performance tests. )
+                ( The Example Data text editor<br/> has much worse performance than react-json-grid.<br/>Use "Hide text editor" to disable it<br/> while doing performance tests. )
               </div>}              
               <br/>
               ?? Copy Paste Features ??<br/>
@@ -257,7 +268,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               ?? Component Examples ??<br />
               </div>
             </div>
-          <br/><br/><br/>Example Data &#123;this.data&#125;<br/>
+          <br/><br/><br/>Example Data Generators<br/>
           <button style={{width:'90px'}} onClick={this.dm.makeS}>5 objects</button>
           <button style={{width:'90px'}} onClick={this.dm.makeM}>150 objects</button>
           <button style={{width:'90px'}} onClick={this.goMakeL}>50K objects</button>
@@ -274,7 +285,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           <button style={{width:'90px'}} onClick={this.dm.makePSV}>PSV</button>
           <button style={{width:'90px'}} onClick={this.dm.makeKVE}>key=value[]</button><br />
           <span style={{ color: 'red' }}>{this.dataErr}</span><br />
-          {!this.ds.hideEditor &&
+          &#123;this.data&#125;<br/>
+          {!this.ds.hideEditor &&            
             <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
           }
           
@@ -304,6 +316,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         onChange={this.setValue}
         onRowAdd={this.onRowAdd}
         onRowCut={this.onRowCut}
+        onReplaceData={this.onReplaceData}        
         onColAdd={this.onColAdd}
         onColCut={this.onColCut}
         onImport={this.onImport}
