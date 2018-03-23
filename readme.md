@@ -69,16 +69,30 @@ This project is under active development, however an API exploration tool will b
 
 
 
-## Install
+## Install for Use
 ```bash
 npm i   -save react-json-grid
 ```
 
-## Usage
+## Install for testing
+```bash
+git clone https://github.com/jason-henriksen/react-json-grid.git
+cd react-json-grid
+npm install
+npm run storybook
+```
+
+## ** Full documentation page coming soon **
+
+## Simple Usage
 
 ```javascript
-
-this.data = [{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}];
+this.data = 
+  [ {r:5,a:5,b:6,c:8,d:90},
+    {r:4,a:5,b:6,c:8,d:90},
+    {r:3,a:5,b:6,c:8,d:90},
+    {r:2,a:5,b:6,c:8,d:90},
+    {r:1,a:5,b:6,c:8,d:90}];
 return(
 <Grid
   data={this.data}
