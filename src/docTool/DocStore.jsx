@@ -98,6 +98,10 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @observable styleInput = '';
   @action setInputStyle(evt) { this.styleInput = evt.target.value; }
 
+  
+  @observable classNameHeader = '';
+  @action setClassNameHeader(evt) { this.classNameHeader = evt.target.value; }
+
   @observable formatDate = '';
   @action setFormatDate(evt) { this.formatDate = evt.target.value; }
   @observable formatTime = '';

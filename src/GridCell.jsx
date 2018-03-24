@@ -290,7 +290,7 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.selectionBounds.b >= this.props.y 
     ) {
       // CSSNOTE!
-      style.backgroundColor = 'lightblue';
+      style={backgroundColor:'lightblue',...style,...this.props.GridStore.styleSelectedCell};
       style.zIndex = 5;
     }
 
@@ -499,14 +499,34 @@ window.reactJsonGridFocusInput = function(elem){
         
       }  
 
-      
+      var cellClassName='';
+      var dataClassName='';
+      if(this.props.x===-1){
+        // this is a row header.  Precedence is classNameHeaderCell, classNameHeaderRowCell
+        cellClassName = (this.props.GridStore.classNameHeaderCell||'')+' '+(this.props.GridStore.classNameHeaderRowCell||'');
+        dataClassName = (this.props.GridStore.classNameHeaderData||'')+' '+(this.props.GridStore.classNameHeaderRowData||'');
+
+        if(!this.props.GridStore.classNameHeaderCell && !this.props.GridStore.classNameHeaderRowCell){
+          if(!style.backgroundColor && (!styleByCol || !styleByCol.backgroundColor)){  style.backgroundColor='#F3F3F3';}
+          if(!style.textAlign && (!styleByCol || !styleByCol.textAlign)){              style.textAlign='center';}
+        }
+
+        var rowKey = this.props.uiMath.rowHeaderList[this.props.y];
+        if(this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[rowKey]){
+          cellClassName = cellClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classNameHeaderCell||'');
+          dataClassName = dataClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classNameHeaderData||'');
+          console.log(cellClassName);
+          console.log(dataClassName);
+        }
+      }
 
       renderPlan = <div tabIndex='0'
+                        className={cellClassName}
                         onClick={this.onClick} 
                         id={this.props.id} style={{...style,...styleByCol}}                        
                         ref={div => div && isFocusNeeded && div.focus() }
                         onKeyDown={this.onKeyDownWhenViewing}>
-            {renderVal}
+            <div className={dataClassName}>{renderVal}</div>
       </div>;
     }
     

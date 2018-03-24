@@ -75,7 +75,16 @@ class GridStore {           // Just a class.  Nothing fancy here.
     // ease of access
     this.colDefListByKey = this.uiMath.colDefListByKey;
     this.colDefListByIdx = props.columnList;
+
+    this.styleSelectedCell = (props.styleSelectedCell||{});   // just for ease of access
+    this.classNameHeaderCell = props.classNameHeaderCell||'';
+    this.classNameHeaderData = props.classNameHeaderData||'';
+    this.classNameHeaderRowCell = props.classNameHeaderRowCell||'';
+    this.classNameHeaderRowData = props.classNameHeaderRowData||'';
+
     this.keyList = this.uiMath.keyNames;
+
+
     var dataWide = this.uiMath.dataWide;
     var dataHigh = this.uiMath.dataHigh;
 

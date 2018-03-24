@@ -120,8 +120,6 @@ import ReactTooltip from 'react-tooltip';
           height: this.props.uiMath.rowHighNoPad,
           display: 'inline-block',
           outline: outline,
-          backgroundColor:'#F3F3F3',
-          textAlign:'center',
           overflow:'hidden'}
         ; // don't add global cell style on row headers
             

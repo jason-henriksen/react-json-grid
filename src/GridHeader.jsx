@@ -82,18 +82,30 @@ import ReactTooltip from 'react-tooltip';
         if (ctr===0 && this.props.pivotOn && ui.pivotRowHeaderWide) {
           curColWide = Number(ui.pivotRowHeaderWide);
         }
-        if(this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[keyName] && this.props.GridStore.colDefListByKey[keyName].forceColWide){
-          curColWide = this.props.GridStore.colDefListByKey[keyName].forceColWide;
+
+        var classNameHeaderColData='';
+        var classNameHeaderColCell='';
+        if(this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[keyName]){
+          if(this.props.GridStore.colDefListByKey[keyName].forceColWide){
+            curColWide = this.props.GridStore.colDefListByKey[keyName].forceColWide;
+          }
+          if(!this.props.pivotOn){
+            classNameHeaderColData = this.props.GridStore.colDefListByKey[keyName].classNameHeaderData||'';
+            classNameHeaderColCell = this.props.GridStore.colDefListByKey[keyName].classNameHeaderCell||'';
+          }
         }
-        curColWide=curColWide;
+
+        var defaultStyle = (this.props.styleHeader||{});
+        if(!this.props.classNameHeaderCell){
+          defaultStyle = {backgroundColor: '#F3F3F3',textAlign:'center'}; // so it can be over-ridden by the class if supplied.
+        }
 
         header.push(  
-          <a data-tip data-for={'dataTip' + ctr} key={ctr} >
-                        <div  key={'k'+ctr}
+          <a data-tip data-for={'dataTip' + ctr} key={ctr}              // default, may be over ridden by styleHeader. Order matters.
+          >
+                        <div  key={'k'+ctr}  className={this.props.classNameHeaderCell+' '+classNameHeaderColCell}
                           style={{
-                            backgroundColor: '#F3F3F3',     // default, may be over ridden by styleHeader. Order matters.
-                            textAlign:'center',             // default, may be over ridden by styleHeader. Order matters.
-                            ...this.props.styleHeader,      // user specified global header styles.
+                            ...defaultStyle,                // user specified global header styles.
                             ...gridColLocalStyle,           // user specified per-column header styles.
                             width: curColWide,              // everything from here down cannot be over-ridden by the user.
                             maxWidth: curColWide,           // everything from here down cannot be over-ridden by the user.
@@ -106,7 +118,9 @@ import ReactTooltip from 'react-tooltip';
                             boxSizing: 'content-box',
                             height:ui.colHeaderHigh+'px',
                             maxHeight:ui.colHeaderHigh+'px'}}>
+                          <div className={this.props.classNameHeaderData+' '+classNameHeaderColData} >
                           {colTitle}
+                          </div>
                           { helpComp &&  // only render this if helpComp is defined
                             <ReactTooltip id={'dataTip' + ctr} >
                               {helpComp}

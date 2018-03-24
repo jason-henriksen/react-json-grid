@@ -236,12 +236,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
                 <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassNameHeader} curValue={this.ds.classNameHeader} label='styleSelectedCell' help='style object to apply to the currently selected cell' />
                 </div>
               }
               <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class Features' help='display API for css class usage' />
               {this.ds.showClassStuff &&
                 <div style={{marginLeft:'40px'}}>
-                <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='classHeader' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassNameHeader} curValue={this.ds.classNameHeader} label='classNameHeaderCell' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassNameHeader} curValue={this.ds.classNameHeader} label='classNameHeaderData' help='classname to apply to header data. For example: text rotations where you do not want to rotate the cell itself.  cannot control border or padding.' />
                 <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='classRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
                 <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='classRow' help='style for default cells.  cannot control border or padding.' />
                 <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='classRowOdd' help='style for default input cells.  cannot control border or padding.' />
