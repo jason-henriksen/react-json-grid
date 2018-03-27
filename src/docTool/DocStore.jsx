@@ -71,34 +71,38 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @action toggleColumnList() { this.columnList = !this.columnList; }
 
   @observable showSizeStuff = false;
-  @action toggleShowSizeStuff() { this.showSizeStuff = !this.showSizeStuff; }
   @observable showFormatStuff = false;
-  @action toggleShowFormatStuff() { this.showFormatStuff = !this.showFormatStuff; }
   @observable showStyleStuff = false;
-  @action toggleShowStyleStuff() { this.showStyleStuff = !this.showStyleStuff; }
   @observable showClassStuff = false;
-  @action toggleShowClassStuff() { this.showClassStuff = !this.showClassStuff; }
   @observable showPivotStuff = false;
-  @action toggleShowPivotStuff() { this.showPivotStuff = !this.showPivotStuff; }
   @observable showEditStuff = false;
-  @action toggleShowEditStuff() { this.showEditStuff = !this.showEditStuff; }
   @observable showDebugStuff = false;
+  @observable showKeyboardStuff = false;
+  @observable showCompStuff = false;
+  @action toggleShowStyleStuff() { this.showStyleStuff = !this.showStyleStuff; }
+  @action toggleShowSizeStuff() { this.showSizeStuff = !this.showSizeStuff; }
+  @action toggleShowFormatStuff() { this.showFormatStuff = !this.showFormatStuff; }
+  @action toggleShowClassStuff() { this.showClassStuff = !this.showClassStuff; }
+  @action toggleShowPivotStuff() { this.showPivotStuff = !this.showPivotStuff; }
+  @action toggleShowEditStuff() { this.showEditStuff = !this.showEditStuff; }
   @action toggleShowDebugStuff() { this.showDebugStuff = !this.showDebugStuff; }
+  @action toggleShowKeyboardStuff() { this.showKeyboardStuff = !this.showKeyboardStuff ; }
+  @action toggleShowCompStuff() { this.showCompStuff = !this.showCompStuff; }
 
   @observable debugGridMath = false;
   @action toggleDebugGridMath() { this.debugGridMath = !this.debugGridMath; }
 
 
   @observable styleHeader = '';
-  @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
   @observable styleRowHeader = '';
-  @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
-
   @observable styleCell = '';
-  @action setCellStyle(evt) { this.styleCell = evt.target.value; }
   @observable styleSelectedCell   = '';
-  @action setStyleSelectedCell(evt) { this.styleSelectedCell   = evt.target.value; }
   @observable styleInput = '';
+
+  @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
+  @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
+  @action setCellStyle(evt) { this.styleCell = evt.target.value; }
+  @action setStyleSelectedCell(evt) { this.styleSelectedCell = evt.target.value; }
   @action setInputStyle(evt) { this.styleInput = evt.target.value; }
 
   
