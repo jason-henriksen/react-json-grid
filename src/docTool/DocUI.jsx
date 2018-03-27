@@ -159,21 +159,51 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
     return (
         <div style={{ overflowY: 'hidden',height:(window.innerHeight-20)+'px'}}>
-          <div style={{marginLeft:'15px',position:'absolute',top:'0px',bottom:'0px',left:'0px',width:'450px',overflow:'auto',
-                       borderRight:'2px solid grey',verticalAlign:'top'}}>
+          <div style={{paddingLeft:'15px',position:'absolute',top:'0px',bottom:'0px',left:'0px',width:'450px',overflow:'auto',
+                       borderRight:'2px solid grey',verticalAlign:'top',backgroundColor:'#fff8ed'}}>
             <div >
+              <br/>
+              <div style={{fontSize:'3em',textAlign:'center'}}>react-json-grid</div>
+              <div style={{fontSize:'1.5em',textAlign:'center'}}>Easy to use, high performance Data Grid</div>
+
+              <p>This is the documentation UI.<br/>Use this page to explore the features of react-json-grid.<br/>
+              The grid is editable by default.  Feel free to play with the data.</p>
+            <br/>
+          Example Data Generators<br/>
+          <button style={{width:'90px'}} onClick={this.dm.makeS}>5 objects</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeM}>150 objects</button>
+          <button style={{width:'90px'}} onClick={this.goMakeL}>50K objects</button>
+          <br/>
+          <button style={{width:'90px'}} onClick={this.dm.makeSA}>5 arrays</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeMA}>150 arrays</button>
+          <button style={{width:'90px'}} onClick={this.goMakeLA}>50K arrays</button>
+          <br/>
+          <button style={{width:'90px'}} onClick={this.dm.makeAInt}>int[]</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeAWords}>word[]</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeKVP}>key : value[]</button>
+          <br/>
+          <button style={{width:'90px'}} onClick={this.dm.makeCSV}>CSV</button>
+          <button style={{width:'90px'}} onClick={this.dm.makePSV}>PSV</button>
+          <button style={{width:'90px'}} onClick={this.dm.makeKVE}>key=value[]</button><br />
+          <span style={{ color: 'red' }}>{this.dataErr}</span><br />
+          &#123;this.data&#125;<br/>
+          {!this.ds.hideEditor &&            
+            <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
+          }
+          
+          <br/>              
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
               <ToggleFolder action={this.ds.toggleShowSizeStuff} toggleValue={this.ds.showSizeStuff} label='Sizing' help='display API for sizing' />
               { this.ds.showSizeStuff &&  
               <div style={{marginLeft:'40px'}}>
-                <NumWheel action={this.ds.setBorderWidth} curValue={this.ds.propBorderWide} label='borderWide' help='width of the border between cells' />
-                <NumWheel action={this.ds.setPadWidth} curValue={this.ds.propPadWide} label='padWide' help='width of the padding inside each cell' />
-                <NumWheel action={this.ds.setGridWide} incr={100} curValue={this.ds.propGridWide} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
-                <NumWheel action={this.ds.setGridHigh} incr={100} curValue={this.ds.propGridHigh} label='gridHigh' help={<div>Forced height of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
-                <NumWheel action={this.ds.setRowHigh} curValue={this.ds.propRowHigh} label='rowHigh' help='over-ride default row height' />
-                <NumWheel action={this.ds.setRowHeaderHigh} curValue={this.ds.propRowHeaderHigh} label='colHeaderHigh' help='over-ride row header height' />
-                <NumWheel action={this.ds.setMinColWide} incr={5} curValue={this.ds.propMinColWide} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
+                <NumWheel action={this.ds.setBorderWidth} curValue={this.ds.propBorderWide} mouseOverValue={5} label='borderWide' help='width of the border between cells' />
+                <NumWheel action={this.ds.setPadWidth} curValue={this.ds.propPadWide} label='padWide' mouseOverValue={5} help='width of the padding inside each cell' />
+                <NumWheel action={this.ds.setGridWide} incr={100} curValue={this.ds.propGridWide} mouseOverValue={150} label='gridWide' help={<div>Forced width of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
+                <NumWheel action={this.ds.setGridHigh} incr={100} curValue={this.ds.propGridHigh}  mouseOverValue={250} label='gridHigh' help={<div>Forced height of the grid.<br />Not set by CSS because the number is needed for javascript calculations.</div>} />
+                <NumWheel action={this.ds.setRowHigh} curValue={this.ds.propRowHigh} label='rowHigh'  mouseOverValue={50} help='over-ride default row height' />
+                <NumWheel action={this.ds.setRowHeaderHigh} curValue={this.ds.propRowHeaderHigh} mouseOverValue={50}  label='colHeaderHigh' help='over-ride row header height' />
+                <NumWheel action={this.ds.setMinColWide} incr={5} curValue={this.ds.propMinColWide} mouseOverValue={50} label='minColWide' help='forced minimum auto grid width.  Over-ridden by column properties.' />
                 <Toggle action={this.ds.toggleColHeaderHide} toggleValue={this.ds.colHeaderHide} label='colHeaderHide' help='hide/show column header.' />
                 <Toggle action={this.ds.toggleGridHighCollapse} toggleValue={this.ds.gridHighCollapse} label='gridHighCollapse' help='If there are fewer rows than needed by the gridHigh setting, shrink the height of the grid.  Otherwise, use the full space.' />
                 </div>
@@ -255,9 +285,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
               {this.ds.showClassStuff &&
                 <div style={{marginLeft:'40px'}}>
                 NOTE: here are some CSS class names to try:<br/>
-                <div style={{ marginLeft: '10px' }}>testClass-GreenRotate<br />testClass-PinkRotate<br />testClass-RedRotate</div>
-                <div style={{ marginLeft: '10px' }}>testClass-BackgroundBlue<br />testClass-BackgroundYellow</div>
-                <div style={{ marginLeft: '10px' }}>testCSS-Gradient1<br />testCSS-Gradient2</div>
+                <div style={{ marginLeft: '10px' }}>GreenRotate<br />PinkRotate<br />RedRotate</div>
+                <div style={{ marginLeft: '10px' }}>BackgroundBlue<br />BackgroundYellow</div>
+                <div style={{ marginLeft: '10px' }}>Gradient1<br />Gradient2</div>
 
                 <br/><u>background classes</u>
                 <TextParam action={this.ds.setClassCell}            curValue={this.ds.classCell} label='classCell' help='class name for cell container boxes.  ( for example, background color )' />
@@ -310,29 +340,6 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 </div>}
             </div>
           </div>
-          <br/>
-          Example Data Generators<br/>
-          <button style={{width:'90px'}} onClick={this.dm.makeS}>5 objects</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeM}>150 objects</button>
-          <button style={{width:'90px'}} onClick={this.goMakeL}>50K objects</button>
-          <br/>
-          <button style={{width:'90px'}} onClick={this.dm.makeSA}>5 arrays</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeMA}>150 arrays</button>
-          <button style={{width:'90px'}} onClick={this.goMakeLA}>50K arrays</button>
-          <br/>
-          <button style={{width:'90px'}} onClick={this.dm.makeAInt}>int[]</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeAWords}>word[]</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeKVP}>key : value[]</button>
-          <br/>
-          <button style={{width:'90px'}} onClick={this.dm.makeCSV}>CSV</button>
-          <button style={{width:'90px'}} onClick={this.dm.makePSV}>PSV</button>
-          <button style={{width:'90px'}} onClick={this.dm.makeKVE}>key=value[]</button><br />
-          <span style={{ color: 'red' }}>{this.dataErr}</span><br />
-          &#123;this.data&#125;<br/>
-          {!this.ds.hideEditor &&            
-            <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
-          }
-          
 
         </div>
 

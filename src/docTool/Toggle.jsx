@@ -9,11 +9,25 @@ import { observer } from 'mobx-react';
 
 
 @observer class Toggle extends React.Component {
-  constructor(props) { super(props); autoBind(this); }
+  constructor(props) { 
+    super(props); autoBind(this); 
+    this.holdVal = false;
+  }
 
   @observable isShowingHelp = false;
   @action toggleHelpOn() { this.isShowingHelp = !this.isShowingHelp; }
   @action toggleHelpOff() { this.isShowingHelp = false; }
+
+
+
+  @action onmouseenter(){
+    this.holdVal = this.props.toggleValue;
+    if(!this.props.toggleValue){ this.props.action(); }
+    
+  }
+  @action onmouseleave(){
+    if(!this.holdVal && this.props.toggleValue){ this.props.action(); }
+  }
 
   render() {    
     var rval = 'rotate(90deg)';
@@ -25,7 +39,10 @@ import { observer } from 'mobx-react';
     return (
     <div>      
       <div style={{display: 'flex',alignItems:'center'}}>
-        <div style={{ display: 'inline-block', minWidth: '175px', font: '16px monospace', cursor: 'help' }} onClick={this.toggleHelpOn} >{this.props.label}</div>
+        <div style={{ display: 'inline-block', minWidth: '175px', font: '16px monospace', cursor: 'help' }} 
+             onClick={this.toggleHelpOn} onMouseEnter={this.onmouseenter} onMouseLeave={this.onmouseleave} >
+          {this.props.label}
+        </div>
         <div style={{verticalAlign:'middle',display: 'inline-block',transform: rval,transition: '0.2s'}}  onClick={this.props.action} >
           {this.props.toggleValue?<CheckFull style={{marginLeft:'2px'}}/>:<CheckEmpty style={{marginRight:'2px'}}/>}
         </div>&nbsp;
