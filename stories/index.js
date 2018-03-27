@@ -12,7 +12,7 @@ import DataNoiseGiant from './dataNoiseGiant.js'
 
 import JSXAddon from 'storybook-addon-jsx';
 
-import './TestCSS.css';
+import '../src/TestCSS.css';
 
 setAddon(JSXAddon);
 
@@ -182,25 +182,25 @@ storiesOf('object[] - column defs', module)
 
   storiesOf('object[] - classNames', module)  
   .addWithJSX('col data types, class headers all',()=>(<Grid 
-    classNameHeaderData='testCSSA'
-    classNameHeaderCell='testCSSD'
+    classNameHeaderData='testClass-GreenRotate'
+    classNameHeaderCell='testClass-BackgroundBlue'
     styleSelectedCell={{backgroundColor:'lightgreen',fontWeight:'bold'}}
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))  
   .addWithJSX('col data types, class headers all,pivot',()=>(<Grid 
-    classNameHeaderData='testCSSA'
-    classNameHeaderCell='testCSSD'
+    classNameHeaderData='testClass-GreenRotate'
+    classNameHeaderCell='testClass-BackgroundBlue'
     styleSelectedCell={{backgroundColor:'lightgreen',fontWeight:'bold'}}
     pivotOn='r'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))  
   .addWithJSX('col data types, class headers+rowHeaders all,pivot',()=>(<Grid 
-    classNameHeaderData='testCSSA'
-    classNameHeaderCell='testCSSD'
-    classNameHeaderRowData='testCSSB'
-    classNameHeaderRowCell='testCSSyellow'
+    classNameHeaderData='testClass-GreenRotate'
+    classNameHeaderCell='testClass-BackgroundBlue'
+    classNameHeaderRowData='testClass-PinkRotate'
+    classNameHeaderRowCell='testClass-BackgroundYellow'
     styleSelectedCell={{backgroundColor:'lightgreen',fontWeight:'bold'}}
     pivotOn='r'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
@@ -208,23 +208,23 @@ storiesOf('object[] - column defs', module)
   />))  
 
   .addWithJSX('col data types, class headers by column',()=>(<Grid 
-    classNameHeaderData='testCSSA'
-    classNameHeaderCell='testCSSD'
-    classNameHeaderRowData='testCSSB'
-    classNameHeaderRowCell='testCSSyellow'
+    classNameHeaderData='testClass-GreenRotate'
+    classNameHeaderCell='testClass-BackgroundBlue'
+    classNameHeaderRowData='testClass-PinkRotate'
+    classNameHeaderRowCell='testClass-BackgroundYellow'
     classNameSelectedCell='testSelectedCellClass'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
-    columnList={[{key:'a',title:'col A',widePct:'15',classNameHeaderCell:'testCSSgrad1',classNameHeaderData:'testCSSA'},{key:'b',title:'col B',widePct:'15',classNameHeaderCell:'testCSSgrad2',classNameHeaderData:'testCSSC'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+    columnList={[{key:'a',title:'col A',widePct:'15',classNameHeaderCell:'testCSS-Gradient1',classNameHeaderData:'testClass-GreenRotate'},{key:'b',title:'col B',widePct:'15',classNameHeaderCell:'testCSS-Gradient2',classNameHeaderData:'testClass-RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />)) 
   .addWithJSX('col data types, class headers by column with pivot',()=>(<Grid 
-    classNameHeaderData='testCSSA'
-    classNameHeaderCell='testCSSD'
-    classNameHeaderRowData='testCSSB'
-    classNameHeaderRowCell='testCSSyellow'
+    classNameHeaderData='testClass-GreenRotate'
+    classNameHeaderCell='testClass-BackgroundBlue'
+    classNameHeaderRowData='testClass-PinkRotate'
+    classNameHeaderRowCell='testClass-BackgroundYellow'
     classNameSelectedCell='testSelectedCellClass'
     pivotOn='b'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
-    columnList={[{key:'a',title:'col A',widePct:'15',classNameHeaderCell:'testCSSgrad1',classNameHeaderData:'testCSSA'},{key:'b',title:'col B',widePct:'15',classNameHeaderCell:'testCSSgrad2',classNameHeaderData:'testCSSC'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+    columnList={[{key:'a',title:'col A',widePct:'15',classNameHeaderCell:'testCSS-Gradient1',classNameHeaderData:'testClass-GreenRotate'},{key:'b',title:'col B',widePct:'15',classNameHeaderCell:'testCSS-Gradient2',classNameHeaderData:'testClass-RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))
 
   .addWithJSX('col data types, style cell',()=>(<Grid 

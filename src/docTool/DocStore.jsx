@@ -93,14 +93,36 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
   @observable styleRowHeader = '';
   @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
+
   @observable styleCell = '';
   @action setCellStyle(evt) { this.styleCell = evt.target.value; }
+  @observable styleSelectedCell   = '';
+  @action setStyleSelectedCell(evt) { this.styleSelectedCell   = evt.target.value; }
   @observable styleInput = '';
   @action setInputStyle(evt) { this.styleInput = evt.target.value; }
 
   
-  @observable classNameHeader = '';
-  @action setClassNameHeader(evt) { this.classNameHeader = evt.target.value; }
+  @observable classCell = '';
+  @observable classData = '';
+  @observable classHeaderCell = '';
+  @observable classHeaderData = '';
+  @observable classRowHeaderCell = '';
+  @observable classRowHeaderData = '';
+  @observable classCellOddRow = '';
+  @observable classDataOddRow = '';
+  @observable classInput = '';
+  @observable classSelected = '';
+
+  @action setClassCell(evt) { this.classCell = evt.target.value; }
+  @action setClassData(evt) { this.classData = evt.target.value; }
+  @action setClassHeaderCell(evt) { this.classHeaderCell = evt.target.value; }
+  @action setClassHeaderData(evt) { this.classHeaderData = evt.target.value; }
+  @action setClassRowHeaderCell(evt) { this.classRowHeaderCell = evt.target.value; }
+  @action setClassRowHeaderData(evt) { this.classRowHeaderData = evt.target.value; }
+  @action setClassCellOddRow(evt) { this.classCellOddRow = evt.target.value; }
+  @action setClassDataOddRow(evt) { this.classDataOddRow = evt.target.value; }
+  @action setClassInput(evt) { this.classInput = evt.target.value; }
+  @action setClassSelected(evt) { this.classSelected = evt.target.value; }
 
   @observable formatDate = '';
   @action setFormatDate(evt) { this.formatDate = evt.target.value; }
@@ -155,6 +177,7 @@ class DocStore {           // Just a class.  Nothing fancy here.
     if(!this.styleHeader){ return res; }
     try {
       res = JSON.parse(this.rrjs.stringToJson(this.styleHeader));
+      console.log(res);
     } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'};
     }
     return res;
@@ -181,6 +204,16 @@ class DocStore {           // Just a class.  Nothing fancy here.
     if(!this.styleCell){ return res; }
     try {
       res = JSON.parse(this.rrjs.stringToJson(this.styleCell));
+      console.log(res);
+    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+    return res;
+  }
+  @computed get jsonCellSelectedStyleObject(){
+    var res={}
+    if(!this.styleCell){ return res; }
+    try {
+      res = JSON.parse(this.rrjs.stringToJson(this.styleCell));
+      console.log(res);
     } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
     return res;
   }

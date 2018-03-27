@@ -1,32 +1,32 @@
-.testCSSA{
+.testClass-GreenRotate{
   background-color: lightgreen !important; 
   transform: rotate(45deg);
   text-align: center;
  }
 
- .testCSSB{
+ .testClass-PinkRotate{
   background-color: pink;
   transform: rotate(-20deg);
   text-align: center;
  }
 
- .testCSSC{
+ .testClass-RedRotate{
   background-color: red;
   transform: rotate(20deg);
   text-align: center;
  }
  
- .testCSSD{
+ .testClass-BackgroundBlue{
   background-color: lightblue;
  }
- .testCSSyellow{
+ .testClass-BackgroundYellow{
   background-color: yellow;
  }
 
- .testCSSgrad1{
+ .testCSS-Gradient1{
   background: linear-gradient(to bottom, #ebf1f6 0%,#abd3ee 36%,#89c3eb 75%,#d5ebfb 100%); 
  }
 
- .testCSSgrad2{
+ .testCSS-Gradient2{
   background: linear-gradient(to bottom, #f0b7a1 0%,#752201 62%,#752201 62%,#8c3310 65%,#8c3310 65%,#bf6e4e 100%); 
  }

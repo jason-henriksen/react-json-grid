@@ -5,7 +5,7 @@ import autoBind from 'react-autobind';
 import Grid from '../Grid';
 import rrjsTool from 'really-relaxed-json';
 
-
+import '../TestCSS.css';
 import Toggle from './Toggle';
 import ToggleFolder from './ToggleFolder';
 import NumWheel from './NumWheel';
@@ -164,7 +164,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
             <div >
               <br/>Parameter UI<br/>
               <div style={{display:'inline-block',verticalAlign:'top',margin:'5px'}}>
-              <ToggleFolder action={this.ds.toggleShowSizeStuff} toggleValue={this.ds.showSizeStuff} label='Size Features' help='display API for sizing' />
+              <ToggleFolder action={this.ds.toggleShowSizeStuff} toggleValue={this.ds.showSizeStuff} label='Sizing' help='display API for sizing' />
               { this.ds.showSizeStuff &&  
               <div style={{marginLeft:'40px'}}>
                 <NumWheel action={this.ds.setBorderWidth} curValue={this.ds.propBorderWide} label='borderWide' help='width of the border between cells' />
@@ -179,7 +179,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 </div>
               }
 
-              <ToggleFolder action={this.ds.toggleColumnList} toggleValue={this.ds.columnList} label='Column Definition Features' help='define column meta data' />
+              <ToggleFolder action={this.ds.toggleColumnList} toggleValue={this.ds.columnList} label='Columns' help='define column meta data' />
               {this.ds.columnList &&
                 <div style={{marginLeft:'40px'}}>
                   <Grid
@@ -211,7 +211,7 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 </div>
               }
 
-              <ToggleFolder action={this.ds.toggleShowEditStuff} toggleValue={this.ds.showEditStuff} label='Edit/Tools Features' help='display edit tools' />
+              <ToggleFolder action={this.ds.toggleShowEditStuff} toggleValue={this.ds.showEditStuff} label='Tools' help='display edit tools' />
               {this.ds.showEditStuff &&
                 <div style={{marginLeft:'40px'}}>
                   <Toggle action={this.ds.toggleToolsAddCut} toggleValue={this.ds.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
@@ -222,41 +222,68 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                   <Toggle action={this.ds.toggleEditAsText} toggleValue={this.ds.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
                 </div>
               }
-              <ToggleFolder action={this.ds.toggleShowPivotStuff} toggleValue={this.ds.showPivotStuff} label='Pivot Features' help='display data pivot' />
+              <ToggleFolder action={this.ds.toggleShowPivotStuff} toggleValue={this.ds.showPivotStuff} label='Pivot' help='display data pivot' />
               {this.ds.showPivotStuff &&
                 <div style={{marginLeft:'40px'}}>
                   <Toggle action={this.ds.togglePivotOn} toggleValue={this.ds.pivotOn} label='pivotOn' help='pivot the data on a key.' />
                   <NumWheel action={this.ds.setPivotRowHeaderWide} incr={25} curValue={this.ds.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br />use this to set the pixel width of the row header</div>} />
                 </div>
               }
-              <ToggleFolder action={this.ds.toggleShowStyleStuff} toggleValue={this.ds.showStyleStuff} label='Style Features' help='display API for style objects' />
+              <ToggleFolder action={this.ds.toggleShowStyleStuff} toggleValue={this.ds.showStyleStuff} label='Style' help='display API for style objects' />
               {this.ds.showStyleStuff &&  
               <div style={{marginLeft:'40px'}}>
+                NOTE: enter a style in the JSX format.  For example:  backgroundColor:'blue'<br/>
+                <br/><u>background style objects</u>
+                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='styleCellOddRow' help='style for default input cells.  cannot control border or padding.' />
                 <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='styleHeader' help='style for header cells.  cannot control border or padding.' />
                 <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='styleRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+
+                <br/><u>data style objects</u>
+                <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='styleData' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setHeaderStyle} curValue={this.ds.styleHeader} label='styleDataOddRow' help='style for header cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='styleHeaderData' help='style for default input cells.  cannot control border or padding.' />
+                <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='styleRowHeaderData' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+
+                <br/><u>selection/input classes</u>
                 <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' />
-                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='styleCell' help='style for default input cells.  cannot control border or padding.' />
-                <TextParam action={this.ds.setClassNameHeader} curValue={this.ds.classNameHeader} label='styleSelectedCell' help='style object to apply to the currently selected cell' />
+                <TextParam action={this.ds.setStyleSelectedCell} curValue={this.ds.styleSelectedCell} label='styleSelectedCell' help='style object to apply to the currently selected cell' />
+                
                 </div>
               }
-              <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class Features' help='display API for css class usage' />
+              <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class' help='display API for css class usage' />
               {this.ds.showClassStuff &&
                 <div style={{marginLeft:'40px'}}>
-                <TextParam action={this.ds.setClassNameHeader} curValue={this.ds.classNameHeader} label='classNameHeaderCell' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
-                <TextParam action={this.ds.setClassNameHeader} curValue={this.ds.classNameHeader} label='classNameHeaderData' help='classname to apply to header data. For example: text rotations where you do not want to rotate the cell itself.  cannot control border or padding.' />
-                <TextParam action={this.ds.setRowHeaderStyle} curValue={this.ds.styleRowHeader} label='classRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
-                <TextParam action={this.ds.setInputStyle} curValue={this.ds.styleInput} label='classRow' help='style for default cells.  cannot control border or padding.' />
-                <TextParam action={this.ds.setCellStyle} curValue={this.ds.styleCell} label='classRowOdd' help='style for default input cells.  cannot control border or padding.' />
+                NOTE: here are some CSS class names that are defined for your testing:<br/>
+                <div style={{marginLeft:'10px'}}>testClass-GreenRotate testClass-PinkRotate testClass-RedRotate</div>
+                <div style={{marginLeft:'10px'}}>testClass-BackgroundBlue testClass-BackgroundYellow</div>
+                <div style={{marginLeft:'10px'}}>testCSS-Gradient1 testCSS-Gradient2</div>
+
+                <br/><u>background classes</u>
+                <TextParam action={this.ds.setClassCell}            curValue={this.ds.classCell} label='classCell' help='class name for cell container boxes.  ( for example, background color )' />
+                <TextParam action={this.ds.setClassCellOddRow}      curValue={this.ds.classCellOddRow} label='classCellOddRow' help='class name for cell backgrounds on odd row numbers.' />
+                <TextParam action={this.ds.setClassHeaderCell}      curValue={this.ds.classHeaderCell} label='classHeaderCell' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassRowHeaderCell}   curValue={this.ds.classRowHeaderCell} label='classRowHeaderCell' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+
+                <br/><u>data classes</u>
+                <TextParam action={this.ds.setClassData}            curValue={this.ds.classData} label='classData' help='class name for cell data. (for example, rotations )' />
+                <TextParam action={this.ds.setClassHeaderData}      curValue={this.ds.classHeaderData} label='classHeaderData' help='classname to apply to header data. For example: text rotations where you do not want to rotate the cell itself.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassRowHeaderData}   curValue={this.ds.classRowHeaderData} label='classRowHeaderData' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassDataOddRow}      curValue={this.ds.classDataOddRow} label='classDataOddRow' help='class name for cell data on odd row numbers.' />
+
+                <br/><u>selection/input classes</u>
+                <TextParam action={this.ds.setClassInput}           curValue={this.ds.classInput} label='classInput' help='class name for input cells' />
+                <TextParam action={this.ds.setClassSelected}        curValue={this.ds.classSelected} label='classSelected' help='class name for selected cells..' />
                 </div>
               }              
-              <ToggleFolder action={this.ds.toggleShowFormatStuff} toggleValue={this.ds.showFormatStuff} label='Format Features' help='display API for date, time and other formatters' />
+              <ToggleFolder action={this.ds.toggleShowFormatStuff} toggleValue={this.ds.showFormatStuff} label='Format' help='display API for date, time and other formatters' />
               {this.ds.showFormatStuff &&
               <div style={{marginLeft:'40px'}}>
                 <TextParam action={this.ds.setFormatDate} curValue={this.ds.formatDate} label='formatDate' help='preferred date format.' />
                 <TextParam action={this.ds.setFormatTime} curValue={this.ds.formatTime} label='formatTime' help='preferred time format.' />
                 </div>
               }
-              <ToggleFolder action={this.ds.toggleShowDebugStuff} toggleValue={this.ds.showDebugStuff} label='Debug Features' help='grid tools to help you debug your grid usage.' />
+              <ToggleFolder action={this.ds.toggleShowDebugStuff} toggleValue={this.ds.showDebugStuff} label='Debug' help='grid tools to help you debug your grid usage.' />
               { this.ds.showDebugStuff &&  
               <div style={{marginLeft:'40px'}}>
                 <Toggle action={this.ds.toggleOutline} toggleValue={this.ds.showOutline} label='Show test outline' help='Not grid related.  Just shows an outline around the container holding the Grid.' />
@@ -265,9 +292,13 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                 ( The Example Data text editor<br/> has much worse performance than react-json-grid.<br/>Use "Hide text editor" to disable it<br/> while doing performance tests. )
               </div>}              
               <br/>
-              ?? Copy Paste Features ??<br/>
-              ?? Multi-Select Features ??<br />
-              ?? Component Examples ??<br />
+              Key Bindings: Arrows, PgUp, PgDn, Home, End, Enter, Shift-Enter, Tab, Shift-Tab, Ctrl-C, Ctrl-V, Ctrl-X, Escape.<br/>
+              Multi-Select Features: Block Select via Shift-Arrow Keys and Shift-Click<br />
+              <br/><u>component slots</u>
+                <TextParam action={this.ds.setClassCell}            curValue={this.ds.classCell} label='compCell' help='class name for cell container boxes.  ( for example, background color )' />
+                <TextParam action={this.ds.setClassCellOddRow}      curValue={this.ds.classCellOddRow} label='compCellOddRow' help='class name for cell backgrounds on odd row numbers.' />
+                <TextParam action={this.ds.setClassHeaderCell}      curValue={this.ds.classHeaderCell} label='compHeader' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
+                <TextParam action={this.ds.setClassRowHeaderCell}   curValue={this.ds.classRowHeaderCell} label='compRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />              
               </div>
             </div>
           <br/><br/><br/>Example Data Generators<br/>
@@ -304,10 +335,16 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         gridWide={this.ds.propGridWide}      
         editDisabled={this.ds.editDisabled}
         editAsText={this.ds.editAsText}
+
         styleHeader={this.ds.jsonHeaderStyleObject}
         styleRowHeader={this.ds.jsonRowHeaderStyleObject}
         styleInput={this.ds.jsonInputStyleObject}
         styleCell={this.ds.jsonCellStyleObject}        
+        setStyleSelectedCell={this.ds.jsonCellSelectedStyleObject} 
+
+        classNameHeaderCell={this.ds.classNameHeaderCell}
+        classNameHeaderData={this.ds.classNameHeaderData}
+
         rowHigh={this.ds.propRowHigh}
         colHeaderHigh={this.ds.propRowHeaderHigh}
         colHeaderHide={this.ds.colHeaderHide}
