@@ -110,8 +110,19 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
   @action onExport() { window.alert('please export'); }
   @action onImport() { window.alert('please import'); }
   
-  
+  @action addColDefRow(x, y, objKey) {    
+    this.ds.colDef.splice(x + 1, 0, observable.object({
+      key: 'key', title: 'KeyCol', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyDate: '',easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+    }) );
+  }
 
+  @action cutColDefRow(x, y, objKey) {
+    this.ds.colDef.splice(x, 1);
+  }
 
   @observable curParamHelp = "";
 
@@ -232,6 +243,9 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                     { key: 'altText', altText: 'provide help text when mousing over the column header' },
                   ]}
                   pivotOn='title'
+                  showToolsAddCut
+                  onRowAdd={this.addColDefRow}
+                  onRowCut={this.cutColDefRow}
                   pivotRowHeaderWide={125}
                   onChange={this.ds.setColDefValue}
                   styleRowHeader={{ textAlign: 'left' }}
@@ -248,7 +262,11 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                   <Toggle action={this.ds.toggleToolsPage} toggleValue={this.ds.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
                   <Toggle action={this.ds.toggleToolsImpExp} toggleValue={this.ds.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
                   <Toggle action={this.ds.toggleToolsCustom} toggleValue={this.ds.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
+                  <TextParam action={this.ds.setToolsButtonClass} curValue={this.ds.toolsButtonClass} label='toolsButtonClass' help='class to apply to tool buttons.' mouseOverValue='Gradient1'  />
+                  <NumWheel action={this.ds.setPageCount} curValue={this.ds.pageCount} label='pageCount' help={<div>when using the page tools, this sets the number of pages to have available. The value shows in Alt-Text for the buttons.</div>} />
+                  <br/>
                   <Toggle action={this.ds.toggleEditDisabled} toggleValue={this.ds.editDisabled} label='editDisabled' help='disable all grid editing' />
+                  <br/>
                   <Toggle action={this.ds.toggleEditAsText} toggleValue={this.ds.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
                 </div>
               }
@@ -381,10 +399,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
         pivotOn={ this.ds.pivotOn? ( Object.keys( (this.cleanData[0]||{a:5}) )[0] ) :null}
         pivotRowHeaderWide={this.ds.pivotRowHeaderWide}
         columnList={ this.ds.columnList?this.ds.colDef:null }
+
         showToolsAddCut={this.ds.showToolsAddCut}
         showToolsPage={this.ds.showToolsPage}
         showToolsImpExp={this.ds.showToolsImpExp}
         showToolsCustom={this.ds.showToolsCustom && <div>Some Funky Thing</div>}
+        toolsButtonClass={this.ds.toolsButtonClass}
+        pageCount={this.ds.pageCount}
+
         formatDate={this.ds.formatDate}
         formatTime={this.ds.formatTime}
 
@@ -413,10 +435,14 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
           {this.ds.propBorderWide > -1 && <span><br />&nbsp;&nbsp;borderWide=&#123;{this.ds.propBorderWide}&#125;&nbsp;&nbsp;</span>}
           {this.ds.pivotOn && <span><br />&nbsp;&nbsp;pivotOn={ Object.keys( (this.cleanData[0]||{a:5}) )[0] }&nbsp;&nbsp;</span>}
           {this.ds.pivotRowHeaderWide > -1 && <span><br />&nbsp;&nbsp;pivotRowHeaderWide=&#123;{''+this.ds.pivotRowHeaderWide}&#125;&nbsp;&nbsp;</span>}          
+
           {this.ds.showToolsAddCut && <span><br />&nbsp;&nbsp;showToolsAddCut</span>}
           {this.ds.showToolsImpExp && <span><br />&nbsp;&nbsp;showToolsImpExp</span>}
           {this.ds.showToolsPage && <span><br />&nbsp;&nbsp;showToolsPage</span>}
           {this.ds.showToolsCustom && <span><br />&nbsp;&nbsp;showToolsCustom=&#123;{'<YourCustomComponent/>'}&#125;&nbsp;&nbsp;</span>}
+          {this.ds.toolsButtonClass && <span><br />&nbsp;&nbsp;toolsButtonClass='{''+this.ds.toolsButtonClass}'</span>}
+          {(this.ds.pageCount>0) && <span><br />&nbsp;&nbsp;pageCount=&#123;{''+this.ds.pageCount}&#125;</span>}
+
           {this.ds.propPadWide > -1 && <span><br />&nbsp;&nbsp;padWide=&#123;{this.ds.propPadWide}&#125;&nbsp;&nbsp;</span>}
           {this.ds.colHeaderHide && <span><br />&nbsp;&nbsp;colHeaderHide=&#123;{''+this.ds.colHeaderHide}&#125;&nbsp;&nbsp;</span>}
 

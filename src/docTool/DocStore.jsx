@@ -15,18 +15,20 @@ class DocStore {           // Just a class.  Nothing fancy here.
 
   // determine which onChangeHandler help and variables to use
   @observable onChangeHandlerType = 'normal'; // fast,primitive, rowReplace
-  
+
   @observable showToolsAddCut = false;
-  @action toggleToolsAddCut() { this.showToolsAddCut = !this.showToolsAddCut; }
-
   @observable showToolsPage = false;
-  @action toggleToolsPage() { this.showToolsPage = !this.showToolsPage; }
-
   @observable showToolsImpExp = false;
+  @observable showToolsCustom = false;  
+  @observable toolsButtonClass = '';  
+  @observable pageCount = 0;  
+  @action toggleToolsAddCut() { this.showToolsAddCut = !this.showToolsAddCut; }
+  @action toggleToolsPage() { this.showToolsPage = !this.showToolsPage; }
   @action toggleToolsImpExp() { this.showToolsImpExp = !this.showToolsImpExp; }
-
-  @observable showToolsCustom = false;
   @action toggleToolsCustom() { this.showToolsCustom = !this.showToolsCustom; }
+  @action setToolsButtonClass(evt) { this.toolsButtonClass = evt.target.value; }
+  @action setPageCount(val) { this.pageCount = val; if(this.pageCount<0){this.pageCount=0;} }
+
 
   @observable editDisabled = false;
   @action toggleEditDisabled() { this.editDisabled = !this.editDisabled; }
@@ -129,8 +131,8 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @action setClassSelected(evt) { this.classSelected = evt.target.value; }
 
   @observable formatDate = '';
-  @action setFormatDate(evt) { this.formatDate = evt.target.value; }
   @observable formatTime = '';
+  @action setFormatDate(evt) { this.formatDate = evt.target.value; }
   @action setFormatTime(evt) { this.formatTime = evt.target.value; }
   
 

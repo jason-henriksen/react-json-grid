@@ -35,7 +35,7 @@ class GridMath
       result.debugGridMath = props.debugGridMath;
 
       // math needs access to columns by key name.
-      if (props.columnList) {
+      if (props.columnList && props.columnList.length>0) {
         result.colDefListByKey = {};
         // make a map of keys to objects for easy access later.
         for (var clctr = 0; clctr < props.columnList.length; clctr++) {
@@ -49,32 +49,36 @@ class GridMath
       // empty object checking & data cleanup
       if(!scrollBarWide){   result.notReady='missing scrollbar size'; return result       }
       if(!props){           result.notReady='missing grid props';     return result       }
-      if(!props.data){ result.notReady = "No Data Provided";     return result }      
+      if(!props.data && !props.columnList){ result.notReady = "No Data Provided";     return result }      
 
-      if( (typeof props.data === 'string' || props.data instanceof String) ||  // array of strings
-          (typeof props.data === 'number' && isFinite(props.data) ) ||         // array of numbers
-          (typeof props.data === 'boolean') ){                                 // array of booleans
+      // try to handle bad input data
+      var data = props.data;
+      if(!props.data && props.columnList){ data=[]; }      
+
+      if( (typeof data === 'string' || data instanceof String) ||  // array of strings
+          (typeof data === 'number' && isFinite(data) ) ||         // array of numbers
+          (typeof data === 'boolean') ){                                 // array of booleans
         result.notReady='Grid data must be an array';  return result;
       }
 
       // don't us foo.isArray because MobX and other arrays don't look like arrays, but are.
-      if(!props.data.length && 0!==props.data.length){ result.notReady = "Input Data is not an array"; return result } 
-      if(props.data.length===0 && !props.columnList){  result.notReady = "No sample data supplied and no column definition list supplied.  To start with an empty array, please define the columns."; return result; }
-      if(props.data.length>0 && !props.columnList &&
-         (props.data[0]===null || typeof props.data[0] === 'undefined')){ 
+      if(!data.length && 0!==data.length){ result.notReady = "Input Data is not an array"; return result } 
+      if(data.length===0 && !props.columnList){  result.notReady = "No sample data supplied and no column definition list supplied.  To start with an empty array, please define the columns."; return result; }
+      if(data.length>0 && !props.columnList &&
+         (data[0]===null || typeof data[0] === 'undefined')){ 
         result.notReady = "Falsey sample data supplied with no column definition list supplied."; return result; 
       }
 
       // add validation that "px" should not be used, and only numbers should be passed as parameters.
 
-      if(props.data[0] && typeof props.data[0] === 'object' && props.data[0].constructor === RegExp){ result.notReady = "Grids of RegExp objects are not supported."; return result; }
-      if(typeof props.data[0] === 'symbol'){ result.notReady = "Grids of Symbol objects are not supported."; return result; }
-      if(typeof props.data[0] === 'function'){ result.notReady = "Grids of Function objects are not supported."; return result; }
+      if( data[0] && typeof data[0] === 'object' && data[0].constructor === RegExp){ result.notReady = "Grids of RegExp objects are not supported."; return result; }
+      if(typeof data[0] === 'symbol'){ result.notReady = "Grids of Symbol objects are not supported."; return result; }
+      if(typeof data[0] === 'function'){ result.notReady = "Grids of Function objects are not supported."; return result; }
 
       // if it's an array of primitivs, make sure to treat it as if it were an array of objects
-      if( (typeof props.data[0] === 'string' || props.data[0] instanceof String) ||  // array of strings
-          (typeof props.data[0] === 'number' && isFinite(props.data[0]) ) ||                         // array of numbers
-          (typeof props.data[0] === 'boolean') ){                                            // array of booleans
+      if( (typeof data[0] === 'string' || data[0] instanceof String) ||  // array of strings
+          (typeof data[0] === 'number' && isFinite(data[0]) ) ||                         // array of numbers
+          (typeof data[0] === 'boolean') ){                                            // array of booleans
         result.isPrimitiveData=true;
       }
 
@@ -130,7 +134,7 @@ class GridMath
 
       var autoColCount=0;
       // look at the data to display and figure out what we need to do.
-      if( (props.data && props.data.length>0) || (props.columnList && props.columnList.length>0) ){ // col def from colList or from data
+      if( (data && data.length>0) || (props.columnList && props.columnList.length>0) ){ // col def from colList or from data
         if(result.isPrimitiveData){
           // ==== PRIMITIVES we have only one line of data to display
           result.keyNames.push('data');
@@ -142,17 +146,17 @@ class GridMath
             result.headerUsage=1;
             result.colHeaderKeyList=[];                 // I mean it: no column headers allowed!
             result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
-            for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
+            for(var pctr=0;pctr<data.length;pctr++){                    // pivot uses pivotOn key for column header keys
               result.colHeaderKeyList.push(pctr);       // key (or maybe value) for the column header.  Only used for autoColWide calculation
             }
-            result.dataWide = props.data.length;        // length => width
+            result.dataWide = data.length;        // length => width
             result.dataHigh = 1;                        // 1 row hight
           }
           else{
             result.colHeaderKeyList=result.keyNames;    // just one header
-            result.fixedRowCount = props.data.length;   // amount of data is the rows
+            result.fixedRowCount = data.length;   // amount of data is the rows
             result.dataWide = 1;                        // 1 item wide.
-            result.dataHigh = props.data.length;        // length items tall.
+            result.dataHigh = data.length;        // length items tall.
           }
         }
         else{
@@ -169,17 +173,17 @@ class GridMath
             else{              
               */
               result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
-              var temp = Object.keys(props.data[0]);
-              for(var pctr=0;pctr<props.data.length;pctr++){                    // pivot uses pivotOn key for column header keys
+              var temp = Object.keys(data[0]);
+              for(var pctr=0;pctr<data.length;pctr++){                    // pivot uses pivotOn key for column header keys
                 result.colHeaderKeyList.push(temp[pctr]);
               }
             //}
 
-            result.rowHeaderList = Object.keys(props.data[0]);   // pull headers from data.  Should there be a colDef check here?
+            result.rowHeaderList = Object.keys(data[0]);   // pull headers from data.  Should there be a colDef check here?
             result.keyNames = result.rowHeaderList;              // object props are row headers
             result.saveColumnForRowHeader=1;                     // save a space for the row header.
             result.fixedRowCount = result.rowHeaderList.length;  // one row per property
-            result.dataWide = props.data.length;                 // one col per data item
+            result.dataWide = data.length;                 // one col per data item
             result.dataHigh = result.rowHeaderList.length;       // one row per property.
           }
           else{
@@ -188,25 +192,30 @@ class GridMath
               for(var cctr=0;cctr<props.columnList.length;cctr++){
                 result.colHeaderKeyList.push(props.columnList[cctr]['key']);  // column for each definition
               }
-              result.keyNames = Object.keys(props.data[0]);   // hang on to the key names.
+              if(data && data[0]){
+                result.keyNames = Object.keys(data[0]);   // hang on to the key names from the object if they're around
+              }
+              else{
+                result.keyNames = result.colHeaderKeyList; // otherwise use the column defs if we don't have any data to use as a template.
+              }
               result.dataWide = result.colHeaderKeyList.length;      // column definition count => data width. (data high handled later)
             }
             else{                                             // no column defs, inspect the first object.
-              if(props.data[0].length){ // probably an array-look-alike.  Use indexes
-                for (var ictr = 0; ictr < props.data[0].length;ictr++){
+              if(data[0].length){ // probably an array-look-alike.  Use indexes
+                for (var ictr = 0; ictr < data[0].length;ictr++){
                   result.keyNames.push(ictr);
                 }
                 result.colHeaderKeyList = result.keyNames;      // keys => columns here
-                result.dataWide = props.data[0].length;       // keynames is width  (data high handled later)
+                result.dataWide = data[0].length;       // keynames is width  (data high handled later)
               }
               else{                     // likely an object.  Treat it normally.
-                result.keyNames = Object.keys(props.data[0]);   // pull the key names
+                result.keyNames = Object.keys(data[0]);   // pull the key names
                 result.colHeaderKeyList = result.keyNames;      // keys => columns here
                 result.dataWide = result.keyNames.length;       // keynames is width  (data high handled later)
               }
             }          
 
-            result.fixedRowCount = props.data.length; // allow over-ride item count.
+            result.fixedRowCount = data.length; // allow over-ride item count.
             result.dataHigh = result.fixedRowCount;            
           }  
         }
