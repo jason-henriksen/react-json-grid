@@ -131,6 +131,7 @@ const GridBody = observer( class GridBody extends React.Component {
             minWidth: ui.rowWide,
             minWidth: ui.rowWide,
             width: ui.rowWide,
+            boxSizing: 'content-box',
             marginTop: (-1 * ui.borderWide),
               height: (ui.collapseAvailable) ,
               minHeight: (ui.collapseAvailable),

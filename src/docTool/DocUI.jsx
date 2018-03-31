@@ -28,6 +28,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     this.printer = new rrjsTool.PrettyPrinter( rrjsTool.PrettyPrinter.Options.Companion.JsonPretty);
     this.dm = new DataMaker(this.updateDataText);
     this.ds = new DocStore();
+    this.ds.rrjs = this.rrjs; // for convenience in the computed values.
+
     this.dataAsObject();
   }
 
@@ -167,6 +169,12 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     for(var cctr=0;cctr<this.ds.colDef.length;cctr++){
       colListAsText.push(<CompactObjView target={this.ds.colDef[cctr]} key={JSON.stringify(this.ds.colDef[cctr])+cctr}/>);
     }
+
+    toJS(this.ds.jsonRowHeaderStyleObject); // have to make sure they get noticed in case they are used.
+    toJS(this.ds.jsonHeaderStyleObject); // have to make sure they get noticed in case they are used.
+    toJS(this.ds.jsonInputStyleObject); // have to make sure they get noticed in case they are used.
+    toJS(this.ds.jsonCellStyleObject); // have to make sure they get noticed in case they are used.
+    toJS(this.ds.jsonCellSelectedStyleObject); // have to make sure they get noticed in case they are used.
 
     return (
         <div style={{ overflowY: 'hidden',height:(window.innerHeight-20)+'px'}}>

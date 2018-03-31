@@ -95,17 +95,6 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @action toggleDebugGridMath() { this.debugGridMath = !this.debugGridMath; }
 
 
-  @observable styleHeader = '';
-  @observable styleRowHeader = '';
-  @observable styleCell = '';
-  @observable styleSelectedCell   = '';
-  @observable styleInput = '';
-
-  @action setHeaderStyle(evt) { this.styleHeader = evt.target.value; }
-  @action setRowHeaderStyle(evt) { this.styleRowHeader = evt.target.value; }
-  @action setCellStyle(evt) { this.styleCell = evt.target.value; }
-  @action setStyleSelectedCell(evt) { this.styleSelectedCell = evt.target.value; }
-  @action setInputStyle(evt) { this.styleInput = evt.target.value; }
 
   
   @observable classCell = '';
@@ -178,53 +167,81 @@ class DocStore {           // Just a class.  Nothing fancy here.
     else{return '';}
   }
 
-  @computed get jsonHeaderStyleObject(){
-    var res={}
-    if(!this.styleHeader){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleHeader));
-      console.log(res);
-    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'};
-    }
+
+  @observable styleCell = '';
+  @observable styleData = '';
+  @observable styleCellOddRow = '';
+  @observable styleDataOddRow = '';
+  @observable styleHeaderCell = '';
+  @observable styleHeaderData = '';
+  @observable styleInput = '';
+  @observable styleSelected = '';
+
+  @action setStyleCell(evt) {  this.styleCell = evt.target.value;  }
+  @action setStyleData(evt) {  this.styleData = evt.target.value;  }
+  @action setStyleCellOddRow(evt) {  this.styleCellOddRow = evt.target.value;  }
+  @action setStyleDataOddRow(evt) {  this.styleDataOddRow = evt.target.value;  }  
+  @action setHStyleHeaderCell(evt) { this.styleHeaderCell = evt.target.value; }
+  @action setHStyleHeaderData(evt) { this.styleHeaderData = evt.target.value; }
+  @action setInputStyle(evt) { this.styleInput = evt.target.value; }
+  @action setStyleSelected(evt) { this.styleSelected = evt.target.value; }
+
+  @computed get jsonCellStyleObject(){
+    var res={}; 
+    if(!this.styleCell){ return res; }
+    try { res = JSON.parse(this.rrjs.stringToJson(this.styleCell));} 
+    catch(e) { res={backgroundColor:'red',err:'invalid Cell JSX Style'}; console.log(e,'invalid Cell JSX Style');}
     return res;
   }
-  @computed get jsonRowHeaderStyleObject(){
-    var res={}
-    if(!this.styleRowHeader){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleRowHeader));
-    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+  @computed get jsonDataStyleObject(){
+    var res={};
+    if(!this.styleData){ return res; }
+    try { res = JSON.parse(this.rrjs.stringToJson(this.styleData));} 
+    catch(e) { res={backgroundColor:'red',err:'invalid Data JSX Style'}; console.log(e,'invalid Data JSX Style');}
     return res;
   }
-  
+  @computed get jsonCellOddRowStyleObject(){
+    var res={};
+    if(!this.styleCellOddRow){ return res; }
+    try { res = JSON.parse(this.rrjs.stringToJson(this.styleCellOddRow));} 
+    catch(e) { res={backgroundColor:'red',err:'invalid Odd Row Cell JSX Style'}; console.log(e,'invalid Odd Row Cell JSX Style');}
+    return res;
+  }
+  @computed get jsonDataOddRowStyleObject(){
+    var res={};
+    if(!this.styleDataOddRow){ return res; }
+    try { res = JSON.parse(this.rrjs.stringToJson(this.styleDataOddRow));} 
+    catch(e) { res={backgroundColor:'red',err:'invalid JSX Odd Row Data Style'}; console.log('invalid JSX Odd Row Data Style',e);}
+    return res;
+  }
+  @computed get jsonHeaderCellStyleObject(){
+    var res={}
+    if(!this.styleHeaderCell){ return res; }
+    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleHeaderCell));    } 
+    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Header Cell Style'}; console.log('Invalid JSX Header Cell Style',e); }
+    return res;
+  }
+  @computed get jsonHeaderDataStyleObject(){
+    var res={}
+    if(!this.styleHeaderData){ return res; }
+    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleHeaderData));    } 
+    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Header Data Style'}; console.log('Invalid JSX Header Data Style',e); }
+    return res;
+  }
   @computed get jsonInputStyleObject(){
     var res={}
     if(!this.styleInput){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleInput));
-    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
-    return res;
-  }
-  @computed get jsonCellStyleObject(){
-    var res={}
-    if(!this.styleCell){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleCell));
-      console.log(res);
-    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleInput));    } 
+    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Input Cell Style'}; console.log('Invalid JSX Input Cell Style',e); }
     return res;
   }
   @computed get jsonCellSelectedStyleObject(){
     var res={}
-    if(!this.styleCell){ return res; }
-    try {
-      res = JSON.parse(this.rrjs.stringToJson(this.styleCell));
-      console.log(res);
-    } catch(e) { res={backgroundColor:'red',err:'invalid JSX Style'}; }
+    if(!this.styleSelected){ return res; }
+    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleCellSelected));   } 
+    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Selected Cell Style'}; console.log('Invalid JSX Selected Cell Style',e); }
     return res;
   }
-
-
 
 
 }

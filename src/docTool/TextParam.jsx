@@ -22,13 +22,13 @@ import { observer } from 'mobx-react';
     var fakeEvt={};
     fakeEvt.target={};
     fakeEvt.target.value=this.props.mouseOverValue;
-    if(this.props.mouseOverValue){ this.props.action(fakeEvt); }    
+    if(this.props.mouseOverValue && this.props.action){ this.props.action(fakeEvt); }    
   }
   @action onmouseleave(){
     var fakeEvt={};
     fakeEvt.target={};
     fakeEvt.target.value=this.holdVal;
-    this.props.action(fakeEvt);
+    if(this.props.mouseOverValue && this.props.action){this.props.action(fakeEvt);}
   }
   
   

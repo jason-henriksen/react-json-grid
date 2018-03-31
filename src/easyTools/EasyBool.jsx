@@ -44,10 +44,12 @@ class EasyBool extends React.Component {
       if(this.props.cellData || this.props.trueText || this.props.falseText ){rval='scale(0.8) rotate(00deg)';} // don't rotate selected, or when text is set.
 
       return (
-        <div  onClick={this.toggle} id={this.props.id} style={{...this.props.style,marginTop:'-3px',width:'24px',transform: rval,transition: '0.2s'}}>
+        <div style={{marginTop:'-3px'}}>
+        <div  onClick={this.toggle} id={this.props.id} style={{...this.props.style,width:'24px',height:'24px',transform: rval,transition: '0.2s'}}>
           {this.makeBoolVal(this.props.cellData)?
-              (this.props.trueText ||<CheckFull/>):
-              (this.props.falseText ||<CheckEmpty/>) }</div>      
+              (this.props.trueText ||<CheckFull  size={24}/>):
+              (this.props.falseText ||<CheckEmpty  size={24}/>) }</div>      
+        </div>
       );
     }
   }
