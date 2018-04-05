@@ -76,12 +76,35 @@ class GridStore {           // Just a class.  Nothing fancy here.
     this.colDefListByKey = this.uiMath.colDefListByKey;
     this.colDefListByIdx = props.columnList;
 
-    this.styleSelectedCell = (props.styleSelectedCell||{});   // just for ease of access
-    this.classNameHeaderCell = props.classNameHeaderCell||'';
-    this.classNameHeaderData = props.classNameHeaderData||'';
-    this.classNameHeaderRowCell = props.classNameHeaderRowCell||'';
-    this.classNameHeaderRowData = props.classNameHeaderRowData||'';
+    //--- style data holders
+    this.styleCell = props.styleCell||{};
+    this.styleCellOddRow = props.styleCellOddRow||{};
+    this.styleHeaderCell = props.styleHeaderCell||{};
+    this.styleRowHeaderCell = props.styleRowHeaderCell||{};
 
+    this.styleData = props.styleData||{};
+    this.styleDataOddRow = props.styleDataOddRow||{};
+    this.styleHeaderData = props.styleHeaderData||{};
+    this.styleRowHeaderData = props.styleRowHeaderData||{};
+
+    this.styleInput = props.styleInput||{};
+    this.styleSelected = props.styleSelected||{};
+
+
+    //--- class data holders
+    this.classCell = props.classCell||'';
+    this.classCellOddRow = props.classCellOddRow||'';
+    this.classHeaderCell = props.classHeaderCell||'';
+    this.classRowHeaderCell = props.classRowHeaderCell||'';
+
+    this.classData = props.classData||'';
+    this.classDataOddRow = props.classDataOddRow||'';
+    this.classHeaderData = props.classHeaderData||'';
+    this.classRowHeaderData = props.classRowHeaderData||'';
+
+    this.classInput = props.classInput||'';
+    this.classSelected = props.classSelected||'';
+    
     this.keyList = this.uiMath.keyNames;
 
 

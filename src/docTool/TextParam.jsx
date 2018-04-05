@@ -30,6 +30,14 @@ import { observer } from 'mobx-react';
     fakeEvt.target.value=this.holdVal;
     if(this.props.mouseOverValue && this.props.action){this.props.action(fakeEvt);}
   }
+  @action onClick(evt){ 
+    if(evt.shiftKey){
+      var fakeEvt={};
+      fakeEvt.target={};
+      fakeEvt.target.value=this.props.mouseOverValue;
+      this.props.action(fakeEvt);
+    }  
+  }
   
   
 
@@ -42,7 +50,7 @@ import { observer } from 'mobx-react';
         <div style={{verticalAlign: 'middle',lineHeight:'normal',display: 'flex',alignItems:'center'}}>
           <div style={{display:'inline-block',minWidth:'175px',font:'16px monospace',cursor:'help'}} 
                onClick={this.toggleHelpOn} onMouseEnter={this.onmouseenter} onMouseLeave={this.onmouseleave} >{this.props.label}</div>
-          <input style={{display: 'inline-block',width:'200px',verticalAlign:'middle' }} onChange={this.props.action} value={this.props.curValue}/>
+          <input style={{display: 'inline-block',width:'200px',verticalAlign:'middle' }} onChange={this.props.action} value={this.props.curValue} onClick={this.onClick}/>
         </div>
         <div style={helpDisplay}>{this.props.help}</div>
       </div>

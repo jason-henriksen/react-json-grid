@@ -5,7 +5,28 @@ import autoBind from 'react-autobind';
 class DocStore {           // Just a class.  Nothing fancy here.
   constructor() { 
     autoBind(this); 
+    this.addColDefRow('a');
+    this.addColDefRow('b');
+    this.addColDefRow('c');
+    this.addColDefRow('d');
   }
+
+  @action addColDefRow(keyName)
+  {
+    this.colDef.push(
+      observable.object({
+      key: (keyName||'key'), title: (keyName||'key')+' Col', 
+      editDisabled: '', 
+      widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
+      easyDate: '',easyDateTime: '', easyMenu: '',
+      altText: '',
+      styleCell: '', styleData:'', styleHeaderCell: '', styleHeaderData: '', 
+      classCell: '', classData:'', classHeaderCell: '', classHeaderData: '', 
+      compHeader: '', compInput: '', compCell: ''
+    }) );
+  }
+
 
   @observable showOutline = false;
   @action toggleOutline() { this.showOutline = !this.showOutline; }
@@ -123,40 +144,8 @@ class DocStore {           // Just a class.  Nothing fancy here.
   @observable formatTime = '';
   @action setFormatDate(evt) { this.formatDate = evt.target.value; }
   @action setFormatTime(evt) { this.formatTime = evt.target.value; }
-  
 
-
-  @observable colDef = 
-      [
-        {  
-          key: 'a',           title:'col A',        editDisabled: '',          widePct: '',          widePx: '',
-          easyBool:'',          easyInt: '',          easyFloat: '',          easyMoneyDollar: '',          easyMoneyEuro: '',          easyMoneyPound: '',
-        easyDate: '',easyDateTime: '',           easyMenu: '',altText: '',
-          styleHeader: '',          styleInput: '',                    styleCell: '',          
-          compHeader: '',          compInput: '',          compCell: '',displayFormatter:''
-        },       
-        {
-          key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
-          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '',easyDateTime: '', altText: '',
-          styleHeader: '', styleInput: '', styleCell: '',
-          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
-        },
-        {
-          key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
-          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '',easyDateTime: '', altText: '',
-          styleHeader: '', styleInput: '', styleCell: '',
-          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
-        },
-        {
-          key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
-          easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
-          easyDate: '',easyDateTime: '', altText: '',
-          styleHeader: '', styleInput: '', styleCell: '',
-          compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
-        }
-    ]
+  @observable colDef = [];
     
   @action setColDefValue(x, y, objKey, newValue) {
     this.colDef[y][objKey] = newValue;
@@ -169,79 +158,53 @@ class DocStore {           // Just a class.  Nothing fancy here.
 
 
   @observable styleCell = '';
-  @observable styleData = '';
   @observable styleCellOddRow = '';
-  @observable styleDataOddRow = '';
   @observable styleHeaderCell = '';
+  @observable styleRowHeaderCell = '';
+
+  @observable styleData = '';
+  @observable styleDataOddRow = '';
   @observable styleHeaderData = '';
+  @observable styleRowHeaderData = '';
+
   @observable styleInput = '';
   @observable styleSelected = '';
 
   @action setStyleCell(evt) {  this.styleCell = evt.target.value;  }
-  @action setStyleData(evt) {  this.styleData = evt.target.value;  }
   @action setStyleCellOddRow(evt) {  this.styleCellOddRow = evt.target.value;  }
+  @action setStyleHeaderCell(evt) { this.styleHeaderCell = evt.target.value; }
+  @action setStyleRowHeaderCell(evt) { this.styleRowHeaderCell = evt.target.value; }
+
+  @action setStyleData(evt) {  this.styleData = evt.target.value;  }
   @action setStyleDataOddRow(evt) {  this.styleDataOddRow = evt.target.value;  }  
-  @action setHStyleHeaderCell(evt) { this.styleHeaderCell = evt.target.value; }
-  @action setHStyleHeaderData(evt) { this.styleHeaderData = evt.target.value; }
-  @action setInputStyle(evt) { this.styleInput = evt.target.value; }
+  @action setStyleHeaderData(evt) { this.styleHeaderData = evt.target.value; }
+  @action setStyleRowHeaderData(evt) { this.styleRowHeaderData = evt.target.value; }
+
+  @action setStyleInput(evt) { this.styleInput = evt.target.value; }
   @action setStyleSelected(evt) { this.styleSelected = evt.target.value; }
 
-  @computed get jsonCellStyleObject(){
+
+  makeJSON(value,error){
     var res={}; 
-    if(!this.styleCell){ return res; }
-    try { res = JSON.parse(this.rrjs.stringToJson(this.styleCell));} 
-    catch(e) { res={backgroundColor:'red',err:'invalid Cell JSX Style'}; console.log(e,'invalid Cell JSX Style');}
+    if(value){ 
+      try { res = JSON.parse(this.rrjs.stringToJson(value));} 
+      catch(e) { res={backgroundColor:'red',err:error}; console.log('ERROR',e,error);}
+    }
     return res;
   }
-  @computed get jsonDataStyleObject(){
-    var res={};
-    if(!this.styleData){ return res; }
-    try { res = JSON.parse(this.rrjs.stringToJson(this.styleData));} 
-    catch(e) { res={backgroundColor:'red',err:'invalid Data JSX Style'}; console.log(e,'invalid Data JSX Style');}
-    return res;
-  }
-  @computed get jsonCellOddRowStyleObject(){
-    var res={};
-    if(!this.styleCellOddRow){ return res; }
-    try { res = JSON.parse(this.rrjs.stringToJson(this.styleCellOddRow));} 
-    catch(e) { res={backgroundColor:'red',err:'invalid Odd Row Cell JSX Style'}; console.log(e,'invalid Odd Row Cell JSX Style');}
-    return res;
-  }
-  @computed get jsonDataOddRowStyleObject(){
-    var res={};
-    if(!this.styleDataOddRow){ return res; }
-    try { res = JSON.parse(this.rrjs.stringToJson(this.styleDataOddRow));} 
-    catch(e) { res={backgroundColor:'red',err:'invalid JSX Odd Row Data Style'}; console.log('invalid JSX Odd Row Data Style',e);}
-    return res;
-  }
-  @computed get jsonHeaderCellStyleObject(){
-    var res={}
-    if(!this.styleHeaderCell){ return res; }
-    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleHeaderCell));    } 
-    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Header Cell Style'}; console.log('Invalid JSX Header Cell Style',e); }
-    return res;
-  }
-  @computed get jsonHeaderDataStyleObject(){
-    var res={}
-    if(!this.styleHeaderData){ return res; }
-    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleHeaderData));    } 
-    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Header Data Style'}; console.log('Invalid JSX Header Data Style',e); }
-    return res;
-  }
-  @computed get jsonInputStyleObject(){
-    var res={}
-    if(!this.styleInput){ return res; }
-    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleInput));    } 
-    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Input Cell Style'}; console.log('Invalid JSX Input Cell Style',e); }
-    return res;
-  }
-  @computed get jsonCellSelectedStyleObject(){
-    var res={}
-    if(!this.styleSelected){ return res; }
-    try {      res = JSON.parse(this.rrjs.stringToJson(this.styleCellSelected));   } 
-    catch(e) { res={backgroundColor:'red',err:'Invalid JSX Selected Cell Style'}; console.log('Invalid JSX Selected Cell Style',e); }
-    return res;
-  }
+
+  @computed get jsonStyleCell(){           return this.makeJSON(this.styleCell,'invalid Cell JSX Style');}
+  @computed get jsonStyleCellOddRow(){     return this.makeJSON(this.styleCellOddRow,'invalid Odd Row Cell JSX Style');}
+  @computed get jsonStyleHeaderCell(){     return this.makeJSON(this.styleHeaderCell,'Invalid JSX Header Cell Style');}
+  @computed get jsonStyleRowHeaderCell(){  return this.makeJSON(this.styleRowHeaderCell,'Invalid JSX Header Cell Style');}
+
+  @computed get jsonStyleData(){           return this.makeJSON(this.styleData,'invalid Data JSX Style');}
+  @computed get jsonStyleDataOddRow(){     return this.makeJSON(this.styleDataOddRow,'invalid JSX Odd Row Data Style');}
+  @computed get jsonStyleHeaderData(){     return this.makeJSON(this.styleHeaderData,'Invalid JSX Header Data Style');}
+  @computed get jsonStyleRowHeaderData(){  return this.makeJSON(this.styleRowHeaderData,'Invalid JSX Header Data Style');}
+  
+  @computed get jsonStyleInput(){          return this.makeJSON(this.styleInput,'Invalid JSX Input Cell Style');}
+  @computed get jsonStyleSelected(){       return this.makeJSON(this.styleSelected,'Invalid JSX Selected Cell Style'); }
 
 
 }

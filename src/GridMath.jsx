@@ -226,6 +226,10 @@ class GridMath
         }
         result.rowWide = result.gridWide - (scrollBarWide||16);   // how wide is each row.
         autoColCount = result.colHeaderKeyList.length;
+        if(props.pivotOn && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
+          // don't autoColCount the rowHeader
+          autoColCount--;
+        }
 
         //==== now calculate column actual sizes and autocol size
 
@@ -260,17 +264,25 @@ class GridMath
         }
         if(props.pivotOn && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
           result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
-          availableWide -= Number(props.pivotRowHeaderWide); // allow a set width pivot header, but still only autocol for pivoted data
+          result.pivotRowHeaderWideTotal = result.pivotRowHeaderWide;
+          result.pivotRowHeaderWideTotal += (result.borderWide);   // each column minus right border amount
+          result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus left pad amount
+          result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus right pad amount
+          availableWide -= result.pivotRowHeaderWideTotal; // allow a set width pivot header, but still only autocol for pivoted data
+          }
+        else{
+          result.pivotRowHeaderWide = 0;
+          result.pivotRowHeaderWideTotal=0;
         }
         //if(autoColCount===0 && fixedWide<result.rowWide){ result.rowWide=fixedWide; } // all columns have a fixed width & smaller than available space.  This basically moves the scroll bar;
 
         //--- no column width data
         if(autoColCount>0){
-          result.autoColWide = Math.floor(
+          result.autoColWide = 
             ( availableWide -          // total width
               result.borderWide        // minus left most border bar
-                                      // scrollbar already handled by basin on rowWide.
-            ) / (autoColCount));       // div number of items that need autocount + (optionally plus 1 if a row header is present)
+                                       // scrollbar already handled by basin on rowWide.
+            ) / (autoColCount)
         }
         else{ result.autoColWide=0; }
         result.autoColWideWithBorderAndPad = result.autoColWide;

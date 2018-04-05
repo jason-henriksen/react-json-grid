@@ -182,9 +182,9 @@ window.reactJsonGridFocusInput = function(elem){
       if (
         (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
         (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-        ( (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar || 
-           this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
-           this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound)
+        ( (this.props.GridStore.colDefListByKey[this.props.objKey].easyDollar || 
+           this.props.GridStore.colDefListByKey[this.props.objKey].easyEuro ||
+           this.props.GridStore.colDefListByKey[this.props.objKey].easyPound)
           && !this.props.GridStore.curEditIsValidFor.isValidFloat)
       ) {
         // value is not valid for the field definition.  Do not make the change.
@@ -281,8 +281,10 @@ window.reactJsonGridFocusInput = function(elem){
 
   render() {
 
+    // Build Render Style object
     var style={...this.props.styleCell,boxSizing: 'content-box'};
     var styleIn={...this.props.styleInput,boxSizing: 'content-box'};
+    var isSelected = false;
     
     if (this.props.GridStore.selectionBounds.l <= this.props.x &&
         this.props.GridStore.selectionBounds.r >= this.props.x &&
@@ -290,8 +292,8 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.selectionBounds.b >= this.props.y 
     ) {
       // CSSNOTE!
-      style={backgroundColor:'lightblue',...style,...this.props.GridStore.styleSelectedCell};
       style.zIndex = 5;
+      isSelected = true;
     }
 
     if(!this.props.isFirstColumn){
@@ -322,12 +324,12 @@ window.reactJsonGridFocusInput = function(elem){
         this.props.GridStore.colDefListByKey[this.props.objKey] && 
         (this.props.GridStore.colDefListByKey[this.props.objKey].easyBool===true || // boolean doesn't need the editor
          this.props.GridStore.colDefListByKey[this.props.objKey].easyMenu===true )  // menu doesn't need the editor
-    )        
-    {
+    ){
       assumeEditOk = false;
     }
     if(this.isEditDisabled()){ assumeEditOk=false; }
 
+    //=== Editor Handling
     if (assumeEditOk && 
           this.props.x === this.props.GridStore.cursor.x &&     // cur render cell is cur cell  
           this.props.y === this.props.GridStore.cursor.y &&     // cur render cell is cur cell
@@ -346,9 +348,9 @@ window.reactJsonGridFocusInput = function(elem){
         if (
             (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt && !this.props.GridStore.curEditIsValidFor.isValidInt) ||
             (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat && !this.props.GridStore.curEditIsValidFor.isValidFloat) ||
-          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
-            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
-            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound) && !this.props.GridStore.curEditIsValidFor.isValidFloat)
+          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyDollar ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyEuro ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyPound) && !this.props.GridStore.curEditIsValidFor.isValidFloat)
           ){
           styleIn.outline="5px red dashed";
         }
@@ -357,9 +359,9 @@ window.reactJsonGridFocusInput = function(elem){
         if (
           (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt) ||
           (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat) ||
-          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
-            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
-            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound))
+          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyDollar ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyEuro ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyPound))
         ) {
           styleIn.textAlign = "right";
         }          
@@ -386,9 +388,12 @@ window.reactJsonGridFocusInput = function(elem){
       }      
       else{
         // use the normal text input editor  
+        var cellClassName = this.props.GridStore.classInput;
+        
         renderPlan = 
           <input value={curDisplayVal} 
                   onChange={this.valChange}
+                  className={cellClassName}
                   onKeyDown={this.onKeyDownWhenEditing}
                   id={this.props.id} style={styleIn}
                   ref={input => input && window.reactJsonGridFocusInput(input)}
@@ -417,30 +422,30 @@ window.reactJsonGridFocusInput = function(elem){
           (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat) ||
           (this.props.GridStore.colDefListByKey[this.props.objKey].easyDate) ||
           (this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime) ||
-          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
-            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
-            this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound))
+          ((this.props.GridStore.colDefListByKey[this.props.objKey].easyDollar ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyEuro ||
+            this.props.GridStore.colDefListByKey[this.props.objKey].easyPound))
         ) {
           style.textAlign = "right";
           // check validation
           if (
             (this.props.GridStore.colDefListByKey[this.props.objKey].easyInt && !this.props.GridStore.checkValidInt(this.props.cellData) ) ||
             (this.props.GridStore.colDefListByKey[this.props.objKey].easyFloat && !this.props.GridStore.checkValidFloat(this.props.cellData) ) ||
-            ((this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar ||
-              this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro ||
-              this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound) && !this.props.GridStore.checkValidFloat(this.props.cellData) )
+            ((this.props.GridStore.colDefListByKey[this.props.objKey].easyDollar ||
+              this.props.GridStore.colDefListByKey[this.props.objKey].easyEuro ||
+              this.props.GridStore.colDefListByKey[this.props.objKey].easyPound) && !this.props.GridStore.checkValidFloat(this.props.cellData) )
           ) {
             style.outline = "3px orange dashed";
           }          
 
           // since we're here: format the money:
-          if (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyDollar) {
+          if (this.props.GridStore.colDefListByKey[this.props.objKey].easyDollar) {
             renderVal = accounting.formatMoney(this.props.cellData, "$", 2, ",", ".");
           }
-          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyEuro) {
+          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyEuro) {
             renderVal = accounting.formatMoney(this.props.cellData, "€", 2, ".", ",");
           }
-          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyMoneyPound) {
+          else if (this.props.GridStore.colDefListByKey[this.props.objKey].easyPound) {
             renderVal = accounting.formatMoney(this.props.cellData, "£", 2, ".", ",");
           }
           // since we're here: highlight invalid dates & times
@@ -499,34 +504,56 @@ window.reactJsonGridFocusInput = function(elem){
         
       }  
 
+      // build the className and style strings
       var cellClassName='';
       var dataClassName='';
+      var finalStyleCell={};
+      var finalStyleData={};
+
       if(this.props.x===-1){
-        // this is a row header.  Precedence is classNameHeaderCell, classNameHeaderRowCell
-        cellClassName = (this.props.GridStore.classNameHeaderCell||'')+' '+(this.props.GridStore.classNameHeaderRowCell||'');
-        dataClassName = (this.props.GridStore.classNameHeaderData||'')+' '+(this.props.GridStore.classNameHeaderRowData||'');
+        // this is a row header.  Precedence is classHeaderCell, classRowHeaderCell
+        cellClassName = (this.props.GridStore.classHeaderCell||'')+' '+(this.props.GridStore.classRowHeaderCell||'');  // header + rowHeader cell
+        dataClassName = (this.props.GridStore.classHeaderData||'')+' '+(this.props.GridStore.classRowHeaderData||'');  // header + rowHeader data
 
-        if(!this.props.GridStore.classNameHeaderCell && !this.props.GridStore.classNameHeaderRowCell){
-          if(!style.backgroundColor && (!styleByCol || !styleByCol.backgroundColor)){  style.backgroundColor='#F3F3F3';}
-          if(!style.textAlign && (!styleByCol || !styleByCol.textAlign)){              style.textAlign='center';}
-        }
-
-        var rowKey = this.props.uiMath.rowHeaderList[this.props.y];
+        var rowKey = this.props.uiMath.rowHeaderList[this.props.y];                                                    // add column specifications
         if(this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[rowKey]){
-          cellClassName = cellClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classNameHeaderCell||'');
-          dataClassName = dataClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classNameHeaderData||'');
-          console.log(cellClassName);
-          console.log(dataClassName);
+          cellClassName = cellClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classHeaderCell||'');
+          dataClassName = dataClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classHeaderData||'');
         }
+
+        var defaultHeaderStyle={backgroundColor:'#F3F3F3',textAlign:'center'};
+        finalStyleCell = {...defaultHeaderStyle,...this.props.GridStore.styleHeaderCell,...this.props.GridStore.styleRowHeaderCell,...style}; // make the grid styling override the user styling
+        finalStyleData = {...this.props.GridStore.styleHeaderData,...this.props.GridStore.styleRowHeaderData};          // just user stying on data
+        
+      }
+      else{
+        // this is a normal row
+        cellClassName = cellClassName+' '+this.props.GridStore.classCell;  // cell
+        dataClassName = dataClassName+' '+this.props.GridStore.classData;  // data
+        finalStyleCell = {...this.props.GridStore.styleCell,...style}; // make the grid styling override the user styling
+        finalStyleData = {...this.props.GridStore.styleData};          // just user stying on data
+        
+        if(this.props.y % 2 === 1){
+          cellClassName = cellClassName+' '+this.props.GridStore.classCellOddRow;  // cell
+          dataClassName = dataClassName+' '+this.props.GridStore.classDataOddRow;  // data
+          finalStyleCell = {...this.props.GridStore.styleCellOddRow,...finalStyleCell}; // make the grid styling override the user styling
+          finalStyleData = {...this.props.GridStore.styleDataOddRow,...finalStyleData}; // make the grid styling override the user styling
+        }
+      }
+
+      if(isSelected){
+        finalStyleCell = {backgroundColor:'lightblue',...this.props.GridStore.styleSelected,...finalStyleCell};
+        cellClassName = cellClassName+' '+this.props.GridStore.classSelected;
       }
 
       renderPlan = <div tabIndex='0'
                         className={cellClassName}
                         onClick={this.onClick} 
-                        id={this.props.id} style={{...style,...styleByCol}}                        
+                        id={this.props.id} 
+                        style={{...styleByCol,...finalStyleCell}}
                         ref={div => div && isFocusNeeded && div.focus() }
                         onKeyDown={this.onKeyDownWhenViewing}>
-            <div className={dataClassName}>{renderVal}</div>
+            <div className={dataClassName} style={finalStyleData}>{renderVal}</div>
       </div>;
     }
     

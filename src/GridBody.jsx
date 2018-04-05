@@ -128,9 +128,9 @@ const GridBody = observer( class GridBody extends React.Component {
           {/* Either keeps size and show a box to fill unused space, or just shrink the grid vertical space used. */ }          
           {this.props.gridHighCollapse === false && ui.collapseAvailable>0 &&
           <div style={{
-            minWidth: ui.rowWide,
-            minWidth: ui.rowWide,
-            width: ui.rowWide,
+            minWidth: ui.rowWide + ui.pivotRowHeaderWideTotal,
+            minWidth: ui.rowWide + ui.pivotRowHeaderWideTotal,
+            width: ui.rowWide + ui.pivotRowHeaderWideTotal,
             boxSizing: 'content-box',
             marginTop: (-1 * ui.borderWide),
               height: (ui.collapseAvailable) ,
@@ -147,9 +147,9 @@ const GridBody = observer( class GridBody extends React.Component {
           {/* Draw a bottom line if it is needed. */ }                      
           {ui.showBottomGridLine &&  // needs the 2x border wide added because this is only a top border
           <div style={{ ...this.props.styleHeader,
-                        width: ui.rowWide + (2 * ui.borderWide),
-                        minWidth: ui.rowWide + (2 * ui.borderWide),
-                        width: ui.rowWide + (2 * ui.borderWide),
+                        width: ui.rowWide + ui.pivotRowHeaderWideTotal+ (2 * ui.borderWide),
+                        minWidth: ui.rowWide + ui.pivotRowHeaderWideTotal+ (2 * ui.borderWide),
+                        width: ui.rowWide + ui.pivotRowHeaderWideTotal+ (2 * ui.borderWide),
                         borderTopStyle: 'solid',                      
                         borderTopWidth: ui.borderWide,
                         height:'0px'}}/>
