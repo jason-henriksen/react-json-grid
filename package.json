@@ -1,6 +1,6 @@
 {
   "name": "react-json-grid",
-  "version": "1.0.18",
+  "version": "1.0.23",
   "description": "A grid UI component for any valid form of JSON",
   "scripts": {
     "test": "jest",
@@ -46,8 +46,8 @@
     "react-dom": "^16.2.0",
     "react-scrollbar-size": "^2.1.0",
     "react-tiny-virtual-list": "^2.1.4",
-    "react-tooltip": "^3.4.0",
-    "really-relaxed-json": "0.0.21"
+    "kotlin": "^1.2.21",
+    "react-tooltip": "^3.4.0"
   },
   "changelogx": {
     "ignoreRegExp": [
