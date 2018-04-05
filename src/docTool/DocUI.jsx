@@ -202,8 +202,10 @@ import DocStore from './DocStore';
             <div style={{ fontSize: '3em', textAlign: 'center' }}><a href='https://github.com/jason-henriksen/react-json-grid'>react-json-grid</a></div>
               <div style={{fontSize:'1.5em',textAlign:'center'}}>Easy to use, high performance, JSON Grid Editor.</div>
 
-              <p>This is the documentation UI.<br/>Use this page to explore the features of react-json-grid.<br/>
-              The grid is editable by default.  Feel free to play with the data.</p>
+            <p>Mouseover each tag attribute to see it's purpose.<br />
+              Click the attribute to show a description.<br />
+              Shift-Click text boxes to paste in a sample value.<br/>
+              Please report issues at the github page linked above.<br/><br/>  Thanks for trying it out!</p>
             <br/>
           Example Data Generators<br/>
           <button style={{width:'90px'}} onClick={this.dm.makeS}>5 objects</button>
@@ -222,7 +224,7 @@ import DocStore from './DocStore';
           <button style={{width:'90px'}} onClick={this.dm.makePSV}>PSV</button>
           <button style={{width:'90px'}} onClick={this.dm.makeKVE}>key=value[]</button><br />
           <span style={{ color: 'red' }}>{this.dataErr}</span><br />
-          &#123;this.data&#125;<br/>
+            &#123;this.data&#125;&nbsp;&nbsp;&nbsp;Use this to see that the grid and the data are in sync.<br/>
           {!this.ds.hideEditor &&            
             <textarea style={{ width: '400px', height: '75px' }} onChange={this.updateData} value={this.data} />
           }
@@ -244,7 +246,66 @@ import DocStore from './DocStore';
                 <Toggle action={this.ds.toggleGridHighCollapse} toggleValue={this.ds.gridHighCollapse} label='gridHighCollapse' help='If there are fewer rows than needed by the gridHigh setting, shrink the height of the grid.  Otherwise, use the full space.' />
                 </div>
               }
+              <ToggleFolder action={this.ds.toggleShowStyleStuff} toggleValue={this.ds.showStyleStuff} label='Style' help='display API for style objects' />
+              {this.ds.showStyleStuff &&
+                <div style={{ marginLeft: '40px' }}>
+                  NOTE: enter styles in the JSX format.<br />For example:  &#123;backgroundColor:'lightblue'&#125;<br />
+                  <br /><u>background style objects</u>
+                  <TextParam action={this.ds.setStyleCell} curValue={this.ds.styleCell} label='styleCell' help='style for cells.' mouseOverValue="{backgroundColor:'beige'}" />
+                  <TextParam action={this.ds.setStyleCellOddRow} curValue={this.ds.styleCellOddRow} label='styleCellOddRow' help='style for cells in odd numbered rows.' mouseOverValue="{backgroundColor:'beige'}" />
+                  <TextParam action={this.ds.setStyleHeaderCell} curValue={this.ds.styleHeaderCell} label='styleHeaderCell' help='style for column header cells (and row headers, if row header style is not specified.)' mouseOverValue="{backgroundColor:'beige'}" />
+                  <TextParam action={this.ds.setStyleRowHeaderCell} curValue={this.ds.styleRowHeaderCell} label='styleRowHeaderCell' help='style for row header cells (only visible when pivotOn is set)' mouseOverValue="{backgroundColor:'beige'}" />
 
+                  <br /><u>data style objects</u>
+                  <TextParam action={this.ds.setStyleData} curValue={this.ds.styleData} label='styleData' help='style for data in cells' mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}" />
+                  <TextParam action={this.ds.setStyleDataOddRow} curValue={this.ds.styleDataOddRow} label='styleDataOddRow' help='style for data in cells in odd numbered rows.' mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}" />
+                  <TextParam action={this.ds.setStyleHeaderData} curValue={this.ds.styleHeaderData} label='styleHeaderData' help='style for data in column header cells (and row headers, if row header style is not specified.)' mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}" />
+                  <TextParam action={this.ds.setStyleRowHeaderData} curValue={this.ds.styleRowHeaderData} label='styleRowHeaderData' help='style for data in row header cells (only visible when pivotOn is set)' mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}" />
+
+                  <br /><u>selection/input classes</u>
+                  <TextParam action={this.ds.setStyleInput} curValue={this.ds.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.' mouseOverValue="{backgroundColor:'lightgreen'}" />
+                  <TextParam action={this.ds.setStyleSelected} curValue={this.ds.styleSelected} label='styleSelected' help='style object to apply to the currently selected cell' mouseOverValue="{backgroundColor:'black',color:'white'}" />
+
+                </div>
+              }
+              <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class' help='display API for css class usage' />
+              {this.ds.showClassStuff &&
+                <div style={{ marginLeft: '40px' }}>
+                  NOTE: here are some CSS class names to try:<br />
+                  <div style={{ marginLeft: '10px' }}>GreenRotate , PinkRotate , RedRotate</div>
+                  <div style={{ marginLeft: '10px' }}>BackgroundBlue , BackgroundYellow</div>
+                  <div style={{ marginLeft: '10px' }}>Gradient1 , Gradient2</div>
+
+                  <br /><u>background classes</u>
+                  <TextParam action={this.ds.setClassCell} curValue={this.ds.classCell} mouseOverValue='Gradient1' label='classCell' help='class name for cell container boxes.  ( for example, background color )' />
+                  <TextParam action={this.ds.setClassCellOddRow} curValue={this.ds.classCellOddRow} mouseOverValue='Gradient1' label='classCellOddRow' help='class name for cell backgrounds on odd row numbers.' />
+                  <TextParam action={this.ds.setClassHeaderCell} curValue={this.ds.classHeaderCell} mouseOverValue='Gradient1' label='classHeaderCell' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
+                  <TextParam action={this.ds.setClassRowHeaderCell} curValue={this.ds.classRowHeaderCell} mouseOverValue='Gradient1' label='classRowHeaderCell' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+
+                  <br /><u>data classes</u>
+                  <TextParam action={this.ds.setClassData} curValue={this.ds.classData} mouseOverValue='GreenRotate' label='classData' help='class name for cell data. (for example, rotations )' />
+                  <TextParam action={this.ds.setClassDataOddRow} curValue={this.ds.classDataOddRow} mouseOverValue='GreenRotate' label='classDataOddRow' help='class name for cell data on odd row numbers.' />
+                  <TextParam action={this.ds.setClassHeaderData} curValue={this.ds.classHeaderData} mouseOverValue='GreenRotate' label='classHeaderData' help='classname to apply to header data. For example: text rotations where you do not want to rotate the cell itself.  cannot control border or padding.' />
+                  <TextParam action={this.ds.setClassRowHeaderData} curValue={this.ds.classRowHeaderData} mouseOverValue='GreenRotate' label='classRowHeaderData' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
+
+                  <br /><u>selection/input classes</u>
+                  <TextParam action={this.ds.setClassInput} curValue={this.ds.classInput} mouseOverValue='Gradient1' label='classInput' help='class name for input cells' />
+                  <TextParam action={this.ds.setClassSelected} curValue={this.ds.classSelected} mouseOverValue='Gradient1' label='classSelected' help='class name for selected cells..' />
+                </div>
+              }              
+              <ToggleFolder action={this.ds.toggleShowEditStuff} toggleValue={this.ds.showEditStuff} label='Tools' help='display edit tools' />
+              {this.ds.showEditStuff &&
+                <div style={{ marginLeft: '40px' }}>
+                  <Toggle action={this.ds.toggleToolsAddCut} toggleValue={this.ds.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
+                  <Toggle action={this.ds.toggleToolsPage} toggleValue={this.ds.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
+                  <Toggle action={this.ds.toggleToolsImpExp} toggleValue={this.ds.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
+                  <Toggle action={this.ds.toggleToolsCustom} toggleValue={this.ds.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
+                  <TextParam action={this.ds.setToolsButtonClass} curValue={this.ds.toolsButtonClass} label='toolsButtonClass' help='class to apply to tool buttons.' mouseOverValue='Gradient1' />
+                  <NumWheel action={this.ds.setPageCount} curValue={this.ds.pageCount} label='pageCount' help={<div>when using the page tools, this sets the number of pages to have available. The value shows in Alt-Text for the buttons.</div>} />
+                  <Toggle action={this.ds.toggleEditDisabled} toggleValue={this.ds.editDisabled} label='editDisabled' help='disable all grid editing' />
+                  <Toggle action={this.ds.toggleEditAsText} toggleValue={this.ds.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br />one item per line, for easy text editing.<br />Best for one dimensional arrays.</div>} />
+                </div>
+              }              
               <ToggleFolder action={this.ds.toggleColumnList} toggleValue={this.ds.columnList} label='Columns' help='define column meta data' />
               {this.ds.columnList &&
                 <div style={{marginLeft:'10px'}}>
@@ -282,20 +343,6 @@ import DocStore from './DocStore';
                 />
                 </div>
               }
-
-              <ToggleFolder action={this.ds.toggleShowEditStuff} toggleValue={this.ds.showEditStuff} label='Tools' help='display edit tools' />
-              {this.ds.showEditStuff &&
-                <div style={{marginLeft:'40px'}}>
-                  <Toggle action={this.ds.toggleToolsAddCut} toggleValue={this.ds.showToolsAddCut} label='showToolsAddCut' help='shows buttons to add/remove rows' />
-                  <Toggle action={this.ds.toggleToolsPage} toggleValue={this.ds.showToolsPage} label='showToolsPage' help='show buttons to select different pages of data' />
-                  <Toggle action={this.ds.toggleToolsImpExp} toggleValue={this.ds.showToolsImpExp} label='showToolsImpExp' help='show buttons to import or export the data' />
-                  <Toggle action={this.ds.toggleToolsCustom} toggleValue={this.ds.showToolsCustom} label='showToolsCustom' help={<div>shows user supplied buttons.<br />Note that you must supply an array of components to this attribute</div>} />
-                  <TextParam action={this.ds.setToolsButtonClass} curValue={this.ds.toolsButtonClass} label='toolsButtonClass' help='class to apply to tool buttons.' mouseOverValue='Gradient1'  />
-                  <NumWheel action={this.ds.setPageCount} curValue={this.ds.pageCount} label='pageCount' help={<div>when using the page tools, this sets the number of pages to have available. The value shows in Alt-Text for the buttons.</div>} />
-                  <Toggle action={this.ds.toggleEditDisabled} toggleValue={this.ds.editDisabled} label='editDisabled' help='disable all grid editing' />
-                  <Toggle action={this.ds.toggleEditAsText} toggleValue={this.ds.editAsText} label='editAsText' help={<div>Converts the JSON to pipe delimited text<br/>one item per line, for easy text editing.<br/>Best for one dimensional arrays.</div>} />
-                </div>
-              }
               <ToggleFolder action={this.ds.toggleShowPivotStuff} toggleValue={this.ds.showPivotStuff} label='Pivot' help='display data pivot' />
               {this.ds.showPivotStuff &&
                 <div style={{marginLeft:'40px'}}>
@@ -303,53 +350,6 @@ import DocStore from './DocStore';
                   <NumWheel action={this.ds.setPivotRowHeaderWide} incr={25} curValue={this.ds.pivotRowHeaderWide} label='pivotRowHeaderWide' help={<div>when pivotOn is set,<br />use this to set the pixel width of the row header</div>} />
                 </div>
               }
-              <ToggleFolder action={this.ds.toggleShowStyleStuff} toggleValue={this.ds.showStyleStuff} label='Style' help='display API for style objects' />
-              {this.ds.showStyleStuff &&  
-              <div style={{marginLeft:'40px'}}>
-                NOTE: enter styles in the JSX format.<br />For example:  &#123;backgroundColor:'lightblue'&#125;<br/>
-                <br/><u>background style objects</u>
-                <TextParam action={this.ds.setStyleCell}           curValue={this.ds.styleCell} label='styleCell' help='style for cells.' mouseOverValue="{backgroundColor:'beige'}" />
-                <TextParam action={this.ds.setStyleCellOddRow}     curValue={this.ds.styleCellOddRow} label='styleCellOddRow' help='style for cells in odd numbered rows.'  mouseOverValue="{backgroundColor:'beige'}"/>
-                <TextParam action={this.ds.setStyleHeaderCell}     curValue={this.ds.styleHeaderCell} label='styleHeaderCell' help='style for column header cells (and row headers, if row header style is not specified.)' mouseOverValue="{backgroundColor:'beige'}" />
-                <TextParam action={this.ds.setStyleRowHeaderCell}  curValue={this.ds.styleRowHeaderCell} label='styleRowHeaderCell' help='style for row header cells (only visible when pivotOn is set)' mouseOverValue="{backgroundColor:'beige'}" />
-
-                <br/><u>data style objects</u>
-                <TextParam action={this.ds.setStyleData}           curValue={this.ds.styleData} label='styleData' help='style for data in cells'  mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}"/> 
-                <TextParam action={this.ds.setStyleDataOddRow}     curValue={this.ds.styleDataOddRow} label='styleDataOddRow' help='style for data in cells in odd numbered rows.'  mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}"/>
-                <TextParam action={this.ds.setStyleHeaderData}     curValue={this.ds.styleHeaderData} label='styleHeaderData' help='style for data in column header cells (and row headers, if row header style is not specified.)'  mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}"/>
-                <TextParam action={this.ds.setStyleRowHeaderData}  curValue={this.ds.styleRowHeaderData} label='styleRowHeaderData' help='style for data in row header cells (only visible when pivotOn is set)'  mouseOverValue="{textAlign:'center',backgroundColor:'lightgreen',transform: rotate(45deg)}"/>
-
-                <br/><u>selection/input classes</u>
-                <TextParam action={this.ds.setStyleInput}          curValue={this.ds.styleInput} label='styleInput' help='style for default cells.  cannot control border or padding.'  mouseOverValue="{backgroundColor:'lightgreen'}" />
-                <TextParam action={this.ds.setStyleSelected}       curValue={this.ds.styleSelected} label='styleSelected' help='style object to apply to the currently selected cell'  mouseOverValue="{backgroundColor:'black',color:'white'}" />
-                
-                </div>
-              }
-              <ToggleFolder action={this.ds.toggleShowClassStuff} toggleValue={this.ds.showClassStuff} label='Class' help='display API for css class usage' />
-              {this.ds.showClassStuff &&
-                <div style={{marginLeft:'40px'}}>
-                NOTE: here are some CSS class names to try:<br/>
-                <div style={{ marginLeft: '10px' }}>GreenRotate , PinkRotate , RedRotate</div>
-                <div style={{ marginLeft: '10px' }}>BackgroundBlue , BackgroundYellow</div>
-                <div style={{ marginLeft: '10px' }}>Gradient1 , Gradient2</div>
-
-                <br/><u>background classes</u>
-                <TextParam action={this.ds.setClassCell}            curValue={this.ds.classCell} mouseOverValue='Gradient1' label='classCell' help='class name for cell container boxes.  ( for example, background color )' />
-                <TextParam action={this.ds.setClassCellOddRow}      curValue={this.ds.classCellOddRow}  mouseOverValue='Gradient1' label='classCellOddRow' help='class name for cell backgrounds on odd row numbers.' />
-                <TextParam action={this.ds.setClassHeaderCell}      curValue={this.ds.classHeaderCell}  mouseOverValue='Gradient1' label='classHeaderCell' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
-                <TextParam action={this.ds.setClassRowHeaderCell}   curValue={this.ds.classRowHeaderCell}  mouseOverValue='Gradient1' label='classRowHeaderCell' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
-
-                <br/><u>data classes</u>
-                <TextParam action={this.ds.setClassData}            curValue={this.ds.classData} mouseOverValue='GreenRotate' label='classData' help='class name for cell data. (for example, rotations )' />
-                <TextParam action={this.ds.setClassDataOddRow}      curValue={this.ds.classDataOddRow} mouseOverValue='GreenRotate' label='classDataOddRow' help='class name for cell data on odd row numbers.' />
-                <TextParam action={this.ds.setClassHeaderData}      curValue={this.ds.classHeaderData} mouseOverValue='GreenRotate' label='classHeaderData' help='classname to apply to header data. For example: text rotations where you do not want to rotate the cell itself.  cannot control border or padding.' />
-                <TextParam action={this.ds.setClassRowHeaderData}   curValue={this.ds.classRowHeaderData} mouseOverValue='GreenRotate' label='classRowHeaderData' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />
-
-                <br/><u>selection/input classes</u>
-                <TextParam action={this.ds.setClassInput}           curValue={this.ds.classInput} mouseOverValue='Gradient1' label='classInput' help='class name for input cells' />
-                <TextParam action={this.ds.setClassSelected}        curValue={this.ds.classSelected} mouseOverValue='Gradient1' label='classSelected' help='class name for selected cells..' />
-                </div>
-              }              
               <ToggleFolder action={this.ds.toggleShowFormatStuff} toggleValue={this.ds.showFormatStuff} label='Format' help='display API for date, time and other formatters' />
               {this.ds.showFormatStuff &&
               <div style={{marginLeft:'40px'}}>
@@ -382,6 +382,7 @@ import DocStore from './DocStore';
                   <TextParam action={this.ds.setClassHeaderCell}      curValue={this.ds.classHeaderCell} label='compHeader' help='classname to apply to header cells.  For example: background colors.  cannot control border or padding.' />
                   <TextParam action={this.ds.setClassRowHeaderCell}   curValue={this.ds.classRowHeaderCell} label='compRowHeader' help='style for row header cells when pivotOn is set.  cannot control border or padding.' />              
                 </div>}
+              <br /><br /><br /><br /><br /><br />
             </div>
           </div>
 
