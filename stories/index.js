@@ -21,31 +21,31 @@ const colDef =
   [
     {
       key: 'a', title: 'col A', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
       easyDate: '', easyDateTime: '', easyMenu: '', altText: '',
       styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', displayFormatter: ''
+      compHeader: '', compInput: '', compCell: '', easyMenu: '' 
     },
     {
       key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
       easyDate: '', easyDateTime: '', altText: '',
       styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
     },
     {
       key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
       easyDate: '', easyDateTime: '', altText: '',
       styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
     },
     {
       key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyMoneyDollar: '', easyMoneyEuro: '', easyMoneyPound: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
       easyDate: '', easyDateTime: '', altText: '',
       styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', displayFormatter: '', easyMenu: ''
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
     }
   ];
 
@@ -64,9 +64,9 @@ storiesOf('Grid', module)
         { key: 'easyBool', easyBool: true, altText: 'render this column as a check box' },
         { key: 'easyInt', easyBool: true, altText: 'render and validate this column as an integer' },
         { key: 'easyFloat', easyBool: true, altText: 'render and validate this column as an float' },
-        { key: 'easyMoneyDollar', easyBool: true, altText: 'render and validate this column as dollars' },
-        { key: 'easyMoneyEuro', easyBool: true, altText: 'render and validate this column as euros' },
-        { key: 'easyMoneyPound', easyBool: true, altText: 'render and validate this column as pounds' },
+        { key: 'easyDollar', easyBool: true, altText: 'render and validate this column as dollars' },
+        { key: 'easyEuro', easyBool: true, altText: 'render and validate this column as euros' },
+        { key: 'easyPound', easyBool: true, altText: 'render and validate this column as pounds' },
         { key: 'easyDate', easyBool: true, altText: 'render and validate this column as a date' },
         { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
         { key: 'easyMenu', altText: 'render and validate this column as a menu. supply an array of values easyMenu={[a,b,c,d]} or a pipe separated list easyMenu={"a|b|c|d"}' },
@@ -118,11 +118,11 @@ storiesOf('object[] - column defs', module)
                                 data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('col data types, in cell editors',()=>(<Grid 
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
-    columnList={[{key:'a',title:'col A',widePct:'15',easyBool:true},{key:'b',title:'col B',widePct:'15',easyMoneyDollar:true},{key:'c',title:'col C',widePct:'5',easyMoneyEuro:true},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R',easyMoneyPound:true}]} 
+    columnList={[{key:'a',title:'col A',widePct:'15',easyBool:true},{key:'b',title:'col B',widePct:'15',easyDollar:true},{key:'c',title:'col C',widePct:'5',easyEuro:true},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R',easyPound:true}]} 
   />))
 .addWithJSX('col data types, overlay editors',()=>(<Grid 
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
-    columnList={[{key:'a',title:'col A',widePct:'15',easyMenu:'a|b|c|d'},{key:'b',title:'col B',widePct:'15',easyMenu:['asdf','qwer','zxcv']},{key:'c',title:'col C',widePct:'5',easyMoneyEuro:true},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+    columnList={[{key:'a',title:'col A',widePct:'15',easyMenu:'a|b|c|d'},{key:'b',title:'col B',widePct:'15',easyMenu:['asdf','qwer','zxcv']},{key:'c',title:'col C',widePct:'5',easyEuro:true},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))
 
   storiesOf('object[] - styles', module)  
@@ -182,49 +182,49 @@ storiesOf('object[] - column defs', module)
 
   storiesOf('object[] - classNames', module)  
   .addWithJSX('col data types, class headers all',()=>(<Grid 
-    classNameHeaderData='GreenRotate'
-    classNameHeaderCell='BackgroundBlue'
-    styleSelectedCell={{backgroundColor:'lightgreen',fontWeight:'bold'}}
+    classHeaderData='GreenRotate'
+    classHeaderCell='BackgroundBlue'
+    styleSelected={{backgroundColor:'lightgreen',fontWeight:'bold'}}
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))  
   .addWithJSX('col data types, class headers all,pivot',()=>(<Grid 
-    classNameHeaderData='GreenRotate'
-    classNameHeaderCell='BackgroundBlue'
-    styleSelectedCell={{backgroundColor:'lightgreen',fontWeight:'bold'}}
+    classHeaderData='GreenRotate'
+    classHeaderCell='BackgroundBlue'
+    styleSelected={{backgroundColor:'lightgreen',fontWeight:'bold'}}
     pivotOn='r'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))  
   .addWithJSX('col data types, class headers+rowHeaders all,pivot',()=>(<Grid 
-    classNameHeaderData='GreenRotate'
-    classNameHeaderCell='BackgroundBlue'
-    classNameHeaderRowData='PinkRotate'
-    classNameHeaderRowCell='BackgroundYellow'
-    styleSelectedCell={{backgroundColor:'lightgreen',fontWeight:'bold'}}
+    classHeaderData='GreenRotate'
+    classHeaderCell='BackgroundBlue'
+    classRowHeaderData='PinkRotate'
+    classRowHeaderCell='BackgroundYellow'
+    styleSelected={{backgroundColor:'lightgreen',fontWeight:'bold'}}
     pivotOn='r'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))  
 
   .addWithJSX('col data types, class headers by column',()=>(<Grid 
-    classNameHeaderData='GreenRotate'
-    classNameHeaderCell='BackgroundBlue'
-    classNameHeaderRowData='PinkRotate'
-    classNameHeaderRowCell='BackgroundYellow'
+    classHeaderData='GreenRotate'
+    classHeaderCell='BackgroundBlue'
+    classRowHeaderData='PinkRotate'
+    classRowHeaderCell='BackgroundYellow'
     classNameSelectedCell='testSelectedCellClass'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
-    columnList={[{key:'a',title:'col A',widePct:'15',classNameHeaderCell:'Gradient1',classNameHeaderData:'GreenRotate'},{key:'b',title:'col B',widePct:'15',classNameHeaderCell:'Gradient2',classNameHeaderData:'RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+    columnList={[{key:'a',title:'col A',widePct:'15',classHeaderCell:'Gradient1',classHeaderData:'GreenRotate'},{key:'b',title:'col B',widePct:'15',classHeaderCell:'Gradient2',classHeaderData:'RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />)) 
   .addWithJSX('col data types, class headers by column with pivot',()=>(<Grid 
-    classNameHeaderData='GreenRotate'
-    classNameHeaderCell='BackgroundBlue'
-    classNameHeaderRowData='PinkRotate'
-    classNameHeaderRowCell='BackgroundYellow'
+    classHeaderData='GreenRotate'
+    classHeaderCell='BackgroundBlue'
+    classRowHeaderData='PinkRotate'
+    classRowHeaderCell='BackgroundYellow'
     classNameSelectedCell='testSelectedCellClass'
     pivotOn='b'
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
-    columnList={[{key:'a',title:'col A',widePct:'15',classNameHeaderCell:'Gradient1',classNameHeaderData:'GreenRotate'},{key:'b',title:'col B',widePct:'15',classNameHeaderCell:'Gradient2',classNameHeaderData:'RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
+    columnList={[{key:'a',title:'col A',widePct:'15',classHeaderCell:'Gradient1',classHeaderData:'GreenRotate'},{key:'b',title:'col B',widePct:'15',classHeaderCell:'Gradient2',classHeaderData:'RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))
 
   .addWithJSX('col data types, style cell',()=>(<Grid 
@@ -351,7 +351,7 @@ storiesOf('primitive[] - pivotOn', module)
 .addWithJSX('boolean leading false primitives',()=>(<Grid pivotOn data={[false,true,false,true]}/>))
 
 storiesOf('primitive[] - formatted', module)
-.addWithJSX('numeric primitives - dollars',()=>(<Grid data={[1,2,3,4]} columnList={[{key:'data', title:'My List', easyMoneyDollar:true, }]}/>))
+.addWithJSX('numeric primitives - dollars',()=>(<Grid data={[1,2,3,4]} columnList={[{key:'data', title:'My List', easyDollar:true, }]}/>))
 .addWithJSX('numeric primitives leading 0 - ints',()=>(<Grid data={[0,1,2,3]} columnList={[{key:'data', title:'My List', easyInt:true, }]}/>))
 .addWithJSX('strings - edit disabled',()=>(<Grid data={['arnold','bernard','clementine','dolores']}  columnList={[{key:'data', title:'My List', editDisabled:true, }]}/>))
 .addWithJSX('bool primitive - easyBool',()=>(<Grid data={[true,false,true,false]} columnList={[{key:'data', title:'My List', easyBool:true, }]}/>))
@@ -372,7 +372,7 @@ storiesOf('primitive[] - sized,pivotOn', module)
 .addWithJSX('boolean leading false primitives',()=>(<Grid pivotOn data={[false,true,false,true]} borderWide={15} padWide={15} />))
 
 storiesOf('primitive[] - formatted,pivotOn', module)
-.addWithJSX('numeric primitives - dollars',()=>(<Grid pivotOn data={[1,2,3,4]} columnList={[{key:'data', title:'My List', easyMoneyDollar:true, }]}/>))
+.addWithJSX('numeric primitives - dollars',()=>(<Grid pivotOn data={[1,2,3,4]} columnList={[{key:'data', title:'My List', easyDollar:true, }]}/>))
 .addWithJSX('numeric primitives leading 0 - ints',()=>(<Grid pivotOn data={[0,1,2,3]} columnList={[{key:'data', title:'My List', easyInt:true, }]}/>))
 .addWithJSX('strings - edit disabled',()=>(<Grid pivotOn data={['arnold','bernard','clementine','dolores']}  columnList={[{key:'data', title:'My List', editDisabled:true, }]}/>))
 .addWithJSX('bool primitive - easyBool',()=>(<Grid pivotOn data={[true,false,true,false]} columnList={[{key:'data', title:'My List', easyBool:true, }]}/>))

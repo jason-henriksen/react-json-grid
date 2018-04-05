@@ -146,7 +146,7 @@ import ReactTooltip from 'react-tooltip';
             gridColLocalStyle = (this.props.GridStore.colDefListByKey[keyName].styleHeader || {});
           }
 
-          var rowHeaderStyle={...cellStyleFirst,...this.props.styleHeader,...this.props.styleRowHeader,...gridColLocalStyle};
+          var rowHeaderStyle={...cellStyleFirst,...gridColLocalStyle};
 
           cellArray.push(
             <a onMouseEnter={(e)=>this.showRowHeaderAltText(e,ctr,this.props.index)}  onMouseLeave={(e)=>this.hideRowHeaderAltText(e,ctr,this.props.index)}   

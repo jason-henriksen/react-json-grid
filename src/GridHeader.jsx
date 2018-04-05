@@ -90,22 +90,20 @@ import ReactTooltip from 'react-tooltip';
             curColWide = this.props.GridStore.colDefListByKey[keyName].forceColWide;
           }
           if(!this.props.pivotOn){
-            classNameHeaderColData = this.props.GridStore.colDefListByKey[keyName].classNameHeaderData||'';
-            classNameHeaderColCell = this.props.GridStore.colDefListByKey[keyName].classNameHeaderCell||'';
+            classNameHeaderColData = this.props.GridStore.colDefListByKey[keyName].classHeaderData||'';
+            classNameHeaderColCell = this.props.GridStore.colDefListByKey[keyName].classHeaderCell||'';
           }
         }
 
-        var defaultStyle = (this.props.styleHeader||{});
-        if(!this.props.classNameHeaderCell){
-          defaultStyle = {backgroundColor: '#F3F3F3',textAlign:'center'}; // so it can be over-ridden by the class if supplied.
-        }
+        var defaultStyleCell = {backgroundColor: '#F3F3F3',textAlign:'center'};
+        defaultStyleCell= {...defaultStyleCell,...this.props.GridStore.styleHeaderCell};
 
         header.push(  
           <a data-tip data-for={'dataTip' + ctr} key={ctr}              // default, may be over ridden by styleHeader. Order matters.
           >
-                        <div  key={'k'+ctr}  className={this.props.classNameHeaderCell+' '+classNameHeaderColCell}
+                        <div  key={'k'+ctr}  className={this.props.GridStore.classHeaderCell+' '+classNameHeaderColCell}
                           style={{
-                            ...defaultStyle,                // user specified global header styles.
+                            ...defaultStyleCell,            // user specified global header styles.
                             ...gridColLocalStyle,           // user specified per-column header styles.
                             width: curColWide,              // everything from here down cannot be over-ridden by the user.
                             maxWidth: curColWide,           // everything from here down cannot be over-ridden by the user.
@@ -118,7 +116,7 @@ import ReactTooltip from 'react-tooltip';
                             boxSizing: 'content-box',
                             height:ui.colHeaderHigh+'px',
                             maxHeight:ui.colHeaderHigh+'px'}}>
-                          <div className={this.props.classNameHeaderData+' '+classNameHeaderColData} >
+                          <div className={this.props.GridStore.classHeaderData+' '+classNameHeaderColData} style={this.props.GridStore.styleHeaderData}>
                           {colTitle}
                           </div>
                           { helpComp &&  // only render this if helpComp is defined
