@@ -3,7 +3,7 @@ import { toJS,observable,action,computed } from 'mobx';
 import { observer } from 'mobx-react';
 import autoBind from 'react-autobind';
 import Grid from '../Grid';
-import rrjsTool from 'really-relaxed-json';
+import rrjsTool from '../rrj-compile/index.js';
 
 import '../TestCSS.css';
 import Toggle from './Toggle';
@@ -14,10 +14,6 @@ import CompactObjView from './CompactObjView';
 import DataMaker from './DataMaker';
 
 import DocStore from './DocStore';
-
-import DataNoiseMed from '../../stories/dataNoiseMedium.js'
-import DataNoiseSmall from '../../stories/dataNoiseSmall.js'
-import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
 
 
 @observer class DocUI extends React.Component {
@@ -33,7 +29,29 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
     this.dataAsObject();
   }
 
-  @observable data = DataNoiseSmall;  // the data AS A STRING for the test editor
+  @observable data = `[
+  { "a": 1,  "b": 20, "c": 3, "d": 4.5 }, 
+  { "a": 21, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 31, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 41, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 51, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 61, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 71, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 81, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 91, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 101, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 111, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 121, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 131, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 131, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 141, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 151, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 161, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 171, "b": 30, "c": 33, "d": "asdf" }, 
+  { "a": 181, "b": 40, "c": 333, "d": "zing" }, 
+  { "a": 191, "b": 50, "c": 3333, "d": "zong" } 
+]
+`;  // the data AS A STRING for the test editor
   @observable cleanData = {};         // the data AS JSON for the fast editor
   @observable dataErr = '';
 
@@ -181,8 +199,8 @@ import DataNoiseGiant from '../../stories/dataNoiseGiant.js'
                        borderRight:'2px solid grey',verticalAlign:'top',backgroundColor:'#fff8ed'}}>
             <div >
               <br/>
-              <div style={{fontSize:'3em',textAlign:'center'}}>react-json-grid</div>
-              <div style={{fontSize:'1.5em',textAlign:'center'}}>Easy to use, high performance Data Grid</div>
+            <div style={{ fontSize: '3em', textAlign: 'center' }}><a href='https://github.com/jason-henriksen/react-json-grid'>react-json-grid</a></div>
+              <div style={{fontSize:'1.5em',textAlign:'center'}}>Easy to use, high performance, JSON Grid Editor.</div>
 
               <p>This is the documentation UI.<br/>Use this page to explore the features of react-json-grid.<br/>
               The grid is editable by default.  Feel free to play with the data.</p>
