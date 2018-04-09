@@ -19,7 +19,7 @@ While this code is being written with the intention of production use with many 
 
 ## Features
 - Accepts input data formatted as:
-  - Array of javascript objects
+  - Array of JavaScript objects
   - Array of arrays
   - Array of primitives
   - Comma-Separated Values string ( next month )
