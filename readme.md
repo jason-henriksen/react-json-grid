@@ -32,7 +32,7 @@ While this code is being written with the intention of production use with many 
   - Intended for large-scale, prodution use in line-of-business applications
 
 - Modern ES6 Component Code
-  - Built to React 16.2 and will be kept up to date as react grows
+  - Built to React 16.2 and will be kept up to date as React grows
   - No runtime warnings
   - Includes comprehensive storybook testing
   - Built for extensibility
