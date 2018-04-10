@@ -1,42 +1,42 @@
 
 
-Simple react grid UI to display and edit any array of JSON data.
+Simple React grid UI to display and edit any array of JSON data.
 
 Explore the API with a live-example, API Playground here:
 ## [https://react-json-grid.azurewebsites.net/](https://react-json-grid.azurewebsites.net/)
 
-Most grid UI tools are either lacking in features, or require you to format your data in order to make it display in the grid.  react-json-grid is designed to work with whatever data you already have handy, wether it's an array of JSON objects or simply a two dimensional array of values.
+Most grid UI tools are either lacking in features, or require you to format your data in order to make it display in the grid.  react-json-grid is designed to work with whatever data you already have handy, whether it's an array of JSON objects or simply a two-dimensional array of values.
 
 ## Easiest API Possible
-This component is built to for line-of-business work horse apps.  Primarily, this was created to assist with banking applications that require large amounts of configuration and editing long lists of complex data.
+This component is built for line-of-business workhorse apps.  Primarily, this was created to assist with banking applications that require large amounts of configuration and editing long lists of complex data.
 
 
-Because it has to have near-XLS levels of user friendliness coupled with repeated use throughout the  application, it is designed to be as simple to use and configure as possible.  For example, not matter what  the format of data you've received, react-jason-grid can usually handle parsing and editing it.  Just go do the live [playground](https://react-json-grid.azurewebsites.net/) and give it a try.
+Because it has to have near-XLS levels of user-friendliness coupled with repeated use throughout the application, it is designed to be as simple to use and configure as possible.  For example, no matter what the format of data you've received, react-jason-grid can usually handle parsing and editing it.  Just go to the live [playground](https://react-json-grid.azurewebsites.net/) and give it a try.
 
 ## April 2018 - Still in Development
-While this code is being written with intention of production use with many thousands of rows it is still under active development.  The code should be ready for production use soon.  Your contributions, ideas and contributions are welcome!
+While this code is being written with the intention of production use with many thousands of rows, it is still under active development.  The code should be ready for production use soon.  Your ideas and contributions are welcome!
 
 
 ## Features
-- Accepts input data formatted as
-  - array of javascript objects
-  - array of arrays
-  - array of primitivs
-  - Comma Seperated Values string ( next month )
-  - Pipe Seperated Values string ( next month )
-  - Name Value Pairs ( next month )
+- Accepts input data formatted as:
+  - Array of JavaScript objects
+  - Array of arrays
+  - Array of primitives
+  - Comma-Separated Values string ( next month )
+  - Pipe-Seperated Values string ( next month )
+  - Name-Value Pairs ( next month )
 
 - Very Fast manipulation of 10s of Thousands of Items
-  - Built In Test UI allows test of 50K items at a button press
+  - Built-in Test UI allows test of 50K items at a button press
   - Editing of items is still quite smooth
-  - Intended for large scale, prodution use in line-of-business applications
+  - Intended for large-scale, prodution use in line-of-business applications
 
 - Modern ES6 Component Code
-  - built to react 16.2 and will be kept up to date as react grows
+  - Built to React 16.2 and will be kept up to date as React grows
   - No runtime warnings
-  - includes comprehensive storybook testing
-  - built for extensibility
-  - built for easy maintenance
+  - Includes comprehensive storybook testing
+  - Built for extensibility
+  - Built for easy maintenance
   - Written with the observer/observable pattern of data management
   - HEAVILY commented for you to edit and contribute
 
@@ -44,29 +44,29 @@ While this code is being written with intention of production use with many thou
   - Cells can be edited by default
   - Various editors may be used by table or by column
 
-- Built in formatters & validations for
+- Built in formatters & validations for:
   - Ints / Floats
   - Dollars / Euros / Pounds
   - Checkboxes
   - Menus
   - Date Picker / DateTime Picker
-  - email addresses ( next month )
-  - snail mail addresses ( next month )
-  - IP addresses ( next month )
+  - Email addresses (next month)
+  - Snail mail addresses (next month)
+  - IP addresses (next month)
 
 - Pivoted Tables
 
 - Ability to edit the data in "textarea mode"
 
-- Mouse Over Help Text on Headers
+- Mouseover Help Text on Headers
 
-- Style object control over cells, headers and inputs.
+- Style object control over cells, headers and inputs
 
 - ClassName control over cells, headers and inputs
 
 - Component replacements for cells, headers and inputs 
 
-- Built In Tool Hooks:
+- Built-in Tool Hooks
   - Add/Remove Rows
   - Import/Export Data
   - Page Controls
@@ -77,9 +77,9 @@ While this code is being written with intention of production use with many thou
   - onDataReplacement
 
 - Multiple data input styles styles
-  - supply entire data set a property
-  - supply a row level get method (next month)
-  - supply a MobX observable object and let the grid manipulate the data for you (next month)
+  - Supply entire data set a property
+  - Supply a row-level get method (next month)
+  - Supply a MobX observable object and let the grid manipulate the data for you (next month)
 
 
 
