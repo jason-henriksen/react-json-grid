@@ -155,6 +155,12 @@ window.reactJsonGridFocusInput = function(elem){
           else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyDateTime){
             this.props.GridStore.showDateTimePicker=true;
           }          
+          else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].easyMenu) {
+            this.props.GridStore.showMenuPicker = true;
+          }          
+          else if (this.props.GridStore.colDefListByKey && this.props.GridStore.colDefListByKey[this.props.objKey] && this.props.GridStore.colDefListByKey[this.props.objKey].overlayComp) {
+            this.props.GridStore.showOverlayComp = true;
+          }          
           else{            
             this.props.GridStore.curEditingValue = ''+e.key;
           }
