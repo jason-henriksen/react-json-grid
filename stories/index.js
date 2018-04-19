@@ -104,7 +104,7 @@ storiesOf('object[] - small data', module)
 .addWithJSX('bool values mixed',()=>(<Grid data={[{r:5,a:true,b:6,c:8,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:8,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed padded',()=>(<Grid borderWide={15} padWide={15} data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-
+.addWithJSX('long menu',()=>(<Grid  columnList={[    {key:'a', title:'a Col', easyMenu:'a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|a|b|c|d|e|f|g|', },    {key:'b', title:'b Col', },    {key:'c', title:'c Col', },    {key:'d', title:'d Col', },  ]}  data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 
 storiesOf('object[] - column defs', module)
 .addWithJSX('col wide auto,noScroll,missing defs', () => (<Grid gridHighCollapse={false} showToolsAddCut debugGridMath
