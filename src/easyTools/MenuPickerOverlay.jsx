@@ -13,7 +13,12 @@ import FilterIcon from 'mdi-react/FilterVariantIcon';
 
 
 @observer class MenuPickerOverlay extends React.Component {
-  constructor(props) { super(props); autoBind(this); }
+  constructor(props) { 
+    super(props); 
+    // this prevents problems with bad key values.  When switching frmo one grid to another in a tab frame, while the overlay is open the overlay div could stay in place, which is wrong.
+    this.semiUniqueKey = Math.random();
+    autoBind(this); 
+  }
 
   blackHole(evt){}
 
@@ -40,10 +45,10 @@ import FilterIcon from 'mdi-react/FilterVariantIcon';
 
     var itemList=[];
     var listTarget = this.props.GridStore.colDefListByKey[this.props.GridStore.cursor.editObjKey].easyMenu;
-    if (Array.isArray(listTarget)){  // it's an array
+    if (listTarget.length){  // it's an array
       // JJH Needs a storybook test
       itemList = listTarget.map((item,index) => { 
-        if(this.filterText && (''+item).indexOf(this.filterText)!==-1){
+        if(''===this.filterText.trim() || (''+item).indexOf(this.filterText)!==-1){
           return (
             <div key={'gridMenu'+index} id={'gridMenu'+index} style={{ padding: '2px',borderBottom:'1px solid lightgrey',paddingLeft:'15px' }} 
              onClick={(e)=>saneThis.updateValue(e,item)}>{item}</div>
@@ -69,10 +74,10 @@ import FilterIcon from 'mdi-react/FilterVariantIcon';
     }
 
     return (
-      <div>
+      <div key={this.semiUniqueKey}>
         <div style={{position:'absolute',top:'0px',bottom:'0px',left:'0px',width:(this.props.uiMath.rowWide+2)+'px',backgroundColor:'grey',zIndex:'20',opacity:'0.7'}} onClick={this.endEdit} />
         <div style={{position: 'absolute', top: '15px', left: '15px', width: (this.props.uiMath.rowWide - 50) + 'px', height: (this.props.uiMath.gridHigh-30),zIndex:'30'}}>
-          <span style={{float:'right',marginRight:'15px'}}><input type='text' onChange={this.changeFilter} value={this.filterText}/></span>
+          <span style={{float:'right',marginRight:'15px'}}><input type='text' onChange={this.changeFilter} value={this.filterText} style={{backgroundColor:'white'}}/></span>
         </div>
         <div style={{position: 'absolute', top: '15px', left:(this.props.uiMath.rowWide-70)+'px',zIndex:'35'}}><FilterIcon  width={18} height={18}/></div>
         
