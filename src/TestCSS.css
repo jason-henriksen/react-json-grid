@@ -18,6 +18,10 @@
   transform: rotate(20deg);
   text-align: center;
  }
+ .BasicBeige{
+  background-color: beige;
+  font-weight: bold;
+ }
  
  .BackgroundBlue{
   background-color: lightblue;

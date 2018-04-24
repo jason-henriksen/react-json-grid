@@ -82,6 +82,13 @@ class GridMath
         result.isPrimitiveData=true;
       }
 
+      // make the data conversion and hold onto the converted data.
+      // just give data available calls?  onChange pass an object that can get the translation?
+      // give an object that can be used to ask for translation at any time.
+      // data.asJSON()
+      // data.asCSV()
+      // data.asPSV()
+
       // general info
       result.borderWide = this.makeValidInt(props.borderWide,1);
       result.padWide = this.makeValidInt(props.padWide, 3);
@@ -107,7 +114,7 @@ class GridMath
       // grid height
       var testStyleHeight = null;
       if(props.style){ testStyleHeight = props.style.height}; // needed for null safety on props.style.  Needs to remove trailing px or % !!! 
-      result.gridHigh = testStyleHeight || this.makeValidInt(props.gridHigh) || 400;  // read from style, read from attributes, read from gridHigh attribute, default to 300
+      result.gridHigh = testStyleHeight || this.makeValidInt(props.gridHigh) || Math.min(result.rowHighWithPad*(data.length+2) ,400);  // read from style, read from attributes, read from gridHigh attribute, default to 300
       if (result.gridHigh === -1) {
         result.gridHigh = 400;
       }

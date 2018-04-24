@@ -6,6 +6,9 @@ import  DocUI  from '../src/docTool/DocUI';
 import EasyBool from '../src/easyTools/EasyBool';
 import WrapperEasyBool from './WrapperEasyBool';
 
+import MultiTest from '../src/multiTest/MultiTest';
+import TestNameTool from '../src/multiTest/TestNameTool';
+
 import DataNoiseMed from './dataNoiseMedium.js'
 import DataNoiseSmall from './dataNoiseSmall.js'
 import DataNoiseGiant from './dataNoiseGiant.js'
@@ -14,44 +17,118 @@ import JSXAddon from 'storybook-addon-jsx';
 
 import '../src/TestCSS.css';
 
+import testParameters from './testParameters.js';
+var testData = TestNameTool(testParameters); // name each test after it's variable name.
+console.log(testData);
+
 setAddon(JSXAddon);
 
 
-const colDef =
-  [
-    {
-      key: 'a', title: 'col A', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
-      easyDate: '', easyDateTime: '', easyMenu: '', altText: '',
-      styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', easyMenu: '' 
-    },
-    {
-      key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
-      easyDate: '', easyDateTime: '', altText: '',
-      styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', easyMenu: ''
-    },
-    {
-      key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
-      easyDate: '', easyDateTime: '', altText: '',
-      styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', easyMenu: ''
-    },
-    {
-      key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
-      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
-      easyDate: '', easyDateTime: '', altText: '',
-      styleHeader: '', styleInput: '', styleCell: '',
-      compHeader: '', compInput: '', compCell: '', easyMenu: ''
-    }
-  ];
-
-
-storiesOf('Grid', module)
+storiesOf('Grid Explorer', module)
   .addWithJSX('Interactive Documentation', () => (<DocUI/>))
+
+storiesOf('Combinatorial Test Design - Self Check', module)
+  .addWithJSX('Factorial Test1 - List Only', () => (
+    <MultiTest
+      target={<div/>}
+      nameTests={testData}
+      test={
+      [ [ testData.testATest ] ]}
+    />))
+  .addWithJSX('Factorial Test1 - A*B', () => (
+    <MultiTest
+      target={<div />}
+      nameTests={testData}
+      test={
+        [ [ testData.testATest, testData.testBTest ]]}
+    />))
+  .addWithJSX('Factorial Test1 - A*B*C', () => (
+    <MultiTest
+      target={<div />}
+      nameTests={testData}
+      test={
+        [ // three lines of definition, 40 tests generated.
+          [// pivot tests by object array data, plus normal and wide versions
+            testData.testATest, testData.testBTest, testData.testCTest,
+          ],
+        ]}
+    />))
+  .addWithJSX('Factorial Test4 - Specific Name', () => (
+    <MultiTest
+      target={<div />}
+      nameTests={testData}
+      test={
+        [ // three lines of definition, 40 tests generated.
+          [// display only a single test, to show that the name works correctly
+            testData.testATest.a0Test
+          ],
+        ]}
+    />))
+    
+storiesOf('Combinatorial Test Design - Self Check', module)  
+  .addWithJSX('Factorial Test - Basic Data', () => (
+    <MultiTest 
+    target={ <Grid/> }
+    test={[
+      [// all basic data tests: 
+        testData.dataTypesTest
+      ],  
+    ]}
+  />))
+  .addWithJSX('Factorial Test - Pivots', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by object array data, plus normal and wide versions
+          testData.dataTypesTest.objArrayTest,
+          testData.pivotsTest.pivotOnNameTest,
+          testData.pivotsHeaderTest
+        ],
+        [// pivot tests by object array data, plus normal and wide versions
+          testData.dataTypesTest.arrArrayTest,
+          testData.pivotsTest.pivotOnIndexTest,
+          testData.pivotsHeaderTest
+        ],
+        [// pivot tests by object array data, plus normal and wide versions
+          testData.dataTypesTest.primsTest,
+          testData.pivotsTest.pivotOnPrimTest,
+          testData.pivotsHeaderTest
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Borders and Pads', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by object array data, plus pad tests, note that I can easily winnow the tests to perform.
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.padPlayTest
+        ],
+        [// pivot tests by object array data, plus pad tests, and pivot note that I can easily winnow the tests to perform.
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotOnNameTest.pivotOnColBTest, 
+          testData.padPlayTest
+        ],
+        [
+          testData.dataTypesTest.arrArrayTest.arrayListForPivotTest,
+          testData.padPlayTest        ],
+        [
+          testData.dataTypesTest.arrArrayTest.arrayListForPivotTest,
+          testData.pivotsTest.pivotOnIndexTest.pivotOnColOneTest,
+          testData.padPlayTest        ],
+        [ 
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.padPlayTest],
+        [
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotOnPrimTest.pivotOnTrueTest,
+          testData.padPlayTest],
+      ]}
+    />))
+
+
+
+storiesOf('Column Definition Debug', module)
   .addWithJSX('Col Def Debug',()=>
     (<Grid debugGridMath
       data={colDef}
@@ -80,6 +157,44 @@ storiesOf('Grid', module)
     />))
 ;
 
+
+
+
+
+
+const colDef =
+  [
+    {
+      key: 'a', title: 'col A', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
+      easyDate: '', easyDateTime: '', easyMenu: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
+    },
+    {
+      key: 'b', title: 'col B', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
+      easyDate: '', easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
+    },
+    {
+      key: 'c', title: 'col C', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
+      easyDate: '', easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
+    },
+    {
+      key: 'd', title: 'col D', editDisabled: '', widePct: '', widePx: '',
+      easyBool: '', easyInt: '', easyFloat: '', easyDollar: '', easyEuro: '', easyPound: '',
+      easyDate: '', easyDateTime: '', altText: '',
+      styleHeader: '', styleInput: '', styleCell: '',
+      compHeader: '', compInput: '', compCell: '', easyMenu: ''
+    }
+  ];
+
+
 // addWithJSX is useful for good data, but looses nuance with deliberatly invalid data.
 storiesOf('Error Handlers', module)
 .addWithJSX('no input data 1',()=>(<div><Grid/><br/>{'<Grid/>'}</div>))
@@ -96,7 +211,7 @@ storiesOf('Error Handlers', module)
 
 
 
-storiesOf('object[] - small data', module)
+storiesOf('obj[],small data,value tpes', module)
 .addWithJSX('numeric values',()=>(<Grid data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros',()=>(<Grid data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0}]}/>))
 .addWithJSX('string values mixed',()=>(<Grid data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'}]}/>))
@@ -106,26 +221,27 @@ storiesOf('object[] - small data', module)
 .addWithJSX('null values mixed padded',()=>(<Grid borderWide={15} padWide={15} data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 
 
-storiesOf('object[] - column defs', module)
+storiesOf('obj[],col defs,col sized and types', module)
 .addWithJSX('col wide auto,noScroll,missing defs', () => (<Grid gridHighCollapse={false} showToolsAddCut debugGridMath
     columnList={[{ key: 'a', title: 'col A' }, { key: 'c', title: 'col C' }, { key: 'b', title: 'col B' }]}
     data={[{ r: null, a: true, b: 6, c: null, d: 90 }, { r: 4, a: false, b: 6, c: 8, d: 90 }, { r: 3, a: true, b: 6, c: null, d: 90 }, { r: 2, a: false, b: 6, c: 8, d: 90 }, { r: 1, a: true, b: 6, c: 8, d: 90 }]} />))
-.addWithJSX('col wide px,noScroll,missing defs',()=>(<Grid gridHighCollapse={false} showToolsAddCut debugGridMath 
+.addWithJSX('wide px,noScroll,missing defs',()=>(<Grid gridHighCollapse={false} showToolsAddCut debugGridMath 
                                 columnList={[{key:'a',title:'col A',widePct:'75'},{key:'b',title:'col B',widePct:'10'},{key:'c',title:'col C',widePct:'5'}]} 
                                 data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col wide pct,noScroll,defs out of order',()=>(<Grid  gridHighCollapse={false} showToolsAddCut 
+.addWithJSX('wide pct,noScroll,defs out of order',()=>(<Grid  gridHighCollapse={false} showToolsAddCut 
                                 columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R'}]} 
                                 data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
-.addWithJSX('col data types, in cell editors',()=>(<Grid 
+.addWithJSX('data types, in cell editors',()=>(<Grid 
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15',easyBool:true},{key:'b',title:'col B',widePct:'15',easyDollar:true},{key:'c',title:'col C',widePct:'5',easyEuro:true},{key:'d',title:'col D',widePct:'5'},{key:'r',title:'col R',easyPound:true}]} 
   />))
-.addWithJSX('col data types, overlay editors',()=>(<Grid 
+.addWithJSX('data types, overlay editors',()=>(<Grid 
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15',easyMenu:'a|b|c|d'},{key:'b',title:'col B',widePct:'15',easyMenu:['asdf','qwer','zxcv']},{key:'c',title:'col C',widePct:'5',easyEuro:true},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))
 
-  storiesOf('object[] - styles', module)  
+
+storiesOf('obj[], grid styles', module)  
   .addWithJSX('col data types, style headers all',()=>(<Grid 
     styleHeader={{backgroundColor:'pink'}}
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
@@ -180,7 +296,7 @@ storiesOf('object[] - column defs', module)
   .addWithJSX('col widths too big,scroll,padded',()=>(<Grid borderWide={15} padWide={15} data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 
 
-  storiesOf('object[] - classNames', module)  
+  storiesOf('obj[], grid classNames', module)  
   .addWithJSX('col data types, class headers all',()=>(<Grid 
     classHeaderData='GreenRotate'
     classHeaderCell='BackgroundBlue'
@@ -227,12 +343,12 @@ storiesOf('object[] - column defs', module)
     columnList={[{key:'a',title:'col A',widePct:'15',classHeaderCell:'Gradient1',classHeaderData:'GreenRotate'},{key:'b',title:'col B',widePct:'15',classHeaderCell:'Gradient2',classHeaderData:'RedRotate'},{key:'c',title:'col C',widePct:'5',styleHeader:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))
 
-  .addWithJSX('col data types, style cell',()=>(<Grid 
+  .addWithJSX('col data types, grid style cell',()=>(<Grid 
     styleCell={{backgroundColor:'teal'}}
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15'},{key:'b',title:'col B',widePct:'15'},{key:'c',title:'col C',widePct:'5'},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
   />))
-  .addWithJSX('col data types, style cell by Column',()=>(<Grid 
+  .addWithJSX('col data types, grid style cell+ column style cell',()=>(<Grid 
     styleCell={{backgroundColor:'teal'}}
     data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}
     columnList={[{key:'a',title:'col A',widePct:'15',styleCell:{backgroundColor:'pink'}},{key:'b',title:'col B',widePct:'15',styleCell:{backgroundColor:'green'}},{key:'c',title:'col C',widePct:'5',styleCell:{backgroundColor:'blue'}},{key:'d',title:'col D',widePct:'5',easyDate:true},{key:'r',title:'col R',easyDateTime:true}]} 
@@ -246,7 +362,7 @@ storiesOf('object[] - column defs', module)
   
 
 
-storiesOf('object[] - small data,pivot', module)
+storiesOf('obj[] - small data,pivot', module)
 .addWithJSX('numeric values',()=>(<Grid debugGridMath pivotOn='b' data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros',()=>(<Grid debugGridMath  pivotOn='b' data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0}]}/>))
 .addWithJSX('string values mixed',()=>(<Grid  debugGridMath pivotOn='b' data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'}]}/>))
@@ -255,7 +371,7 @@ storiesOf('object[] - small data,pivot', module)
 .addWithJSX('null values mixed',()=>(<Grid pivotOn='b' data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('string values mixed,padded',()=>(<Grid borderWide={15} padWide={15} debugGridMath pivotOn='b' data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'}]}/>))
 
-storiesOf('object[] - small data,big grid,autoColWide', module)
+storiesOf('obj[] - small data,big grid,autoColWide', module)
 .addWithJSX('numeric values super size',()=>(<Grid showToolsAddCut gridHighCollapse={false} gridHigh={800} gridWide={800} data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros bad tiny',()=>(<Grid debugGridMath showToolsAddCut gridHighCollapse={false} gridHigh={40} gridWide={40}  data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0}]}/>))
 .addWithJSX('string values mixed wide fullHigh',()=>(<Grid showToolsAddCut  gridHighCollapse={false} gridHigh={400} gridWide={400}  data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'}]}/>))
@@ -263,7 +379,7 @@ storiesOf('object[] - small data,big grid,autoColWide', module)
 .addWithJSX('bool values mixed collapsed',()=>(<Grid showToolsAddCut gridHigh={400} gridWide={400}  data={[{r:5,a:true,b:6,c:8,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:8,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed fullHigh',()=>(<Grid showToolsAddCut gridHighCollapse={false} gridHigh={400} gridWide={400}  data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 
-storiesOf('object[] - small data,big grid,autoColWide,pivotOn', module)
+storiesOf('obj[] - small data,big grid,autoColWide,pivotOn', module)
 .addWithJSX('numeric values super size',()=>(<Grid pivotOn='c' showToolsAddCut gridHighCollapse={false} gridHigh={800} gridWide={800} data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros bad tiny',()=>(<Grid pivotOn='c' showToolsAddCut gridHighCollapse={false} gridHigh={40} gridWide={40}  data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0}]}/>))
 .addWithJSX('string values mixed wide fullHigh',()=>(<Grid pivotOn='c' showToolsAddCut  gridHighCollapse={false} gridHigh={400} gridWide={400}  data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'}]}/>))
@@ -273,7 +389,7 @@ storiesOf('object[] - small data,big grid,autoColWide,pivotOn', module)
 .addWithJSX('null values mixed fullHigh padded',()=>(<Grid pivotOn='c'  borderWide={15} padWide={15} showToolsAddCut gridHighCollapse={false} gridHigh={400} gridWide={400}  data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90}]}/>))
 
 
-storiesOf('object[] - medium data', module)
+storiesOf('obj[] - medium data', module)
 .addWithJSX('numeric values',()=>(<Grid data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros',()=>(<Grid data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('string values mixed',()=>(<Grid data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
@@ -281,7 +397,7 @@ storiesOf('object[] - medium data', module)
 .addWithJSX('bool values mixed',()=>(<Grid data={[{r:5,a:true,b:6,c:8,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:8,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('null values mixed',()=>(<Grid data={[{r:null,a:true,b:6,c:null,d:90},{r:4,a:false,b:6,c:8,d:90},{r:3,a:true,b:6,c:null,d:90},{r:2,a:false,b:6,c:8,d:90},{r:1,a:true,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 
-storiesOf('object[] - medium data,big grid,autoColWide', module)
+storiesOf('obj[] - medium data,big grid,autoColWide', module)
 .addWithJSX('numeric values super size',()=>(<Grid showToolsAddCut gridHighCollapse={false} gridHigh={800} gridWide={800} data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('numeric values with zeros bad tiny',()=>(<Grid showToolsAddCut gridHighCollapse={false} gridHigh={40} gridWide={40}  data={[{r:0,a:5,b:6,c:8,d:90},{r:4,a:0,b:6,c:8,d:90},{r:3,a:5,b:0,c:8,d:90},{r:2,a:5,b:6,c:0,d:90},{r:1,a:5,b:6,c:8,d:0},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('string values mixed wide fullHigh',()=>(<Grid showToolsAddCut  gridHighCollapse={false} gridHigh={400} gridWide={400}  data={[{r:'asdf',a:5,b:6,c:8,d:90},{r:4,a:'qwer',b:6,c:8,d:90},{r:3,a:5,b:6,c:'zxcv',d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:'zaq'},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))

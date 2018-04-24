@@ -272,7 +272,7 @@ import DocStore from './DocStore';
               {this.ds.showClassStuff &&
                 <div style={{ marginLeft: '40px' }}>
                   NOTE: here are some CSS class names to try:<br />
-                  <div style={{ marginLeft: '10px' }}>GreenRotate , PinkRotate , RedRotate</div>
+                  <div style={{ marginLeft: '10px' }}>BasicBeige, GreenRotate , PinkRotate , RedRotate</div>
                   <div style={{ marginLeft: '10px' }}>BackgroundBlue , BackgroundYellow</div>
                   <div style={{ marginLeft: '10px' }}>Gradient1 , Gradient2</div>
 
@@ -327,6 +327,21 @@ import DocStore from './DocStore';
                     { key: 'easyDateTime', easyBool: true, altText: 'render and validate this column as a datetime' },
                     { key: 'easyMenu', altText: 'render and validate this column as a menu. supply an array of values easyMenu={[a,b,c,d]} or a pipe separated list easyMenu={"a|b|c|d"}' },
                     { key: 'altText', altText: 'provide help text when mousing over the column header' },
+
+                    { key: 'styleCell', altText: 'provide help text when mousing over the column header' },
+                    { key: 'styleData', altText: 'provide help text when mousing over the column header' },
+                    { key: 'styleHeaderCell', altText: 'provide help text when mousing over the column header' },
+                    { key: 'styleHeaderData', altText: 'provide help text when mousing over the column header' },
+
+
+                    { key: 'classCell', altText: 'provide help text when mousing over the column header' },
+                    { key: 'classData', altText: 'provide help text when mousing over the column header' },
+                    { key: 'classHeaderCell', altText: 'provide help text when mousing over the column header' },
+                    { key: 'classHeaderData', altText: 'provide help text when mousing over the column header' },
+
+                    { key: 'compHeader', altText: 'provide help text when mousing over the column header' },
+                    { key: 'compInput', altText: 'provide help text when mousing over the column header' },
+                    { key: 'compCell', altText: 'provide help text when mousing over the column header' },
                   ]}
                   pivotOn='title'
                   showToolsAddCut
