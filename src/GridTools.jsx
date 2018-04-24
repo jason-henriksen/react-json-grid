@@ -60,7 +60,7 @@ import ReactTooltip from 'react-tooltip';
     return(          
         <div>      
           {this.props.showToolsAddCut &&
-            <div style={{display:'inline-block',marginRight:'15px'}}>
+            <div style={{display:'inline-block',marginRight:'15px',minWidth:'95px'}}>
             <a data-tip data-for='btnAddRow'>
               <button onClick={this.addRow} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><PlaylistPlusIcon/></button>
               <ReactTooltip id='btnAddRow' place='bottom'>Add Row</ReactTooltip>
