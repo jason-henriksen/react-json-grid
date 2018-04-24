@@ -65,7 +65,8 @@ storiesOf('Combinatorial Test Design - Self Check', module)
         ]}
     />))
     
-storiesOf('Combinatorial Test Design - Self Check', module)  
+    
+storiesOf('Combinatorial Test Design - Grid Tests', module)
   .addWithJSX('Factorial Test - Basic Data', () => (
     <MultiTest 
     target={ <Grid/> }
