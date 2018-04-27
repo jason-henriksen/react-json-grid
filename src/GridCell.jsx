@@ -548,7 +548,7 @@ window.reactJsonGridFocusInput = function(elem){
       }
 
       if(isSelected){
-        finalStyleCell = {backgroundColor:'lightblue',...this.props.GridStore.styleSelected,...finalStyleCell};
+        finalStyleCell = { ...finalStyleCell, backgroundColor: 'lightblue', ...this.props.GridStore.styleSelected};
         cellClassName = cellClassName+' '+this.props.GridStore.classSelected;
       }
 
