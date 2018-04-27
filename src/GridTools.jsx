@@ -61,11 +61,11 @@ import ReactTooltip from 'react-tooltip';
         <div>      
           {this.props.showToolsAddCut &&
             <div style={{display:'inline-block',marginRight:'15px',minWidth:'95px'}}>
-            <a data-tip data-for='btnAddRow'>
+            <a data-tip data-for='btnAddRow'  style={{display:'inline-block'}}>
               <button onClick={this.addRow} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><PlaylistPlusIcon/></button>
               <ReactTooltip id='btnAddRow' place='bottom'>Add Row</ReactTooltip>
             </a>
-            <a data-tip data-for='btnDelRow'>
+            <a data-tip data-for='btnDelRow' style={{display:'inline-block'}}>
               <button onClick={this.cutRow} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><PlaylistRemoveIcon/></button>
               <ReactTooltip id='btnDelRow' place='bottom'>Delete Row</ReactTooltip>
             </a>

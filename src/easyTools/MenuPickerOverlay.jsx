@@ -45,7 +45,7 @@ import FilterIcon from 'mdi-react/FilterVariantIcon';
 
     var itemList=[];
     var listTarget = this.props.GridStore.colDefListByKey[this.props.GridStore.cursor.editObjKey].easyMenu;
-    if (listTarget.length){  // it's an array
+    if (listTarget && listTarget.length){  // it's an array
       // JJH Needs a storybook test
       itemList = listTarget.map((item,index) => { 
         if(''===this.filterText.trim() || (''+item).indexOf(this.filterText)!==-1){
