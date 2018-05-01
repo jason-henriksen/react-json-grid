@@ -147,7 +147,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           ],
         ]}
       />))
-      .addWithJSX('Factorial Test - Grid Wide Style States', () => (
+      .addWithJSX('Factorial Test - Grid Wide Style', () => (
         <MultiTest
           target={<Grid />}
           test={[
@@ -171,6 +171,93 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
             ],
           ]}
         />))
+  .addWithJSX('Factorial Test - Grid Wide Class', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.inputSelectionStatesTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.styleGridTest
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.inputSelectionStatesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.styleGridTest
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.inputSelectionStatesTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.styleGridTest
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Column Headers', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.columnsTest.titleAndEditableTest,
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.columnsTest.titleAndEditableTest,
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.columnsTest.titleAndEditableTest,
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Column Sizes', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.columnsTest.columnSizeTest,
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.columnsTest.columnSizeTest,
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.columnsTest.columnSizeTest,
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Column Easy Types', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+      ]}
+    />))
     
 
 

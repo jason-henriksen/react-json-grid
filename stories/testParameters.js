@@ -38,11 +38,23 @@ const testData=
     },
     //-- object array
     objArrayTest:{
-      objListNumericTest : { data: [{ r: 5, a: 0, b: 6, c: 8, d: 90 }, { r: 4, a: 5, b: 0, c: 8, d: 90 }, { r: 3, a: 5, b: 6, c: 8, d: 90 }, { r: 2, a: 5, b: 6, c: 8, d: 90 }, { r: 1, a: 5, b: 6, c: 8, d: 90 }] },
+      objListNumericTest : { data: [{ r: 5, a: 0, b: 6, c: 7, d: 8 }, 
+                                    { r: 4, a: 1, b: 7, c: 8, d: 9 }, 
+                                    { r: 3, a: 0, b: 8, c: 9, d: 10 }, 
+                                    { r: 2, a: 1, b: 9.50, c: 10.50, d: 11.50 }, 
+                                    { r: 1, a: 0, b: 10.75, c: 11.75, d: 12.75 }] },
       objListStringTest : { data: [{ r: 'asdf', a: 5, b: 6, c: 8, d: 90 }, { r: 4, a: 'qwer', b: 6, c: 8, d: 90 }, { r: 3, a: 5, b: 6, c: 'zxcv', d: 90 }, { r: 2, a: 5, b: 6, c: 8, d: 90 }, { r: 1, a: 5, b: 6, c: 8, d: 'zaq' }] },
-      objListEmptyStringsTest:{ data: [{ r: 'asdf', a: '', b: 0, c: 8, d: 90 }, { r: 4, a: 'qwer', b: 6, c: 8, d: 90 }, { r: 3, a: '', b: 0, c: 'zxcv', d: 90 }, { r: 2, a: 5, b: 6, c: 8, d: 90 }, { r: 1, a: 5, b: 6, c: 8, d: 'zaq' }] },
+      objListEmptyStringsTest:{ data: [{ r: 'asdf', a: '', b: 0, c: 8, d: 90 }, 
+                                       { r: 4, a: 'qwer', b: 6, c: 8, d: 90 }, 
+                                       { r: 3, a: '', b: 0, c: 'zxcv', d: 90 }, 
+                                       { r: 2, a: 5, b: 6, c: 8, d: 90 }, 
+                                       { r: 1, a: 5, b: 6, c: 8, d: 'zaq' }] },
       objListBoolsTest:{ data: [{ r: 5, a: true, b: 6, c: 8, d: 90 }, { r: 4, a: false, b: 6, c: 8, d: 90 }, { r: 3, a: true, b: 6, c: 8, d: 90 }, { r: 2, a: false, b: 6, c: 8, d: 90 }, { r: 1, a: true, b: 6, c: 8, d: 90 }] },
-      objListNullsTest:{ data: [{ r: null, a: true, b: 6, c: null, d: 90 }, { r: 4, a: false, b: 6, c: 8, d: 90 }, { r: 3, a: true, b: 6, c: null, d: 90 }, { r: 2, a: false, b: 6, c: 8, d: 90 }, { r: 1, a: true, b: 6, c: 8, d: 90 }] },
+      objListNullsTest:{ data: [{ r: null, a: true,  b: 6, c: null, d: 90 }, 
+                                { r: 4,    a: false, b: null, c: 8, d: null }, 
+                                { r: 3,    a: true,  b: 6, c: null, d: 90 }, 
+                                { r: 2,    a: false, b: null, c: 8, d: null }, 
+                                { r: 1,    a: true,  b: 6, c: 8, d: 90 }] },
     },
     //-- array array
     arrArrayTest: {
@@ -161,6 +173,110 @@ const testData=
       styleInput:{backgroundColor:'aqua'},
       styleSelected:{backgroundColor:'silver'},
     }
+  },
+  classGridTest: {
+    classAllTest: {
+      classHeaderCell: { backgroundColor: 'pink' },
+      classCell: { backgroundColor: 'lightblue' },
+      classCellOddRow: { backgroundColor: 'linen' },
+      classRowHeaderCell: { backgroundColor: 'yellow' },
+
+      classHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
+      classData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },
+      classDataOddRow: { backgroundColor: 'slateblue' },
+      classRowHeaderData: { backgroundColor: 'purple' },
+
+      classInput: { backgroundColor: 'aqua' },
+      classSelected: { backgroundColor: 'silver' },
+    },
+    classNoOddRowsTest: {
+      classHeaderCell: { backgroundColor: 'pink' },
+      classCell: { backgroundColor: 'lightblue' },
+      classRowHeaderCell: { backgroundColor: 'yellow' },
+
+      classHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
+      classData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },
+      classRowHeaderData: { backgroundColor: 'purple' },
+
+      classInput: { backgroundColor: 'aqua' },
+      classSelected: { backgroundColor: 'silver' },
+    }
+  },
+  toolsEnabledTest:{
+    toolsAllTest:{
+      showToolsAddCut:true,
+      showToolsPage: true,
+      showToolsImpExp: true,
+      showToolsCustom: true,
+      pageCount:5,
+    },
+    toolsSomeTest:{
+      showToolsAddCut: true,
+      showToolsPage: false,
+      showToolsImpExp: true,
+      showToolsCustom: false,
+      pageCount: 5,
+    },
+    editAsTextTest:{
+      editAsText:true
+    },
+    editDisabledTest: {
+      editAsText: true
+    }
+  },
+  columnsTest:{
+    titleAndEditableTest: {
+      // key, title, editable, altText.  Columns deliberately out of order, with not all values specified
+      columnList:[
+        { key: 'r', altText: 'col me RRR', editDisabled:true}, 
+        { key: 'a', altText: 'col me AAA', title: 'AA Col', },
+        { key: 'c', altText: 'col me CCC', title: 'CC Col', },
+        { key: 'b', altText: 'col me BBB', title: 'BB Col', editDisabled: true },
+        { key: 'd', altText: 'col me DDD', title: 'DD Col', editDisabled: true}]
+    },
+    columnSizeTest: {
+      oneLargeColTest: {
+            columnList:[{ key: 'r', widePct: '15'},
+                        { key: 'a', widePct: '15' },
+                        { key: 'c', widePct: '15' },
+                        { key: 'b', widePct: '15' },
+                        { key: 'd', widePct: '40' }]},
+      mostlyPxColTest: {
+            columnList:[{ key: 'r', widePx:  '15' },
+                        { key: 'a', widePx:  '15' },
+                        { key: 'c', widePx:  '15' },
+                        { key: 'b', widePx:  '15' },
+                        { key: 'd', widePct: '100' }]},
+      decreaseColTest: {
+            columnList:[{ key: 'r', widePct: '50' },
+                        { key: 'a', widePct: '25' },
+                        { key: 'c', widePct: '13' },
+                        { key: 'b', widePct: '7'  },
+                        { key: 'd', widePct: '5'  }]},
+    },
+    columnEasyTypesTest:{
+      simpleFormatsTest:{
+            columnList: [ { key: 'r', easyInt: true },
+                          { key: 'a', easyFloat: true },
+                          { key: 'c', easyDollar: true },
+                          { key: 'b', easyEuro: true },
+                          { key: 'd', easyPound: true }]},
+      interactiveFormatsTest:{
+            columnList: [ { key: 'r', easyBool: true },
+                          { key: 'a', easyMenu: 'a|b|c|d|e'},
+                          { key: 'c', easyDate: true },
+                          { key: 'b', easyDateTime: true },
+                          { key: 'd', easyPound: true }]},
+    },
+    columnStyleTest: {
+    },
+    columnClassTest: {
+    },
+    columnComponentTest: {
+    },
+
+  },
+  componentsTest:{
   }
   
 };
@@ -171,34 +287,7 @@ export default testData;
 // all pivot tests, including redundant failure moves, mostly error checking
 var allPivotTest = [dataTypes * pivots]; // for some value of *
 
-<<<<<<< HEAD
-=======
 
-
-var testSizing = [sizing * normalDataPivotTests]    
->>>>>>> 6bc33cf8024e3412e2438e125f2394d858d10cf6
-
-var styleSet={
-  // all data types * [pivotOff,pivotOnColB,pivotOnCol1] *all style
-  styleCell:{},
-  styleData:{ pivot: true },
-  styleHeaderCell:{ pivot: true },
-  styleHeaderData:{ pivot: true },
-};
-var testStyle = [styleSet * normalDataPivotTests]    
-
-
-var classSet =  
-  {
-  // all data types * [pivotOff,pivotOnColB,pivotOnCol1] *all class
-    name:'class',
-    values:{
-      classCell:{},
-      classData:{ pivot: true },
-      classHeaderCell:{ pivot: true },
-      classHeaderData:{ pivot: true },
-    }
-  },
   {
   // all data types * [pivotOff,pivotOnColB,pivotOnCol1] *all components
     name: 'components',
@@ -210,17 +299,6 @@ var classSet =
     }
   },
   
-  {
-  // [ objA*[pivotOff,pivotOnColB], arrayA*[pivotOff,pivotOnColB], prims*[pivotOff,pivotOnTrue] ] * all tools
-    name:'tools',
-    values:{
-      toolAddCut:{},
-      toolPage:{ pivot: true },
-      toolImpExp:{ pivot: true },
-      toolAll:{ pivot: true },
-      editAsText: { editAsText:true }
-    }
-  },
   {
     // all data types * all pivot types * [all class,all style]
     name:'columns',
