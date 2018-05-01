@@ -72,6 +72,7 @@ const testData=
     }
     */
   },
+  //-- test the ways the data can be pivoted
   pivotsTest:  {
     pivotOnNameTest:{
       pivotOnColRTest: { pivotOn: 'r' },
@@ -85,24 +86,81 @@ const testData=
     pivotOnPrimTest: {
       pivotOnTrueTest: { pivotOn: true },
     },
+    //-- these are less thorough tests for convenience
+    pivotToggleNamedColumnsTest:{
+      pivotOffTest:{ none:'' },
+      pivotOnColBTest:{ pivotOn: 'b' },
+    },
+    pivotToggleIndexColumnsTest:{
+      pivotOffTest:{ none:'' },
+      pivotOnColBTest:{ pivotOn: 'b' },
+    },
+    pivotToggleBoolColumnsTest:{
+      pivotOffTest:{ none:'' },
+      pivotOnColBTest:{ pivotOn: 'b' },
+    }
   },
+  //-- test the pivot row header sizing
   pivotsHeaderTest : {
     pivotWithNormalHeaderTest: {  },
     pivotWithWideHeaderTest: { pivotRowHeaderWide: 125 },
   },
+  //--- test padding and borders
   padPlayTest:{
-    border0Test: { borderWide: 0 },
-    pad0Test: { padWide: 0 },
-    border1Test: { borderWide: 1 },
-    pad1Test: { padWide: 1 },
+    border0Test:  { borderWide: 0 },
+    pad0Test:     { padWide: 0 },
+    border1Test:  { borderWide: 1 },
+    pad1Test:     { padWide: 1 },
     border15Test: { borderWide: 15},
-    pad15Test: { padWide: 15},
-    borderAndPad0Test: { borderWide: 0, padWide: 0 },
-    borderAndPad1Test: { borderWide: 1, padWide: 1 },
+    pad15Test:    { padWide: 15},
+    borderAndPad0Test:  { borderWide: 0, padWide: 0 },
+    borderAndPad1Test:  { borderWide: 1, padWide: 1 },
     borderAndPad15Test: { borderWide: 15, padWide: 15},
     hideHeaderTest:{ hideHeader: true },
     gridCollapseOnTest: { gridCollapse: true, gridHigh:500 },
-    gridCollapseOffTest: { gridCollapse: true, gridHigh: 500 },    
+    gridCollapseOffTest: { gridCollapse: true, gridHigh: 500 },
+  },
+  //--- test various selection/input states
+  inputSelectionStatesTest:{
+    singleSelectionRootTest:{testCursor:{x:0,y:0}},
+    singleSelection1x1Test:{testCursor:{x:1,y:1}},
+    singleSelection2x2Test:{testCursor:{x:2,y:2}},
+    singleSelectionRootTo2x2Test:{testCursor:{x:0,y:0,selectToX:2,selectToY:2,shiftSelInProgress:true}},
+    singleSelection1x1to1x3Test:{testCursor:{x:1,y:1,selectToX:1,selectToY:3,shiftSelInProgress:true}},
+    singleSelection1x1to3x1Test:{testCursor:{x:1,y:1,selectToX:3,selectToY:1,shiftSelInProgress:true}},
+    singleSelection2x2to4x4Test:{testCursor:{x:2,y:2,selectToX:4,selectToY:4,shiftSelInProgress:true}},
+    singleInput0x0Test:{testCursor:{x:0,y:0,editX:0,editY:0}},
+    singleInput1x1SingleCellSelectionTest:{testCursor:{x:1,y:1,editX:1,editY:1}},
+    singleInput1x1LargeSelectionTest:{testCursor:{x:2,y:2,selectToX:4,selectToY:4,editX:3,editY:3,shiftSelInProgress:true}},
+  },
+    //--- test grid-wide style settings
+  styleGridTest:{
+    styleAllTest:{
+      styleHeaderCell:{backgroundColor:'pink'},
+      styleCell:{backgroundColor:'lightblue'},
+      styleCellOddRow:{backgroundColor:'linen'},
+      styleRowHeaderCell:{backgroundColor:'yellow'},
+
+      styleHeaderData:{backgroundColor:'lightbrown',transform: 'rotate(-20deg)',textAlign:'center'},
+      styleData:{backgroundColor:'lightgreen',transform: 'rotate(20deg)',textAlign:'center'},                  
+      styleDataOddRow:{backgroundColor:'slateblue'},
+      styleRowHeaderData:{backgroundColor:'purple'},
+
+      styleInput:{backgroundColor:'aqua'},
+      styleSelected:{backgroundColor:'silver'},
+    },
+    styleNoOddRowsTest:{
+      styleHeaderCell:{backgroundColor:'pink'},
+      styleCell:{backgroundColor:'lightblue'},
+      styleRowHeaderCell:{backgroundColor:'yellow'},
+
+      styleHeaderData:{backgroundColor:'lightbrown',transform: 'rotate(-20deg)',textAlign:'center'},
+      styleData:{backgroundColor:'lightgreen',transform: 'rotate(20deg)',textAlign:'center'},                  
+      styleRowHeaderData:{backgroundColor:'purple'},
+
+      styleInput:{backgroundColor:'aqua'},
+      styleSelected:{backgroundColor:'silver'},
+    }
   }
   
 };
@@ -113,6 +171,12 @@ export default testData;
 // all pivot tests, including redundant failure moves, mostly error checking
 var allPivotTest = [dataTypes * pivots]; // for some value of *
 
+<<<<<<< HEAD
+=======
+
+
+var testSizing = [sizing * normalDataPivotTests]    
+>>>>>>> 6bc33cf8024e3412e2438e125f2394d858d10cf6
 
 var styleSet={
   // all data types * [pivotOff,pivotOnColB,pivotOnCol1] *all style

@@ -126,7 +126,52 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           testData.padPlayTest],
       ]}
     />))
-
+    .addWithJSX('Factorial Test - Selection States', () => (
+      <MultiTest
+        target={<Grid />}
+        test={[
+          [// pivot tests by basic array array data times all selection states
+            testData.dataTypesTest.objArrayTest.objListStringTest,
+            testData.inputSelectionStatesTest,
+            testData.pivotsTest.pivotToggleNamedColumnsTest
+          ],
+          [// pivot tests by basic object array data times all selection states
+            testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+            testData.inputSelectionStatesTest,
+            testData.pivotsTest.pivotToggleIndexColumnsTest
+          ],
+          [// pivot tests by basic prims array data times all selection states
+            testData.dataTypesTest.primsTest.primsListMixedTest,
+            testData.inputSelectionStatesTest,
+            testData.pivotsTest.pivotToggleBoolColumnsTest
+          ],
+        ]}
+      />))
+      .addWithJSX('Factorial Test - Grid Wide Style States', () => (
+        <MultiTest
+          target={<Grid />}
+          test={[
+            [// pivot tests by basic array array data times all selection states
+              testData.dataTypesTest.objArrayTest.objListStringTest,
+              testData.inputSelectionStatesTest,
+              testData.pivotsTest.pivotToggleNamedColumnsTest,
+              testData.styleGridTest
+            ],
+            [// pivot tests by basic object array data times all selection states
+              testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+              testData.inputSelectionStatesTest,
+              testData.pivotsTest.pivotToggleIndexColumnsTest,
+              testData.styleGridTest
+            ],
+            [// pivot tests by basic prims array data times all selection states
+              testData.dataTypesTest.primsTest.primsListMixedTest,
+              testData.inputSelectionStatesTest,
+              testData.pivotsTest.pivotToggleBoolColumnsTest,
+              testData.styleGridTest
+            ],
+          ]}
+        />))
+    
 
 
 storiesOf('Column Definition Debug', module)

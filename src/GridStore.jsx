@@ -117,6 +117,16 @@ class GridStore {           // Just a class.  Nothing fancy here.
       this.cursor.maxY = dataHigh-1;
     }
 
+    if(props.testCursor){ 
+      this.cursor.x = props.testCursor.x; 
+      this.cursor.y = props.testCursor.y; 
+      this.cursor.selectToX = (props.testCursor.selectToX||-1); 
+      this.cursor.selectToY = (props.testCursor.selectToY||-1); 
+      this.cursor.editX = (props.testCursor.editX||-1); 
+      this.cursor.editY = (props.testCursor.editY||-1); 
+      this.cursor.shiftSelInProgress = props.testCursor.shiftSelInProgress; 
+    }
+
     // make handlers easily available and log messages if they're missing.
     this.onChange       = (props.onChange       || this.logNoChangeHandlerMessage );  
     this.onRowAdd       = (props.onRowAdd       || this.logNoOnRowAddHandlerMessage); 

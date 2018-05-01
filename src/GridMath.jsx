@@ -111,14 +111,6 @@ class GridMath
       if (-1 === result.colHeaderHigh) { result.colHeaderHigh = 18; }
       if (props.colHeaderHide) { result.colHeaderHigh = 0; } // hide not wide or high
 
-      // grid height
-      var testStyleHeight = null;
-      if(props.style){ testStyleHeight = props.style.height}; // needed for null safety on props.style.  Needs to remove trailing px or % !!! 
-      result.gridHigh = testStyleHeight || this.makeValidInt(props.gridHigh) || Math.min(result.rowHighWithPad*(data.length+2) ,400);  // read from style, read from attributes, read from gridHigh attribute, default to 300
-      if (result.gridHigh === -1) {
-        result.gridHigh = 400;
-      }
-
       // header height
       if (props.colHeaderHide || result.forceColHeaderHide) {     // provide a header row.
         result.headerUsage=1;
@@ -300,6 +292,16 @@ class GridMath
         // calculate the used row width
         result.rowWide= fixedWide + (result.autoColWideWithBorderAndPad * autoColCount) - result.borderWide;
 
+        // grid height - can't calculate this until dataHigh is defined due to pivot concerns
+        var testStyleHeight = null;
+        if(props.style){ testStyleHeight = props.style.height}; // needed for null safety on props.style.  Needs to remove trailing px or % !!! 
+        result.gridHigh = testStyleHeight || 
+                          this.makeValidInt(props.gridHigh) || 
+                          Math.min(result.rowHighWithPad*result.dataHigh+result.headerUsage+(result.borderWide*3)+10 ,400);  // read from style, read from attributes, read from gridHigh attribute, default to 300
+        if (result.gridHigh === -1) {
+          result.gridHigh = 400;
+        }
+
         // How high should the grid be?
         result.dataFullHigh = result.dataHigh * (result.rowHighWithPad + result.borderWide);
         result.dataAvailableHigh = result.gridHigh-result.headerUsage-result.toolUsage; // this is the virtList height.
@@ -358,6 +360,8 @@ class GridMath
           (result.borderWide * 2);
         result.colHeaderKeyList = ["No Data Provided"];
       }
+
+      
 
       
       return result;
