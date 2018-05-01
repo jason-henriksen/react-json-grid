@@ -99,7 +99,10 @@ const testData=
     pad15Test: { padWide: 15},
     borderAndPad0Test: { borderWide: 0, padWide: 0 },
     borderAndPad1Test: { borderWide: 1, padWide: 1 },
-    borderAndPad15Test: { borderWide: 15, padWide: 15}
+    borderAndPad15Test: { borderWide: 15, padWide: 15},
+    hideHeaderTest:{ hideHeader: true },
+    gridCollapseOnTest: { gridCollapse: true, gridHigh:500 },
+    gridCollapseOffTest: { gridCollapse: true, gridHigh: 500 },    
   }
   
 };
@@ -110,31 +113,6 @@ export default testData;
 // all pivot tests, including redundant failure moves, mostly error checking
 var allPivotTest = [dataTypes * pivots]; // for some value of *
 
-var normalDataPivotTests = [
-  dataType.objArray.objListString,                        // normal, non pivot data
-  dataTypes.objArray.objListString * pivots.pivotOnColB,  // normal, pivoted data
-  dataTypes.arrArray.arrayListWithEmpties,                // array non-piot
-  dataTypes.arrArray.arrayListWithEmpties * pivots.pivotOnCol1, // array pivot
-  dataTypes.prims.primsListMixed,
-  dataTypes.prims.primsListMixed * pivots.pivotOnTrue, // array pivot
-  dataTypes.texts,
-  dataTypes.texts * pivots.pivotOnCol1,
-  dataTypes.texts * pivots.pivotOnColB
-];
-
-// all data types * [pivotOff,pivotOnColB,pivotOnCol1] *all sizing
-var sizing={
-      sizeNone:{},
-      sizePadding:{ padWide:15  },
-      sizeBorder:{ borderWide:15 },
-      sizeBoth:{ borderWide:15, padWide:15 },
-      hideHeader:{ hideHeader:true},
-      gridCollapse:{ gridCollapse:true},
-      sizeSmall: { gridHigh:400, gridWide:100 },
-      sizeLarge: { gridHigh:800, gridWide:800 },
-    };
-
-var testSizing = [sizing * normalDataPivotTests]    
 
 var styleSet={
   // all data types * [pivotOff,pivotOnColB,pivotOnCol1] *all style
