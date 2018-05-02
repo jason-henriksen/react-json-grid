@@ -11,6 +11,8 @@ import SelectNo from 'mdi-react/CheckboxBlankOutlineIcon';
 import SelectYes from 'mdi-react/CheckboxBlankIcon';
 import CloseBox from 'mdi-react/CloseBoxIcon';
 
+import TestItem from './TestItem';
+
 
 
 // Given a set of parameters and rules for multiplying those objects togeter, generate 
@@ -20,8 +22,6 @@ export default class MultiTest extends React.Component {
   constructor(props) {
     super(props); autoBind(this);        
     this.state = { filter: (window.reactFactorialTest_filter || ''),
-                   compList: [],
-                   flagList: [],
                    showCompsOnly: false,
                    showFlagsOnly: false
                  };
@@ -86,50 +86,9 @@ export default class MultiTest extends React.Component {
     window.reactFactorialTest_filter=filterVal;
     window.reactFactorialTest_compsOnly = false;
     window.reactFactorialTest_flagsOnly = false;
-    this.setState({ filter: filterVal, compList: this.state.compList, showCompsOnly: false, showFlagsOnly: false });
+    this.setState({ filter: filterVal, showCompsOnly: false, showFlagsOnly: false });
   }
 
-  // toggle wether a given test name is in the comparison list.
-  // save the information to a window variable so that it will survive reloading the page due the tested code being updated.
-  toggleComp(testName) {
-    var compList = this.state.compList;
-    if (compList.indexOf(testName)===-1){
-      // add it
-      compList.push(testName)
-      window.reactFactorialTest_compList = compList;
-      this.setState({ compList: compList });
-    }
-    else{
-      // cut it
-      var i;
-      while ((i = compList.indexOf(testName)) != -1) {
-        compList.splice(i, 1);
-      }    
-      window.reactFactorialTest_compList = compList;
-      this.setState({ compList: compList });
-    }
-  }
-
-  // toggle wether a given test name is in the comparison list.
-  // save the information to a window variable so that it will survive reloading the page due the tested code being updated.
-  toggleFlag(testName) {
-    var flagList = this.state.flagList;
-    if (flagList.indexOf(testName) === -1) {
-      // add it
-      flagList.push(testName)
-      window.reactFactorialTest_flagList = flagList;
-      this.setState({ flagList: flagList });
-    }
-    else {
-      // cut it
-      var i;
-      while ((i = flagList.indexOf(testName)) != -1) {
-        flagList.splice(i, 1);
-      }
-      window.reactFactorialTest_flagList = flagList;
-      this.setState({ flagList: flagList });
-    }
-  }  
 
   // toggle wether the system is showing all tests or just the comparison tests.
   // save the information to a window variable so that it will survive reloading the page due the tested code being updated.
@@ -187,7 +146,10 @@ export default class MultiTest extends React.Component {
       // 3) any number of tests can be set for comparison, again controlled by window variables.
 
       // this renders each item in allwork to an array, filtering out items that are not supposed to be rendered.
+      var isInCompShowMode  = window.reactFactorialTest_compsOnly;
       var holdName = item.tstName; 
+
+      // It seems like this logic has to be checked twice in order to have things be performant and also work while in focused mode
       if (
           // if there's no filter or this test matches a filter, include it.
           (!window.reactFactorialTest_filter || holdName === window.reactFactorialTest_filter) &&
@@ -196,62 +158,17 @@ export default class MultiTest extends React.Component {
              (window.reactFactorialTest_compsOnly && 
               window.reactFactorialTest_compList &&
               -1 !== window.reactFactorialTest_compList.indexOf(holdName))
-          ) 
+          ) &&
+          // if there's no comparison, or if there is comparison and this test is in the list.
+          (!window.reactFactorialTest_flagsOnly ||
+            (window.reactFactorialTest_flagsOnly && 
+             window.reactFactorialTest_flagList &&
+             -1 !== window.reactFactorialTest_flagList.indexOf(holdName))
+         )          
       ){
-        item.tstName=undefined;
-
-        // is this test name in the comparison list?
-        var isInCompList      = (window.reactFactorialTest_compList && -1 !== window.reactFactorialTest_compList.indexOf(holdName));
-        // is this system in comparisons only mode?
-        var isInCompShowMode  = window.reactFactorialTest_compsOnly;
-        // is this test flagged for review
-        var isFlagged = (window.reactFactorialTest_flagList && -1 !== window.reactFactorialTest_flagList.indexOf(holdName));
-
-
-        var focusButton='';
-        var includeToggle = '';
-        var compViewToggle = '';
-        var flagToggle = '';
-        if (holdName !== window.reactFactorialTest_filter){
-          // only show the focus button if everything is being rendered
-          focusButton =     <div  style={{ padding: '2px', backgroundColor: 'lightgreen', border: '1px solid black',width:20,display:'inline-block' }}
-                              onClick={() => this.setFilter(holdName)}
-                              title='Show only this test'
-          ><MagnifyIcon width={18} height={18}/></div>
-
-          includeToggle = <div style={{ padding: '2px', backgroundColor: 'lightgreen', border: '1px solid black', width: 20, display: 'inline-block' }}
-                              onClick={() => this.toggleComp(holdName)}
-                              title='Include test for comparisons'
-          >{isInCompList ? <SelectYes width={18} height={18} /> : <SelectNo width={18} height={18}/>}</div>
-
-          flagToggle = <div style={{ padding: '2px', backgroundColor: isFlagged ? 'crimson' : 'lightgreen', border: '1px solid black', width: 20, display: 'inline-block' }}
-                              onClick={() => this.toggleFlag(holdName)}
-                              title='Flag test for review'
-                            ><FlagIcon width={18} height={18}/></div>
-
-
-        }
-
-
-        // final rendering of the target with each multiplied parameter set
-        return(
-        <div key={index}>
-          <hr />          
-          <div>
-            <div style={{ width: '80%',display:'inline-block' }}>
-              <div style={{ fontSize: '1.5em' }}>{holdName}</div>            
-              {alphaStringify(item)}
-            </div>
-            <div style={{ width: '20%',display:'inline-block',marginLeft:'auto',verticalAlign:'top'}}>
-                {focusButton}&nbsp;
-                {flagToggle}&nbsp;
-                {includeToggle}
-            </div>
-          </div>
-
-          {React.cloneElement(this.props.target, item)}
-        </div>
-        );
+        return <TestItem key={index} index={index} item={item} target={this.props.target} 
+                  focusToggle={() => this.setFilter(holdName)}
+                />
       }
     });
 
