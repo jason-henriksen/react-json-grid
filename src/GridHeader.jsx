@@ -27,7 +27,7 @@ import ReactTooltip from 'react-tooltip';
         var gridColLocalStyle={};
         var helpComp=null;
         if(this.props.GridStore.colDefListByKey[keyName]){ // is there a colDef that uses this key?
-          if(this.props.pivotOn){                  
+          if (this.props.pivotOn || this.props.pivotOn === 0) {
             //== Pivot, With ColDefs
             if(ctr>0){
               if (this.props.GridStore.colDefListByKey[ this.props.GridStore.keyList[ctr-1] ].altText) { 
@@ -36,10 +36,10 @@ import ReactTooltip from 'react-tooltip';
             }
             var targetCol = 0;
             for (var tctr = 0; tctr < ui.colHeaderKeyList.length; tctr++) {
-              if (ui.colHeaderKeyList[tctr] === this.props.pivotOn) { targetCol = tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
+              if (''+ui.colHeaderKeyList[tctr] === ''+this.props.pivotOn) { targetCol = tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
             }
-            colTitle = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data, ctr - 1, targetCol - 1);// both -1 are to account for the '/' in the header row.
-            
+            colTitle = ''+this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data, ctr - 1, targetCol - 1);// both -1 are to account for the '/' in the header row.
+//            console.log(ctr, targetCol,colTitle);
           }
           else{
             //== NonPivot, With ColDefs
@@ -51,7 +51,7 @@ import ReactTooltip from 'react-tooltip';
               curColWide = ui.rowWide * (this.props.GridStore.colDefListByKey[keyName].widePct / 100);
             }
 
-            colTitle = this.props.GridStore.colDefListByKey[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
+            colTitle = ''+this.props.GridStore.colDefListByKey[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
             if (this.props.GridStore.colDefListByKey[keyName].altText) { 
               // handle alt text.  Note that the 'text' could be a component.  regular header
               helpComp = this.props.GridStore.colDefListByKey[keyName].altText; 
@@ -59,15 +59,17 @@ import ReactTooltip from 'react-tooltip';
           }
         }
         else{ 
-          if(this.props.pivotOn){ 
+          if (this.props.pivotOn || this.props.pivotOn === 0) {
             // no column defs, Pivot On
-            if(ctr>0){
+            if(ctr>=0){
               // find the index of the colDefListByKey item for the pivotOn target:
               var targetCol=0;
               for(var tctr=0;tctr<ui.colHeaderKeyList.length;tctr++){
-                if(ui.colHeaderKeyList[tctr]===this.props.pivotOn){ targetCol=tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
+                if(ui.colHeaderKeyList[tctr]===''+this.props.pivotOn){ // string conversion so that array indexes match
+                  targetCol = tctr; // this is the header index matching the pivotOn key, offset by 1 due to leading '/'
+                }
               }
-              colTitle = this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr-1,targetCol-1);// both -1 are to account for the '/' in the header row.
+              colTitle = ''+this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data,ctr-1,targetCol-1);// both -1 are to account for the '/' in the header row.
             }
           }
           else{
@@ -79,7 +81,7 @@ import ReactTooltip from 'react-tooltip';
         }
 
         // NOTE: check for header components here.
-        if (ctr===0 && this.props.pivotOn && ui.pivotRowHeaderWide) {
+        if (ctr === 0 && (this.props.pivotOn || this.props.pivotOn === 0) && ui.pivotRowHeaderWide) {
           curColWide = Number(ui.pivotRowHeaderWide);
         }
 
@@ -89,7 +91,7 @@ import ReactTooltip from 'react-tooltip';
           if(this.props.GridStore.colDefListByKey[keyName].forceColWide){
             curColWide = this.props.GridStore.colDefListByKey[keyName].forceColWide;
           }
-          if(!this.props.pivotOn){
+          if(!this.props.pivotOn && this.props.pivotOn!==0){
             classNameHeaderColData = this.props.GridStore.colDefListByKey[keyName].classHeaderData||'';
             classNameHeaderColCell = this.props.GridStore.colDefListByKey[keyName].classHeaderCell||'';
           }
@@ -105,8 +107,9 @@ import ReactTooltip from 'react-tooltip';
                           style={{
                             ...defaultStyleCell,            // user specified global header styles.
                             ...gridColLocalStyle,           // user specified per-column header styles.
-                            width: curColWide,              // everything from here down cannot be over-ridden by the user.
-                            maxWidth: curColWide,           // everything from here down cannot be over-ridden by the user.
+                            width: curColWide+'px',              // everything from here down cannot be over-ridden by the user.
+                            maxWidth: curColWide + 'px',           // everything from here down cannot be over-ridden by the user.
+                            minWidth: curColWide + 'px',           // everything from here down cannot be over-ridden by the user.
                             borderStyle: 'solid',
                             borderWidth:ui.borderWide,
                             padding: ui.padWide+'px',

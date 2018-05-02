@@ -17,7 +17,7 @@ import JSXAddon from 'storybook-addon-jsx';
 
 import '../src/TestCSS.css';
 
-import testParameters from './testParameters.js';
+import testParameters from './testParameters.jsx';
 var testData = TestNameTool(testParameters); // name each test after it's variable name.
 console.log(testData);
 
@@ -147,6 +147,28 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           ],
         ]}
       />))
+      .addWithJSX('Factorial Test - Tools', () => (
+        <MultiTest
+          target={<Grid />}
+          test={[
+            [// pivot tests by basic array array data times all selection states
+              testData.dataTypesTest.objArrayTest.objListStringTest,
+              testData.pivotsTest.pivotToggleNamedColumnsTest,
+              testData.toolsEnabledTest
+            ],
+            [// pivot tests by basic object array data times all selection states
+              testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+              testData.pivotsTest.pivotToggleIndexColumnsTest,
+              testData.toolsEnabledTest
+            ],
+            [// pivot tests by basic prims array data times all selection states
+              testData.dataTypesTest.primsTest.primsListMixedTest,
+              testData.pivotsTest.pivotToggleBoolColumnsTest,
+              testData.toolsEnabledTest
+            ],
+          ]}
+        />))
+      
       .addWithJSX('Factorial Test - Grid Wide Style', () => (
         <MultiTest
           target={<Grid />}
@@ -192,6 +214,27 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           testData.inputSelectionStatesTest,
           testData.pivotsTest.pivotToggleBoolColumnsTest,
           testData.styleGridTest
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Grid Wide Component', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.componentTest
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.componentTest
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.componentTest
         ],
       ]}
     />))
@@ -258,6 +301,89 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
+  .addWithJSX('Factorial Test - Column Style', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Column Class', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+      ]}
+    />))
+  .addWithJSX('Factorial Test - Column Component', () => (
+    <MultiTest
+      target={<Grid />}
+      test={[
+        [// pivot tests by basic array array data times all selection states
+          testData.dataTypesTest.objArrayTest.objListStringTest,
+          testData.pivotsTest.pivotToggleNamedColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic object array data times all selection states
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          testData.pivotsTest.pivotToggleIndexColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+        [// pivot tests by basic prims array data times all selection states
+          testData.dataTypesTest.primsTest.primsListMixedTest,
+          testData.pivotsTest.pivotToggleBoolColumnsTest,
+          testData.columnsTest.columnEasyTypesTest,
+        ],
+      ]}
+    />))
+
+    //=== Test still needed:
+    /*
+    - Formats test
+    - Interactive edit tests - nightwatch
+    - Interactive keyboarding test - nightwatch
+    - Component API + Interactive tests
+    - Large data test?
+    - remove some of the excess class&style tests
+    - compRowHeader
+
+    - Jest/Enzyme regression
+    - Factor out Factorial Test
+
+    - DocUI: make sure the generated JSX is valid
+
+    - data is MobX feature
+    - internally manage data feature.
+    */
+    
     
 
 

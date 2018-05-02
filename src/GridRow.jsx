@@ -96,7 +96,7 @@ import ReactTooltip from 'react-tooltip';
     var keyName = null;  // used for pivoted data only
 
     var columnCount = this.props.GridStore.cursor.maxX+1;
-    if (this.props.pivotOn){
+    if (this.props.pivotOn || this.props.pivotOn === 0){
       columnCount = this.props.data.length;
     }
     var isFirst=true;
@@ -171,7 +171,7 @@ import ReactTooltip from 'react-tooltip';
       else{
 
         var curColKey = this.props.uiMath.colHeaderKeyList[ctr]; // the xth column defined in the colHeaderKey list
-        if (this.props.pivotOn) {          
+        if (this.props.pivotOn || this.props.pivotOn === 0) {          
           if (this.props.GridStore.colDefListByIdx){
             // pvt ON, colDef ON
             //console.log(this.props.index, this.props.GridStore.colDefListByIdx[this.props.index]);

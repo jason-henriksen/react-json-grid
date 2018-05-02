@@ -130,14 +130,15 @@ class GridMath
 
       result.formatDate = props.formatDate||'YYYY-MM-DD';
       result.formatTime = props.formatTime||'HH:mm';
-
+//console.log('here');
       var autoColCount=0;
       // look at the data to display and figure out what we need to do.
       if( (data && data.length>0) || (props.columnList && props.columnList.length>0) ){ // col def from colList or from data
         if(result.isPrimitiveData){
+//          console.log('is Prim Data');
           // ==== PRIMITIVES we have only one line of data to display
           result.keyNames.push('data');
-          if(props.pivotOn){
+          if(props.pivotOn || props.pivotOn===0){
             result.rowHeaderList=['data'];              // one row header
             result.fixedRowCount = 1;                   // one row
             result.saveColumnForRowHeader=1;            // will have a row header.
@@ -147,6 +148,8 @@ class GridMath
             result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
             for(var pctr=0;pctr<data.length;pctr++){                    // pivot uses pivotOn key for column header keys
               result.colHeaderKeyList.push(pctr);       // key (or maybe value) for the column header.  Only used for autoColWide calculation
+//              console.log(pctr);
+
             }
             result.dataWide = data.length;        // length => width
             result.dataHigh = 1;                        // 1 row hight
@@ -160,7 +163,7 @@ class GridMath
         }
         else{
           // ==== OBJECTS we have rows of objects to display
-          if(props.pivotOn){  // pivot the data using this key as the col header
+          if(props.pivotOn || props.pivotOn === 0){  // pivot the data using this key as the col header
             //---- PIVOTED FLOW
             /*
             if(props.columnList){                             // pull key data from col def list first, but from data if cols are not defined
@@ -175,6 +178,7 @@ class GridMath
               var temp = Object.keys(data[0]);
               for(var pctr=0;pctr<data.length;pctr++){                    // pivot uses pivotOn key for column header keys
                 result.colHeaderKeyList.push(temp[pctr]);
+//                console.log(pctr,temp[pctr]);
               }
             //}
 
@@ -224,8 +228,8 @@ class GridMath
           result.gridWide = scrollBarWide + 10*result.keyNames.length;
         }
         result.rowWide = result.gridWide - (scrollBarWide||16);   // how wide is each row.
-        autoColCount = result.colHeaderKeyList.length;
-        if(props.pivotOn && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
+        autoColCount = result.colHeaderKeyList.length;        
+        if ((props.pivotOn || props.pivotOn === 0) && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
           // don't autoColCount the rowHeader
           autoColCount--;
         }
@@ -235,7 +239,7 @@ class GridMath
         var availableWide = result.rowWide;         // amount of space to allocate evenly
         var fixedWide = 0;                          // becomes the new rowWide is all columns are specified
         var change = 0;
-        if (props.columnList && result.colHeaderKeyList.length && !props.pivotOn){ // only autosize allowed on pivoted data
+        if (props.columnList && result.colHeaderKeyList.length && !props.pivotOn && props.pivotOn!==0){ // only autosize allowed on pivoted data
           autoColCount = 0; // number of columns that need auto width, i.e. column defs without a pct or px
           for (var cctr = 0; cctr < result.colHeaderKeyList.length;cctr++){
             change=0;
@@ -261,7 +265,8 @@ class GridMath
             }
           }
         }
-        if(props.pivotOn && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
+        
+        if( (props.pivotOn || props.pivotOn === 0) && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
           result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
           result.pivotRowHeaderWideTotal = result.pivotRowHeaderWide;
           result.pivotRowHeaderWideTotal += (result.borderWide);   // each column minus right border amount

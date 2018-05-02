@@ -482,8 +482,8 @@ window.reactJsonGridFocusInput = function(elem){
             React.cloneElement(
                 this.props.GridStore.colDefListByKey[this.props.objKey].compCell,
                 {
-                  x: this.props.GridStore.pivotOn ? this.props.y : this.props.x,
-                  y: this.props.GridStore.pivotOn ? this.props.x : this.props.x,
+                  x: (this.props.GridStore.pivotOn || 0 === this.props.GridStore.pivotOn) ? this.props.y : this.props.x,
+                  y: (this.props.GridStore.pivotOn || 0 === this.props.GridStore.pivotOn) ? this.props.x : this.props.x,
                   objKey: this.props.objKey,
                   cellData: this.props.cellData,
                   id: this.props.id+'-comp',
@@ -498,14 +498,15 @@ window.reactJsonGridFocusInput = function(elem){
 
           var disableEdit = this.isEditDisabled();
 
+          // note that the false || 0 check is required to pivot on the 0th column.
           renderVal = <span><EasyBool 
-                  x={this.props.GridStore.pivotOn ? this.props.y : this.props.x} 
-                  y={this.props.GridStore.pivotOn ? this.props.x : this.props.y} 
-                  objKey={this.props.objKey}
-                  cellData={this.props.cellData}
-                  id={this.props.id+'-comp'}
-                  disabled={disableEdit } 
-                  onChange={this.props.GridStore.onChange}/></span>
+            x={(this.props.GridStore.pivotOn || 0 === this.props.GridStore.pivotOn) ? this.props.y : this.props.x} 
+            y={(this.props.GridStore.pivotOn || 0 === this.props.GridStore.pivotOn) ? this.props.x : this.props.y} 
+            objKey={this.props.objKey}
+            cellData={this.props.cellData}
+            id={this.props.id+'-comp'}
+            disabled={disableEdit } 
+            onChange={this.props.GridStore.onChange}/></span>
         }       
         
       }  

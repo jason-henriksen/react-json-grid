@@ -51,7 +51,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   // call this to ensure that the pivot variables get swizzled correctly.
   onChangePivotWrapper(x,y,objKey,val){
     if(val===null) return; // cannot set null via the UI.  prevents unintended changes.
-    if (this.pivotOn) {
+    if (this.pivotOn || 0 === this.pivotOn) {
       this.onChange(y, x, objKey, val);
     }
     else {
@@ -218,7 +218,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   getDataRespectingPivotAtEditCursor(clientData){
     if(this.uiMath.isPrimitiveData){
       // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
-      if(this.pivotOn){
+      if (this.pivotOn || this.pivotOn === 0){
         return clientData[this.cursor.editY]; // y is rows down / outer array
       }
       else{
@@ -226,7 +226,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
       }
     }
     else{    
-      if(this.pivotOn){        
+      if(this.pivotOn || this.pivotOn===0){        
         return clientData[this.cursor.editX][this.uiMath.rowHeaderList[this.cursor.editY]]; // y is rows down / outer array        
       }
       else{
@@ -237,10 +237,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
 
   getDataRespectingPivotAtLocation(clientData,x,y)
   {
+    if(x<0 && y<0){ return '/' }
+    if (x < 0) { return '/' }
+    if (y < 0) { return '/' }    
     if(typeof clientData !== "object"){ console.log('Remember that the first parameter of this method must be the user client data.  Currently it is '+clientData);}
     if(this.uiMath.isPrimitiveData){
       // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
-      if(this.pivotOn){
+      if (this.pivotOn || 0 === this.pivotOn){
         return clientData[x]; // y is rows down / outer array
       }
       else{
@@ -249,8 +252,13 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
     else{
       // object data.  Use the real stuff.
-      if(this.pivotOn){
-        return clientData[x][this.uiMath.rowHeaderList[y]]; // x data items into outer list.  Y+1 adjusts for the "/" column heading
+      if (this.pivotOn || 0 === this.pivotOn){
+        if (this.uiMath.rowHeaderList){
+          return clientData[x][this.uiMath.rowHeaderList[y]]; // x data items into outer list.  Y+1 adjusts for the "/" column heading
+        }
+        else{
+          return clientData[x][y]; // x data items into outer list.  Y+1 adjusts for the "/" column heading
+        }
       }
       else{
         return clientData[y][this.uiMath.colHeaderKeyList[x]];  // y is depth in outer list, x is the column into the inner list/object

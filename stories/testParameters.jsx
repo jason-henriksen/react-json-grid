@@ -1,3 +1,4 @@
+import React from 'react';
 
 // independent variable list: each variable may be is multipled by another variable to create a new test
 // all test object names must end in the suffix 'Test'
@@ -114,8 +115,8 @@ const testData=
   },
   //-- test the pivot row header sizing
   pivotsHeaderTest : {
-    pivotWithNormalHeaderTest: {  },
-    pivotWithWideHeaderTest: { pivotRowHeaderWide: 125 },
+    pivotWithNormalHeaderTest: { none: '' },
+    pivotWithWideHeaderTest: { pivotRowHeaderWide: 250 },
   },
   //--- test padding and borders
   padPlayTest:{
@@ -221,7 +222,7 @@ const testData=
       editAsText:true
     },
     editDisabledTest: {
-      editAsText: true
+      editDisabled: true
     }
   },
   columnsTest:{
@@ -269,14 +270,62 @@ const testData=
                           { key: 'd', easyPound: true }]},
     },
     columnStyleTest: {
+      columnList: [
+        { key: 'r', easyBool: true },
+        {
+          key: 'a', 
+          styleHeaderCell: { backgroundColor: 'pink' },
+          styleCell: { backgroundColor: 'lightblue' },
+          styleHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
+          styleData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },              
+        },
+        { key: 'c', 
+          styleHeaderCell: { backgroundColor: 'pink' },
+          styleCell: { backgroundColor: 'lightblue' },
+          styleHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
+          styleData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },              
+        },
+        { key: 'b', easyDateTime: true },
+        { key: 'd', easyPound: true }]
     },
     columnClassTest: {
+      columnList: [
+        { key: 'r', easyBool: true },
+        {
+          key: 'a',
+          classCell: { backgroundColor: 'lightblue' },
+          classData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },
+          classHeaderCell: { backgroundColor: 'pink' },
+          classHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
+        },
+        {
+          key: 'c',
+          classCell: { backgroundColor: 'lightblue' },
+          classData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },
+          classHeaderCell: { backgroundColor: 'pink' },
+          classHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
+        },
+        { key: 'b', easyDateTime: true },
+        { key: 'd', easyPound: true }]
     },
     columnComponentTest: {
+      columnList: [
+        { key: 'r', easyBool: true },
+        {
+          key: 'a',
+          classCell: <div>My Cell</div>,
+          classData: <div>My Data</div>,
+          classHeaderCell: <div>Header Cell</div>,
+          classHeaderData: <div>Header Data</div>,
+        }
+      ]
     },
-
   },
-  componentsTest:{
+  componentTest:{
+    classCell: <div>My Cell</div>,
+    classData: <div>My Data</div>,
+    classHeaderCell: <div>Header Cell</div>,
+    classHeaderData: <div>Header Data</div>,    
   }
   
 };
