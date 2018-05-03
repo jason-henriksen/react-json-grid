@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ContainerDimensions from 'react-container-dimensions';
 import GridBody from './GridBody';
 import GridStore from './GridStore';
 import Provider from 'mobx-react';
@@ -22,9 +21,7 @@ class Grid extends React.Component {
   render(){
     return(
       <div  style={this.props.style}>
-        <ContainerDimensions>          
           <GridBody {...this.props} GridStore={this.GridStore} scrollBarWide={this.scrollBarWide}/>
-        </ContainerDimensions>
       </div>
     );
   }

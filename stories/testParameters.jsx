@@ -154,10 +154,10 @@ const testData=
       styleCellOddRow:{backgroundColor:'linen'},
       styleRowHeaderCell:{backgroundColor:'yellow'},
 
-      styleHeaderData:{backgroundColor:'lightbrown',transform: 'rotate(-20deg)',textAlign:'center'},
+      styleHeaderData:{backgroundColor:'cornsilk',transform: 'rotate(-20deg)',textAlign:'center'},
       styleData:{backgroundColor:'lightgreen',transform: 'rotate(20deg)',textAlign:'center'},                  
       styleDataOddRow:{backgroundColor:'slateblue'},
-      styleRowHeaderData:{backgroundColor:'purple'},
+      styleRowHeaderData:{backgroundColor:'plum'},
 
       styleInput:{backgroundColor:'aqua'},
       styleSelected:{backgroundColor:'silver'},
@@ -167,9 +167,9 @@ const testData=
       styleCell:{backgroundColor:'lightblue'},
       styleRowHeaderCell:{backgroundColor:'yellow'},
 
-      styleHeaderData:{backgroundColor:'lightbrown',transform: 'rotate(-20deg)',textAlign:'center'},
+      styleHeaderData:{backgroundColor:'cornsilk',transform: 'rotate(-20deg)',textAlign:'center'},
       styleData:{backgroundColor:'lightgreen',transform: 'rotate(20deg)',textAlign:'center'},                  
-      styleRowHeaderData:{backgroundColor:'purple'},
+      styleRowHeaderData:{backgroundColor:'plum'},
 
       styleInput:{backgroundColor:'aqua'},
       styleSelected:{backgroundColor:'silver'},
@@ -177,30 +177,30 @@ const testData=
   },
   classGridTest: {
     classAllTest: {
-      classHeaderCell: { backgroundColor: 'pink' },
-      classCell: { backgroundColor: 'lightblue' },
-      classCellOddRow: { backgroundColor: 'linen' },
-      classRowHeaderCell: { backgroundColor: 'yellow' },
+      classHeaderCell: 'testHeaderCell',
+      classCell: 'testCell',
+      classCellOddRow: 'testCellOddRow',
+      classRowHeaderCell: 'testRowHeaderCell',
 
-      classHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
-      classData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },
-      classDataOddRow: { backgroundColor: 'slateblue' },
-      classRowHeaderData: { backgroundColor: 'purple' },
+      classHeaderData: 'testHeaderData',
+      classData: 'testData',
+      classDataOddRow: 'testDataOddRow',
+      classRowHeaderData: 'testRowHeaderData',
 
-      classInput: { backgroundColor: 'aqua' },
-      classSelected: { backgroundColor: 'silver' },
+      classInput: 'testInput',
+      classSelected: 'testSelected',
     },
     classNoOddRowsTest: {
-      classHeaderCell: { backgroundColor: 'pink' },
-      classCell: { backgroundColor: 'lightblue' },
-      classRowHeaderCell: { backgroundColor: 'yellow' },
+      classHeaderCell: 'testHeaderCell',
+      classCell: 'testCell',
+      classRowHeaderCell: 'testRowHeaderCell',
 
-      classHeaderData: { backgroundColor: 'lightbrown', transform: 'rotate(-20deg)', textAlign: 'center' },
-      classData: { backgroundColor: 'lightgreen', transform: 'rotate(20deg)', textAlign: 'center' },
-      classRowHeaderData: { backgroundColor: 'purple' },
+      classHeaderData: 'testHeaderData',
+      classData: 'testData',
+      classRowHeaderData: 'testRowHeaderData',
 
-      classInput: { backgroundColor: 'aqua' },
-      classSelected: { backgroundColor: 'silver' },
+      classInput: 'testInput',
+      classSelected: 'testSelected',
     }
   },
   toolsEnabledTest:{

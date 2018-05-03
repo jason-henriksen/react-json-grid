@@ -4,6 +4,7 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import autoBind from 'react-autobind';
 import ReactTooltip from 'react-tooltip';
+import isEmpty from './util/isEmpty';
 
 
 
@@ -97,7 +98,10 @@ import ReactTooltip from 'react-tooltip';
           }
         }
 
-        var defaultStyleCell = {backgroundColor: '#F3F3F3',textAlign:'center'};
+        var defaultStyleCell ={};
+        if(isEmpty(this.props.GridStore.styleHeaderCell) && isEmpty(this.props.GridStore.classHeaderCell)){
+          defaultStyleCell = {backgroundColor: '#F3F3F3',textAlign:'center'};
+        }        
         defaultStyleCell= {...defaultStyleCell,...this.props.GridStore.styleHeaderCell};
 
         header.push(  

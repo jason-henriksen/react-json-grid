@@ -41,4 +41,17 @@
  body{
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
-}
+ }
+
+ .testHeaderCell{background-color:pink;}
+ .testCell{background-color:lightblue;}
+ .testCellOddRow{background-color:linen;}
+ .testRowHeaderCell{background-color:yellow;}
+
+ .testHeaderData{background-color:cornsilk;transform: rotate(-20deg);text-align:center;}
+ .testData{background-color:lightgreen;transform: rotate(20deg);text-align:center;}              
+ .testDataOddRow{background-color:slateblue;}
+ .testRowHeaderData{background-color:plum;}
+
+ .testInput{background-color:aqua;}
+ .testSelected{background-color:silver;}

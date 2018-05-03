@@ -5,13 +5,13 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
-import { ContainerDimensions } from 'react-container-dimensions';
 
 import moment from 'moment';
 import accounting from 'accounting';
 
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import isEmpty from './util/isEmpty';
 
 
 import EasyBool from './easyTools/EasyBool';
@@ -528,7 +528,11 @@ window.reactJsonGridFocusInput = function(elem){
           dataClassName = dataClassName +' '+ (this.props.GridStore.colDefListByKey[rowKey].classHeaderData||'');
         }
 
-        var defaultHeaderStyle={backgroundColor:'#F3F3F3',textAlign:'center'};
+        var defaultHeaderStyle ={};
+        if(isEmpty(this.props.GridStore.styleHeaderCell) && isEmpty(this.props.GridStore.classHeaderCell) && isEmpty(this.props.GridStore.styleRowHeaderCell)){
+          defaultHeaderStyle = {backgroundColor: '#F3F3F3',textAlign:'center'};
+        }  
+
         finalStyleCell = {...defaultHeaderStyle,...this.props.GridStore.styleHeaderCell,...this.props.GridStore.styleRowHeaderCell,...style}; // make the grid styling override the user styling
         finalStyleData = {...this.props.GridStore.styleHeaderData,...this.props.GridStore.styleRowHeaderData};          // just user stying on data
         
@@ -543,13 +547,17 @@ window.reactJsonGridFocusInput = function(elem){
         if(this.props.y % 2 === 1){
           cellClassName = cellClassName+' '+this.props.GridStore.classCellOddRow;  // cell
           dataClassName = dataClassName+' '+this.props.GridStore.classDataOddRow;  // data
-          finalStyleCell = {...this.props.GridStore.styleCellOddRow,...finalStyleCell}; // make the grid styling override the user styling
-          finalStyleData = {...this.props.GridStore.styleDataOddRow,...finalStyleData}; // make the grid styling override the user styling
+          finalStyleCell = {...finalStyleCell,...this.props.GridStore.styleCellOddRow}; // make the grid styling override the user styling
+          finalStyleData = {...finalStyleData,...this.props.GridStore.styleDataOddRow}; // make the grid styling override the user styling
         }
       }
 
       if(isSelected){
-        finalStyleCell = { ...finalStyleCell, backgroundColor: 'lightblue', ...this.props.GridStore.styleSelected};
+        var defaultSelection = {};
+        if(isEmpty(this.props.GridStore.styleSelected) && isEmpty(this.props.GridStore.classSelected)){
+          defaultSelection = {backgroundColor: 'lightblue'};
+        }
+        finalStyleCell = { ...finalStyleCell, ...defaultSelection, ...this.props.GridStore.styleSelected};
         cellClassName = cellClassName+' '+this.props.GridStore.classSelected;
       }
 

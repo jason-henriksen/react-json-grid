@@ -5,7 +5,7 @@ import autoBind from 'react-autobind';
 import Grid from '../Grid';
 import rrjsTool from '../rrj-compile/index.js';
 
-import '../TestCSS.css';
+import '../../static/TestCSS.css';
 import Toggle from './Toggle';
 import ToggleFolder from './ToggleFolder';
 import NumWheel from './NumWheel';

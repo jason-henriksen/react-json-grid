@@ -5,7 +5,6 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
-import { ContainerDimensions } from 'react-container-dimensions';
 import GridCell from './GridCell';
 import ReactTooltip from 'react-tooltip';
 

@@ -5,7 +5,6 @@ import { observable,action,trace } from 'mobx';
 import { observer } from 'mobx-react';
 import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
-import {ContainerDimensions} from 'react-container-dimensions';
 import GridRow from './GridRow';
 import GridTextBox from './GridTextBox';
 import GridHeader from './GridHeader';

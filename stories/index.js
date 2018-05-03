@@ -15,11 +15,10 @@ import DataNoiseGiant from './dataNoiseGiant.js'
 
 import JSXAddon from 'storybook-addon-jsx';
 
-import '../src/TestCSS.css';
+import '../static/TestCSS.css';
 
 import testParameters from './testParameters.jsx';
 var testData = TestNameTool(testParameters); // name each test after it's variable name.
-console.log(testData);
 
 setAddon(JSXAddon);
 
@@ -187,13 +186,15 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
             ],
             [// pivot tests by basic prims array data times all selection states
               testData.dataTypesTest.primsTest.primsListMixedTest,
-              testData.inputSelectionStatesTest,
+              testData.inputSelectionStatesTest.singleInput0x0Test,
               testData.pivotsTest.pivotToggleBoolColumnsTest,
               testData.styleGridTest
             ],
           ]}
         />))
   .addWithJSX('Factorial Test - Grid Wide Class', () => (
+    <div>
+      <div className='testCell'><br/><br/>If background is blue, classes have loaded.</div>
     <MultiTest
       target={<Grid />}
       test={[
@@ -201,22 +202,22 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           testData.dataTypesTest.objArrayTest.objListStringTest,
           testData.inputSelectionStatesTest,
           testData.pivotsTest.pivotToggleNamedColumnsTest,
-          testData.styleGridTest
+          testData.classGridTest
         ],
         [// pivot tests by basic object array data times all selection states
           testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
           testData.inputSelectionStatesTest,
           testData.pivotsTest.pivotToggleIndexColumnsTest,
-          testData.styleGridTest
+          testData.classGridTest
         ],
         [// pivot tests by basic prims array data times all selection states
           testData.dataTypesTest.primsTest.primsListMixedTest,
-          testData.inputSelectionStatesTest,
+          testData.inputSelectionStatesTest.singleInput0x0Test,
           testData.pivotsTest.pivotToggleBoolColumnsTest,
-          testData.styleGridTest
+          testData.classGridTest
         ],
       ]}
-    />))
+    /></div>))
   .addWithJSX('Factorial Test - Grid Wide Component', () => (
     <MultiTest
       target={<Grid />}
