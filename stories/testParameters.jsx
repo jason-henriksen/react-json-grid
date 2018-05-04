@@ -37,6 +37,7 @@ const testData=
       dataArrayRegexTest: { data: [new RegExp(), new RegExp()] },
       dataArrayFuncsTest: { data: [() => { console.log('fail') }, () => { console.log('fail') }] },
     },
+    
     //-- object array
     objArrayTest:{
       objListNumericTest : { data: [{ r: 5, a: 0, b: 6, c: 7, d: 8 }, 

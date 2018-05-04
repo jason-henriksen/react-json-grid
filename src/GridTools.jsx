@@ -71,41 +71,41 @@ import ReactTooltip from 'react-tooltip';
             </a>
             </div>
           }
-          {this.props.showToolsImpExp &&
-            <div style={{ display: 'inline-block', marginRight: '15px' }}>
-              <a data-tip data-for='btnGridImport'>
+          {this.props.showToolsImpExp && 
+            <div style={{ display: 'inline-block', marginRight: '15px',display:'inline-block' }}>
+              <a data-tip data-for='btnGridImport'  style={{display:'inline-block'}}>
                 <button onClick={this.onImport} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><PackageUpIcon /></button>
                 <ReactTooltip id='btnGridImport' place='bottom'>Replace Grid with Uploaded JSON</ReactTooltip>
               </a>
-                <a data-tip data-for='btnGridExport'>
+                <a data-tip data-for='btnGridExport'  style={{display:'inline-block'}}>
                 <button onClick={this.onExport} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><PackageDownIcon /></button>
                 <ReactTooltip id='btnGridExport' place='bottom'>Download Grid to JSON file</ReactTooltip>
               </a>
             </div>
           }
           {this.props.showToolsPage &&
-            <div style={{ display: 'inline-block', marginRight: '15px' }}>
-              <a data-tip data-for='btnGridPageFirst'>
+            <div style={{ display: 'inline-block', marginRight: '15px',display:'inline-block' }}>
+              <a data-tip data-for='btnGridPageFirst' style={{display:'inline-block'}}>
                   <button onClick={this.onPageFirst} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><FirstIcon /></button>
                   <ReactTooltip id='btnGridPageFirst' place='bottom'>Goto Page 1 of {(this.props.pageCount||1)}</ReactTooltip>
               </a>
-              <a data-tip data-for='btnGridPagePrev'>
+              <a data-tip data-for='btnGridPagePrev' style={{display:'inline-block'}}>
                   <button onClick={this.onPagePrev} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><LeftIcon /></button>
                   <ReactTooltip id='btnGridPagePrev' place='bottom'>Goto Page {Math.max(this.curPage-1,1)} of {(this.props.pageCount||1)}</ReactTooltip>
               </a>
               <input style={{ verticalAlign:'top',display: 'inline-block', minWidth: '40px', boxSizing:'content-box',maxWidth: '40px', height: '24px', textAlign: 'center' }} value={(this.curPage)} onChange={this.onChange} />
-              <a data-tip data-for='btnGridPageNext'>
+              <a data-tip data-for='btnGridPageNext' style={{display:'inline-block'}}>
                   <button onClick={this.onPageNext} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><RightIcon /></button>
                   <ReactTooltip id='btnGridPageNext' place='bottom'>Goto Page {Math.min(this.curPage+1,((this.props.pageCount||1)))} of {(this.props.pageCount||1)}</ReactTooltip>
               </a>
-              <a data-tip data-for='btnGridPageLast'>
+              <a data-tip data-for='btnGridPageLast' style={{display:'inline-block'}}>
                   <button onClick={this.onPageLast} className={this.props.toolsButtonClass} style={{boxSizing:'content-box',verticalAlign:'center',height:'24px',maxHeight:'24px'}}><LastIcon /></button>
                   <ReactTooltip id='btnGridPageLast' place='bottom'>Goto Page {(this.props.pageCount||1)} of {(this.props.pageCount||1)}</ReactTooltip>
               </a>
             </div>
           }
           {this.props.showToolsCustom &&
-              <div style={{ display: 'inline-block', marginRight: '15px'}}>
+              <div style={{ display: 'inline-block', marginRight: '15px',display:'inline-block'}}>
                 {this.props.showToolsCustom}
               </div>
           }

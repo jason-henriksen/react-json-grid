@@ -111,11 +111,13 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
         [
           testData.dataTypesTest.arrArrayTest.arrayListForPivotTest,
-          testData.padPlayTest        ],
+          testData.padPlayTest        
+        ],
         [
           testData.dataTypesTest.arrArrayTest.arrayListForPivotTest,
           testData.pivotsTest.pivotOnIndexTest.pivotOnColOneTest,
-          testData.padPlayTest        ],
+          testData.padPlayTest        
+        ],
         [ 
           testData.dataTypesTest.primsTest.primsListMixedTest,
           testData.padPlayTest],

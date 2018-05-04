@@ -511,6 +511,8 @@ window.reactJsonGridFocusInput = function(elem){
         
       }  
 
+
+      
       // build the className and style strings
       var cellClassName='';
       var dataClassName='';
