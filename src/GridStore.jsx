@@ -27,7 +27,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable showDatePicker = false;             // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
   @observable showDateTimePicker = false;         // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
   @observable showMenuPicker = false;             // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
-  @observable showOverlayComp = false;         // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
+  @observable showOverlayComp = false;            // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
 
 
 
@@ -39,7 +39,8 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return Number(res);
   }
 
-  @action logNoChangeHandlerMessage()         {console.log('no onChange handler supplied.');}
+  // all the default handlers inform the user that there is no handler specified.
+  @action logNoChangeHandlerMessage()         { console.log('no onChange handler supplied.');}
   @action logNoOnRowAddHandlerMessage()       { console.log('no onRowAdd handler supplied.'); }
   @action logNoOnRowCutHandlerMessage()       { console.log('no onRowCut handler supplied.'); }
   @action logNoOnGotoPageHandlerMessage()     { console.log('no onGotoPage handler supplied.'); }
@@ -56,16 +57,11 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
     else {
       this.onChange(x, y, objKey, val);
-    }
-    
+    }    
   }
 
   /* 	
-  something funky here:
   this method takes the props and updates the grid store.
-  However, the gridStore is ALSO part of the props.  So once this method id done, it will be called again with the newly updated props.
-  The method must give the same results again in order not to get into a loop of re-changing props each round. 
-  I'd love a cleaner solution to this, but not sure what that would be yet.
   */
   @action prepSelectionField(props)
   {
@@ -140,10 +136,12 @@ class GridStore {           // Just a class.  Nothing fancy here.
   }
 
 
+  // sets a selected cell
   @action cellSelectSet(x,y,val){
     selectedCells[y][x]=val;
   }
 
+  // handles keyboard movement.  takes an event.
   @action cellMoveKey(e)
   {
     // only worry about arrow keys:
@@ -181,6 +179,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
       e.preventDefault();    
   }
 
+  // computes the selection bounds based on changes to the selected cell position and shift key.
   @computed get selectionBounds(){
     var res={l:-1,r:-1,t:-1,b:-1};
     // block selection 
@@ -199,6 +198,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return res;
   }
 
+  // validates some input fields
   @computed get curEditIsValidFor() {
     var res={};
     res.isValidInt = this.checkValidInt(this.curEditingValue);
@@ -206,6 +206,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return res;
   }
 
+  // very basic validity checks.
   checkValidInt(t){  
     if(!t) return true; // blank+null is ok.  
     return (!isNaN(t) && (function (x) { return (x | 0) === x; })(parseFloat(t)));
@@ -215,7 +216,9 @@ class GridStore {           // Just a class.  Nothing fancy here.
     return (!isNaN(t));
   }
 
-  getDataRespectingPivotAtEditCursor(clientData){
+  // because the data may be in a pivot display, use this layer to find the real coordinates of the data for the cell
+  getDataRespectingPivotAtEditCursor(clientData)
+  {
     if(this.uiMath.isPrimitiveData){
       // non-object data.  Just pretend it's a grid.  Only one coordinate will matter.
       if (this.pivotOn || this.pivotOn === 0){
@@ -235,6 +238,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
     }
   }
 
+  // because the data may be in a pivot display, use this layer to find the real coordinates of the data for the cell. arbirary location
   getDataRespectingPivotAtLocation(clientData,x,y)
   {
     if(x<0 && y<0){ return '/' }
@@ -267,10 +271,12 @@ class GridStore {           // Just a class.  Nothing fancy here.
   }
   
 
+  // some error handling helpers
   @observable jsonAsTxtError = '';
   @observable textDataLinesLength=0;
   @observable textGoalFormat = '';
 
+  // data conversion for text editor support
   @action convertJSONtoTXT(data){
     this.textDataLinesLength=0;
     this.keyList=[];
@@ -314,10 +320,9 @@ class GridStore {           // Just a class.  Nothing fancy here.
   }
 
   // TODO
-  // - Make this return a full, reconstituted data object.
   // - tool button to switch between editor types.
   // - remember if the input was obj, array, or prim array and use it to convert back
-  // - ALSO: Get components working everywhere, then close to ready to ship it!
+  // - Get user specified components working everywhere
   @action convertTXTtoJSON(txt){
     var lines = txt.split('\n');
     // bonehead implementation.  this is intended for lists of less than 200 items.

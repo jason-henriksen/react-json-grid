@@ -82,7 +82,7 @@ class GridMath
         result.isPrimitiveData=true;
       }
 
-      // make the data conversion and hold onto the converted data.
+      //TODO:   make the data conversion and hold onto the converted data.
       // just give data available calls?  onChange pass an object that can get the translation?
       // give an object that can be used to ask for translation at any time.
       // data.asJSON()
@@ -130,12 +130,10 @@ class GridMath
 
       result.formatDate = props.formatDate||'YYYY-MM-DD';
       result.formatTime = props.formatTime||'HH:mm';
-//console.log('here');
       var autoColCount=0;
       // look at the data to display and figure out what we need to do.
       if( (data && data.length>0) || (props.columnList && props.columnList.length>0) ){ // col def from colList or from data
         if(result.isPrimitiveData){
-//          console.log('is Prim Data');
           // ==== PRIMITIVES we have only one line of data to display
           result.keyNames.push('data');
           if(props.pivotOn || props.pivotOn===0){
@@ -148,73 +146,60 @@ class GridMath
             result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
             for(var pctr=0;pctr<data.length;pctr++){                    // pivot uses pivotOn key for column header keys
               result.colHeaderKeyList.push(pctr);       // key (or maybe value) for the column header.  Only used for autoColWide calculation
-//              console.log(pctr);
-
             }
-            result.dataWide = data.length;        // length => width
+            result.dataWide = data.length;              // length => width
             result.dataHigh = 1;                        // 1 row hight
           }
           else{
             result.colHeaderKeyList=result.keyNames;    // just one header
-            result.fixedRowCount = data.length;   // amount of data is the rows
+            result.fixedRowCount = data.length;         // amount of data is the rows
             result.dataWide = 1;                        // 1 item wide.
-            result.dataHigh = data.length;        // length items tall.
+            result.dataHigh = data.length;              // length items tall.
           }
         }
         else{
           // ==== OBJECTS we have rows of objects to display
-          if(props.pivotOn || props.pivotOn === 0){  // pivot the data using this key as the col header
+          if(props.pivotOn || props.pivotOn === 0){              // pivot the data using this key as the col header
             //---- PIVOTED FLOW
-            /*
-            if(props.columnList){                             // pull key data from col def list first, but from data if cols are not defined
-              result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
-              for (var pctr = 0; pctr < props.columnList.length;pctr++){                    // pivot uses pivotOn key for column header keys
-                result.colHeaderKeyList.push(props.columnList[pctr].key);  // key (or maybe value) for the column header
-              }
+            result.colHeaderKeyList.push('\\');                  // extra column on header for row headers.
+            var temp = Object.keys(data[0]);
+            for(var pctr=0;pctr<data.length;pctr++){             // pivot uses pivotOn key for column header keys
+              result.colHeaderKeyList.push(temp[pctr]);
             }
-            else{              
-              */
-              result.colHeaderKeyList.push('\\');                               // extra column on header for row headers.
-              var temp = Object.keys(data[0]);
-              for(var pctr=0;pctr<data.length;pctr++){                    // pivot uses pivotOn key for column header keys
-                result.colHeaderKeyList.push(temp[pctr]);
-//                console.log(pctr,temp[pctr]);
-              }
-            //}
 
-            result.rowHeaderList = Object.keys(data[0]);   // pull headers from data.  Should there be a colDef check here?
+            result.rowHeaderList = Object.keys(data[0]);         // pull headers from data.  Should there be a colDef check here?
             result.keyNames = result.rowHeaderList;              // object props are row headers
             result.saveColumnForRowHeader=1;                     // save a space for the row header.
             result.fixedRowCount = result.rowHeaderList.length;  // one row per property
-            result.dataWide = data.length;                 // one col per data item
+            result.dataWide = data.length;                       // one col per data item
             result.dataHigh = result.rowHeaderList.length;       // one row per property.
           }
           else{
             //---- NORMAL FLOW
-            if(props.columnList){                             // pull key data from col def list first, but from data if cols are not defined
+            if(props.columnList){                                // pull key data from col def list first, but from data if cols are not defined
               for(var cctr=0;cctr<props.columnList.length;cctr++){
                 result.colHeaderKeyList.push(props.columnList[cctr]['key']);  // column for each definition
               }
               if(data && data[0]){
-                result.keyNames = Object.keys(data[0]);   // hang on to the key names from the object if they're around
+                result.keyNames = Object.keys(data[0]);          // hang on to the key names from the object if they're around
               }
               else{
-                result.keyNames = result.colHeaderKeyList; // otherwise use the column defs if we don't have any data to use as a template.
+                result.keyNames = result.colHeaderKeyList;          // otherwise use the column defs if we don't have any data to use as a template.
               }
-              result.dataWide = result.colHeaderKeyList.length;      // column definition count => data width. (data high handled later)
+              result.dataWide = result.colHeaderKeyList.length;     // column definition count => data width. (data high handled later)
             }
-            else{                                             // no column defs, inspect the first object.
+            else{                                                   // no column defs, inspect the first object.
               if(data[0].length){ // probably an array-look-alike.  Use indexes
                 for (var ictr = 0; ictr < data[0].length;ictr++){
                   result.keyNames.push(ictr);
                 }
-                result.colHeaderKeyList = result.keyNames;      // keys => columns here
-                result.dataWide = data[0].length;       // keynames is width  (data high handled later)
+                result.colHeaderKeyList = result.keyNames;          // keys => columns here
+                result.dataWide = data[0].length;                   // keynames is width  (data high handled later)
               }
-              else{                     // likely an object.  Treat it normally.
-                result.keyNames = Object.keys(data[0]);   // pull the key names
-                result.colHeaderKeyList = result.keyNames;      // keys => columns here
-                result.dataWide = result.keyNames.length;       // keynames is width  (data high handled later)
+              else{                                                 // likely an object.  Treat it normally.
+                result.keyNames = Object.keys(data[0]);             // pull the key names
+                result.colHeaderKeyList = result.keyNames;          // keys => columns here
+                result.dataWide = result.keyNames.length;           // keynames is width  (data high handled later)
               }
             }          
 
@@ -266,19 +251,19 @@ class GridMath
           }
         }
         
+        // calculate wide row headers, respecting pivots
         if( (props.pivotOn || props.pivotOn === 0) && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
           result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
           result.pivotRowHeaderWideTotal = result.pivotRowHeaderWide;
           result.pivotRowHeaderWideTotal += (result.borderWide);   // each column minus right border amount
           result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus left pad amount
           result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus right pad amount
-          availableWide -= result.pivotRowHeaderWideTotal; // allow a set width pivot header, but still only autocol for pivoted data
-          }
+          availableWide -= result.pivotRowHeaderWideTotal;         // allow a set width pivot header, but still only autocol for pivoted data
+        }
         else{
           result.pivotRowHeaderWide = 0;
           result.pivotRowHeaderWideTotal=0;
         }
-        //if(autoColCount===0 && fixedWide<result.rowWide){ result.rowWide=fixedWide; } // all columns have a fixed width & smaller than available space.  This basically moves the scroll bar;
 
         //--- no column width data
         if(autoColCount>0){
@@ -366,13 +351,8 @@ class GridMath
         result.colHeaderKeyList = ["No Data Provided"];
       }
 
-      
-
-      
       return result;
     }
-  
-
 }
 
 export default GridMath;
