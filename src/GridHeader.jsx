@@ -40,7 +40,6 @@ import isEmpty from './util/isEmpty';
               if (''+ui.colHeaderKeyList[tctr] === ''+this.props.pivotOn) { targetCol = tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
             }
             colTitle = ''+this.props.GridStore.getDataRespectingPivotAtLocation(this.props.data, ctr - 1, targetCol - 1);// both -1 are to account for the '/' in the header row.
-//            console.log(ctr, targetCol,colTitle);
           }
           else{
             //== NonPivot, With ColDefs
@@ -52,7 +51,7 @@ import isEmpty from './util/isEmpty';
               curColWide = ui.rowWide * (this.props.GridStore.colDefListByKey[keyName].widePct / 100);
             }
 
-            colTitle = ''+this.props.GridStore.colDefListByKey[keyName].title || keyName; // if there is a title for the colDef use it, or just stick with thekey
+            colTitle = ''+(this.props.GridStore.colDefListByKey[keyName].title || keyName); // if there is a title for the colDef use it, or just stick with thekey
             if (this.props.GridStore.colDefListByKey[keyName].altText) { 
               // handle alt text.  Note that the 'text' could be a component.  regular header
               helpComp = this.props.GridStore.colDefListByKey[keyName].altText; 
@@ -105,8 +104,7 @@ import isEmpty from './util/isEmpty';
         defaultStyleCell= {...defaultStyleCell,...this.props.GridStore.styleHeaderCell};
 
         header.push(  
-          <a data-tip data-for={'dataTip' + ctr} key={ctr}              // default, may be over ridden by styleHeader. Order matters.
-          >
+          <a data-tip data-for={'dataTip' +ui.id+'.h.'+ctr} key={ctr}>
                         <div  key={'k'+ctr}  className={this.props.GridStore.classHeaderCell+' '+classNameHeaderColCell}
                           style={{
                             ...defaultStyleCell,            // user specified global header styles.
@@ -127,7 +125,7 @@ import isEmpty from './util/isEmpty';
                           {colTitle}
                           </div>
                           { helpComp &&  // only render this if helpComp is defined
-                            <ReactTooltip id={'dataTip' + ctr} >
+                            <ReactTooltip id={'dataTip' + ui.id + '.h.' + ctr} >
                               {helpComp}
                             </ReactTooltip>
                           }

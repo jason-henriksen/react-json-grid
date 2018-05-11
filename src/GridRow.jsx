@@ -6,7 +6,6 @@ import { observer } from 'mobx-react';
 import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
 import GridCell from './GridCell';
-import ReactTooltip from 'react-tooltip';
 
 
 
@@ -134,11 +133,6 @@ import ReactTooltip from 'react-tooltip';
           }
           isFirst=false;
           
-          var helpComp=null;
-          if (this.props.GridStore.colDefListByKey[keyName] && this.props.GridStore.colDefListByKey[keyName].altText) { 
-            helpComp = this.props.GridStore.colDefListByKey[keyName].altText; 
-          }
-
           // add in the row header style
           var gridColLocalStyle = {};
           if(this.props.GridStore.colDefListByKey[keyName]){ 
@@ -148,10 +142,9 @@ import ReactTooltip from 'react-tooltip';
           var rowHeaderStyle={...cellStyleFirst,...gridColLocalStyle};
 
           cellArray.push(
-            <a onMouseEnter={(e)=>this.showRowHeaderAltText(e,ctr,this.props.index)}  onMouseLeave={(e)=>this.hideRowHeaderAltText(e,ctr,this.props.index)}   
-               key={this.props.index + '-RH'}>                      
             <GridCell              
-              id={this.props.index + '-RH'}
+              key={this.props.uiMath.id + '.' + this.props.index + '.H'}
+              id={this.props.uiMath.id + '.' + this.props.index + '.H'}
               x={ctr}
               y={this.props.index}
               forceNoEdit={true}
@@ -163,7 +156,6 @@ import ReactTooltip from 'react-tooltip';
               uiMath={this.props.uiMath}
               onChange={this.props.onChange}
             />
-            </a>
           );
         }
       }
@@ -185,8 +177,8 @@ import ReactTooltip from 'react-tooltip';
 
         cellArray.push(
         <GridCell 
-          key={this.props.index+'-'+ctr} 
-          id={this.props.index+'-'+ctr}
+          key={this.props.uiMath.id + '.' +this.props.index+'-'+ctr} 
+          id={this.props.uiMath.id+'.'+this.props.index+'-'+ctr}
           x={ctr}
           y={this.props.index}
           objKey={curColKey}
@@ -207,11 +199,6 @@ import ReactTooltip from 'react-tooltip';
     
     return(
       <div>
-        {helpComp &&  // only render this if helpComp is defined
-          <ReactTooltip id={'dataTip' + keyName} effect='solid' place='right' >
-            {helpComp}
-          </ReactTooltip>
-        }          
         {cellArray}
       </div>
     );

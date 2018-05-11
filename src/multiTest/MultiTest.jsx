@@ -21,7 +21,25 @@ export default class MultiTest extends React.Component {
 
   constructor(props) {
     super(props); autoBind(this);        
-    this.state = { filter: (window.reactFactorialTest_filter || ''),
+    
+    try {
+      // clear any bad data
+      var reactFactorialTest_filter = localStorage.getItem('reactFactorialTest_filter') || '';  // empty string implies false.
+      var reactFactorialTest_compsOnly = localStorage.getItem('reactFactorialTest_compsOnly') || ''; 
+      var reactFactorialTest_compList = JSON.parse(localStorage.getItem('reactFactorialTest_compList')) || [];
+      var reactFactorialTest_flagsOnly = localStorage.getItem('reactFactorialTest_flagsOnly') || '';
+      var reactFactorialTest_flagList = JSON.parse(localStorage.getItem('reactFactorialTest_flagList')) || [];    
+    } catch (e) {
+      localStorage.removeItem('reactFactorialTest_filter');
+      localStorage.removeItem('reactFactorialTest_compsOnly');
+      localStorage.removeItem('reactFactorialTest_compList');
+      localStorage.removeItem('reactFactorialTest_flagsOnly');
+      localStorage.removeItem('reactFactorialTest_flagList');    
+    }
+    
+    
+    this.state = {
+      filter: (localStorage.getItem("reactFactorialTest_filter") || ''),
                    showCompsOnly: false,
                    showFlagsOnly: false
                  };
@@ -83,26 +101,28 @@ export default class MultiTest extends React.Component {
   // show only the given test name.
   // save the information to a window variable so that it will survive reloading the page due the tested code being updated.
   setFilter(filterVal){
-    window.reactFactorialTest_filter=filterVal;
-    window.reactFactorialTest_compsOnly = false;
-    window.reactFactorialTest_flagsOnly = false;
-    this.setState({ filter: filterVal, showCompsOnly: false, showFlagsOnly: false });
+    localStorage.setItem('reactFactorialTest_filter',filterVal);
+    localStorage.setItem('reactFactorialTest_compsOnly',''); // emptry string for false because local storage works on strings.
+    localStorage.setItem('reactFactorialTest_flagsOnly','');
+    this.setState({ filter: filterVal, showCompsOnly: '', showFlagsOnly: ''});
   }
 
 
   // toggle wether the system is showing all tests or just the comparison tests.
   // save the information to a window variable so that it will survive reloading the page due the tested code being updated.
   toggleCompVisible(){
-    var compsOnly = !this.state.showCompsOnly;
-    window.reactFactorialTest_compsOnly = compsOnly;
+    var showCompsOnly = localStorage.getItem('reactFactorialTest_compsOnly') || '';
+    var compsOnly = ('' === showCompsOnly) ? 'T' : ''; // rigmaroll so I can store in local storage.
+    localStorage.setItem('reactFactorialTest_compsOnly',compsOnly);
     this.setState({ showCompsOnly: compsOnly });
   }
 
   // toggle wether the system is showing all tests or just the flagged tests.
   // save the information to a window variable so that it will survive reloading the page due the tested code being updated.
   toggleFlagVisible() {
-    var flagsOnly = !this.state.showFlagsOnly;
-    window.reactFactorialTest_flagsOnly = flagsOnly;
+    var showFlagsOnly = localStorage.getItem('reactFactorialTest_flagsOnly')||'';
+    var flagsOnly = ('' === showFlagsOnly) ? 'T' : ''; // rigmaroll so I can store in local storage.
+    localStorage.setItem('reactFactorialTest_flagsOnly',flagsOnly);
     this.setState({ showFlagsOnly: flagsOnly });
   }
   
@@ -135,6 +155,13 @@ export default class MultiTest extends React.Component {
       }
     }
 
+    var reactFactorialTest_filter = localStorage.getItem('reactFactorialTest_filter') || '';
+    var reactFactorialTest_compsOnly = localStorage.getItem('reactFactorialTest_compsOnly') || ''; // empty string implies false.
+    var reactFactorialTest_compList = JSON.parse(localStorage.getItem('reactFactorialTest_compList')) || [];
+    var reactFactorialTest_flagsOnly = localStorage.getItem('reactFactorialTest_flagsOnly') || '';
+    var reactFactorialTest_flagList = JSON.parse(localStorage.getItem('reactFactorialTest_flagList')) || [];    
+    
+
     //===== FILTERING PHASE =====
     var renderList = allWork.map((item, index) => {
 
@@ -146,24 +173,23 @@ export default class MultiTest extends React.Component {
       // 3) any number of tests can be set for comparison, again controlled by window variables.
 
       // this renders each item in allwork to an array, filtering out items that are not supposed to be rendered.
-      var isInCompShowMode  = window.reactFactorialTest_compsOnly;
       var holdName = item.tstName; 
 
       // It seems like this logic has to be checked twice in order to have things be performant and also work while in focused mode
       if (
           // if there's no filter or this test matches a filter, include it.
-          (!window.reactFactorialTest_filter || holdName === window.reactFactorialTest_filter) &&
+          (!reactFactorialTest_filter || holdName === reactFactorialTest_filter) &&
           // if there's no comparison, or if there is comparison and this test is in the list.
-          (!window.reactFactorialTest_compsOnly ||
-             (window.reactFactorialTest_compsOnly && 
-              window.reactFactorialTest_compList &&
-              -1 !== window.reactFactorialTest_compList.indexOf(holdName))
+          (!reactFactorialTest_compsOnly ||
+             (reactFactorialTest_compsOnly && 
+              reactFactorialTest_compList &&
+              -1 !== reactFactorialTest_compList.indexOf(holdName))
           ) &&
           // if there's no comparison, or if there is comparison and this test is in the list.
-          (!window.reactFactorialTest_flagsOnly ||
-            (window.reactFactorialTest_flagsOnly && 
-             window.reactFactorialTest_flagList &&
-             -1 !== window.reactFactorialTest_flagList.indexOf(holdName))
+          (!reactFactorialTest_flagsOnly ||
+            (reactFactorialTest_flagsOnly && 
+             reactFactorialTest_flagList &&
+             -1 !== reactFactorialTest_flagList.indexOf(holdName))
          )          
       ){
         return <TestItem key={index} index={index} item={item} target={this.props.target} 
@@ -175,7 +201,7 @@ export default class MultiTest extends React.Component {
     var unFocusButton='';
     var unCompareButton = '';    
     var unFlagButton = '';
-    if (window.reactFactorialTest_filter || window.reactFactorialTest_compsOnly || window.reactFactorialTest_flagsOnly ) {
+    if (reactFactorialTest_filter || reactFactorialTest_compsOnly || reactFactorialTest_flagsOnly ) {
       unFocusButton = 
         <div style={{ display: 'inline-block', padding: '2px', backgroundColor: 'lightgreen', border: '1px solid black' }}
           onClick={() => this.setFilter('')}

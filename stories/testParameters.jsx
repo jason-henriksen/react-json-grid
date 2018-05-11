@@ -107,11 +107,12 @@ const testData=
     },
     pivotToggleIndexColumnsTest:{
       pivotOffTest:{ none:'' },
-      pivotOnColBTest:{ pivotOn: 'b' },
+      pivotOnColZeroTest: { pivotOn: 0 },
+      pivotOnColOneTest: { pivotOn: 1 },
     },
     pivotToggleBoolColumnsTest:{
       pivotOffTest:{ none:'' },
-      pivotOnColBTest:{ pivotOn: 'b' },
+      pivotOnColPrimTest:{ pivotOn: 'data' },
     }
   },
   //-- test the pivot row header sizing
@@ -227,7 +228,13 @@ const testData=
     }
   },
   columnsTest:{
-    titleAndEditableTest: {
+    titleAndEditableColsByInvalidNameTest: {
+      columnList: [
+        { key: 'OMG this is wrong!', altText: 'col me RRR', editDisabled: true },
+        { key: 'Nobody uses this as key!', altText: 'col me AAA', title: 'AA Col', },
+        { key: 'Show me an error please!', altText: 'col me CCC', title: 'CC Col', }]
+    },
+    titleAndEditableColsByNameTest: {
       // key, title, editable, altText.  Columns deliberately out of order, with not all values specified
       columnList:[
         { key: 'r', altText: 'col me RRR', editDisabled:true}, 
@@ -235,6 +242,32 @@ const testData=
         { key: 'c', altText: 'col me CCC', title: 'CC Col', },
         { key: 'b', altText: 'col me BBB', title: 'BB Col', editDisabled: true },
         { key: 'd', altText: 'col me DDD', title: 'DD Col', editDisabled: true}]
+    },
+    titleAndEditableColsByIndexTest: {
+      // key, title, editable, altText.  Columns deliberately out of order, with not all values specified
+      columnList: [
+        { key: 0, altText: 'col me 000', editDisabled: true },
+        { key: 1, altText: 'col me 111', title: 'AA1 Col', },
+        { key: 2, altText: 'col me 222', title: 'CC2 Col', },
+        { key: 3, altText: 'col me 333', title: 'BB3 Col', editDisabled: true },
+        { key: 4, altText: 'col me 444', title: 'DD4 Col', editDisabled: true }]
+    },
+    primColTest: {
+      primColBadTest: {
+        // columns are specified, but not with the correct key.  (For primitive lists it is always 'data')
+        columnList: [
+          { key: 'r', altText: 'col me RRR', editDisabled: true },
+          { key: 'a', altText: 'col me AAA', title: 'AA Col', },
+          { key: 'c', altText: 'col me CCC', title: 'CC Col', },
+          { key: 'b', altText: 'col me BBB', title: 'BB Col', editDisabled: true },
+          { key: 'd', altText: 'col me DDD', title: 'DD Col', editDisabled: true }]
+      },
+      primColGoodTest: {
+        // key, title, editable, altText.  Columns deliberately out of order, with not all values specified
+        columnList: [
+          { key: 'data', altText: 'Prim Data Alt', title:'Prim Data Title' },
+        ]
+      },
     },
     columnSizeTest: {
       oneLargeColTest: {

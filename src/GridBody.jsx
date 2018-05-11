@@ -88,7 +88,9 @@ const GridBody = observer( class GridBody extends React.Component {
         <div style={{...this.props.style,
                      height:ui.gridHigh,
                      width:ui.gridWide}} 
-                     onKeyPress={this.onKeyPress} onBlur={this.blurControl} key='scrollSize'>
+                     onKeyPress={this.onKeyPress} onBlur={this.blurControl} key='scrollSize'
+          id={ui.id}
+        >
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize onLoad={this.setScrollBarWide} onChange={this.setScrollBarWide} /> 
 

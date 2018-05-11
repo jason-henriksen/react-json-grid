@@ -33,6 +33,8 @@ class GridMath
       result.colHeaderKeyList=[];         // when pivoted, this will NOT match the keyNames list.
       result.saveColumnForRowHeader=0;
       result.debugGridMath = props.debugGridMath;
+      result.id = props.id || 'reactJsonGridId';
+  
 
       // math needs access to columns by key name.
       if (props.columnList && props.columnList.length>0) {
@@ -80,6 +82,34 @@ class GridMath
           (typeof data[0] === 'number' && isFinite(data[0]) ) ||                         // array of numbers
           (typeof data[0] === 'boolean') ){                                            // array of booleans
         result.isPrimitiveData=true;
+      }
+
+      if(props.columnList && !props.columnList.length){
+        result.notReady = "If the columnList property is set, it must be an array with more that one object in it."; return result;
+      }
+
+      // validate any column data
+      if (props.columnList) {
+        if(result.isPrimitiveData && props.columnList ){
+          // make sure at least one column is 'data' for primitives
+          var foundPrimCol = false;
+          for (var cctr = 0; cctr < props.columnList.length;cctr++){
+            if(props.columnList[cctr].key==='data'){foundPrimCol=true;}
+          }
+          if(!foundPrimCol){
+            result.notReady = "When using a list of primitives, and a columnList, one of the column keys must be named 'data'.  (Prim Lists use a hard coded key)"; return result;
+          }
+        }
+        else{
+          // make sure at least one column key matches a data key.
+          var foundPrimCol = false;
+          for (var cctr = 0; cctr < props.columnList.length; cctr++) {
+            if (data[0][ props.columnList[cctr].key ]) { foundPrimCol = true; }
+          }
+          if (!foundPrimCol) {
+            result.notReady = "None of the key properties of your columnList match a key in your data.  For arrray data, use integer keys.  For object data you field names."; return result;
+          }
+        }
       }
 
       //TODO:   make the data conversion and hold onto the converted data.

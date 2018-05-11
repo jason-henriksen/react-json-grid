@@ -245,20 +245,30 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
     <MultiTest
       target={<Grid />}
       test={[
-        [// pivot tests by basic array array data times all selection states
+        [// good header name keys
           testData.dataTypesTest.objArrayTest.objListStringTest,
           testData.pivotsTest.pivotToggleNamedColumnsTest,
-          testData.columnsTest.titleAndEditableTest,
+          testData.columnsTest.titleAndEditableColsByNameTest,
         ],
-        [// pivot tests by basic object array data times all selection states
+        [// invalid key lists
+          testData.dataTypesTest.arrArrayTest.objListStringTest,
+          // testData.pivotsTest.pivotToggleIndexColumnsTest, ok to skip.  This validation happens before pivot matters
+          testData.columnsTest.titleAndEditableColsByInvalidNameTest,
+        ],        
+        [// good header index keys
           testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
           testData.pivotsTest.pivotToggleIndexColumnsTest,
-          testData.columnsTest.titleAndEditableTest,
+          testData.columnsTest.titleAndEditableColsByIndexTest,
+        ],
+        [//  invalid key lists
+          testData.dataTypesTest.arrArrayTest.arrayListWithEmptiesTest,
+          // testData.pivotsTest.pivotToggleIndexColumnsTest, ok to skip.  This validation happens before pivot matters
+          testData.columnsTest.titleAndEditableColsByInvalidNameTest,
         ],
         [// pivot tests by basic prims array data times all selection states
           testData.dataTypesTest.primsTest.primsListMixedTest,
           testData.pivotsTest.pivotToggleBoolColumnsTest,
-          testData.columnsTest.titleAndEditableTest,
+          testData.columnsTest.primColTest,
         ],
       ]}
     />))

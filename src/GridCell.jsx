@@ -5,6 +5,7 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import ScrollbarSize from 'react-scrollbar-size';
 import autoBind from 'react-autobind';
+import ReactTooltip from 'react-tooltip';
 
 import moment from 'moment';
 import accounting from 'accounting';
@@ -12,7 +13,6 @@ import accounting from 'accounting';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import isEmpty from './util/isEmpty';
-
 
 import EasyBool from './easyTools/EasyBool';
 
@@ -409,6 +409,7 @@ window.reactJsonGridFocusInput = function(elem){
     } 
     else{
       //===== VIEW SIDE
+      var altText='';
 
       var renderVal = '' + (this.renderZero(this.props.cellData)||'');
       if (this.props.GridStore.colDefListByKey && 
@@ -520,7 +521,7 @@ window.reactJsonGridFocusInput = function(elem){
       var finalStyleData={};
 
       if(this.props.x===-1){
-        // this is a row header.  Precedence is classHeaderCell, classRowHeaderCell
+        // this is a row header.  Precedence is classHeaderCell, classRowHeaderCell        
         cellClassName = (this.props.GridStore.classHeaderCell||'')+' '+(this.props.GridStore.classRowHeaderCell||'');  // header + rowHeader cell
         dataClassName = (this.props.GridStore.classHeaderData||'')+' '+(this.props.GridStore.classRowHeaderData||'');  // header + rowHeader data
 
@@ -538,6 +539,10 @@ window.reactJsonGridFocusInput = function(elem){
         finalStyleCell = {...defaultHeaderStyle,...this.props.GridStore.styleHeaderCell,...this.props.GridStore.styleRowHeaderCell,...style}; // make the grid styling override the user styling
         finalStyleData = {...this.props.GridStore.styleHeaderData,...this.props.GridStore.styleRowHeaderData};          // just user stying on data
         
+        if (this.props.GridStore.colDefListByKey[rowKey] && this.props.GridStore.colDefListByKey[rowKey].altText) {
+          altText = this.props.GridStore.colDefListByKey[rowKey ].altText;
+        }
+
       }
       else{
         // this is a normal row
@@ -572,6 +577,17 @@ window.reactJsonGridFocusInput = function(elem){
                         onKeyDown={this.onKeyDownWhenViewing}>
             <div className={dataClassName} style={finalStyleData}>{renderVal}</div>
       </div>;
+    }
+
+    //--- handle row header help text
+    if(this.props.x===-1){
+      renderPlan = 
+      <a data-tip data-for={'dataTip' + this.props.id} key={'dataTip' + this.props.id}>      
+        {renderPlan}
+        <ReactTooltip id={'dataTip' + this.props.id} >
+          ASDF{altText}
+        </ReactTooltip>
+      </a>
     }
     
     return(renderPlan);
