@@ -30,11 +30,13 @@ import isEmpty from './util/isEmpty';
         if(this.props.GridStore.colDefListByKey[keyName]){ // is there a colDef that uses this key?
           if (this.props.pivotOn || this.props.pivotOn === 0) {
             //== Pivot, With ColDefs
-            if(ctr>0){
+            /* No column headers on pivoted data.  If they're defined, they are displayed on row headers.
+            if(ctr>0){  // this code should be removed when I'm confident it's not needed.  Note left 5/2018
               if (this.props.GridStore.colDefListByKey[ this.props.GridStore.keyList[ctr-1] ].altText) { 
                 helpComp = this.props.GridStore.colDefListByKey[ this.props.GridStore.keyList[ctr-1] ].altText; 
               }
             }
+            */
             var targetCol = 0;
             for (var tctr = 0; tctr < ui.colHeaderKeyList.length; tctr++) {
               if (''+ui.colHeaderKeyList[tctr] === ''+this.props.pivotOn) { targetCol = tctr; }// this is the header index matching the pivotOn key, offset by 1 due to leading '/'
@@ -104,7 +106,7 @@ import isEmpty from './util/isEmpty';
         defaultStyleCell= {...defaultStyleCell,...this.props.GridStore.styleHeaderCell};
 
         header.push(  
-          <a data-tip data-for={'dataTip' +ui.id+'.h.'+ctr} key={ctr}>
+          <a data-tip={helpComp} data-for={ui.id+'.rh'} key={ctr}>
                         <div  key={'k'+ctr}  className={this.props.GridStore.classHeaderCell+' '+classNameHeaderColCell}
                           style={{
                             ...defaultStyleCell,            // user specified global header styles.
@@ -124,11 +126,6 @@ import isEmpty from './util/isEmpty';
                           <div className={this.props.GridStore.classHeaderData+' '+classNameHeaderColData} style={this.props.GridStore.styleHeaderData}>
                           {colTitle}
                           </div>
-                          { helpComp &&  // only render this if helpComp is defined
-                            <ReactTooltip id={'dataTip' + ui.id + '.h.' + ctr} >
-                              {helpComp}
-                            </ReactTooltip>
-                          }
                         </div>
                       </a>);
         marginOffset=-1*ui.borderWide;

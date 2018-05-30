@@ -29,6 +29,7 @@ class GridStore {           // Just a class.  Nothing fancy here.
   @observable showMenuPicker = false;             // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
   @observable showOverlayComp = false;            // due to scrolling issues, the react-datepicker popup cannot be used.  This add a non-scrolled over-lay picker.
 
+  @observable scrollBarWide = 20;
 
 
   // javascript sucks at math

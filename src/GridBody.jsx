@@ -27,7 +27,10 @@ const GridBody = observer( class GridBody extends React.Component {
   }
 
   @observable scrollBarWide = 0;              // keep track of how wide the scroll bar will be
-  @action setScrollBarWide(exp) { this.props.GridStore.scrollBarWide = exp.scrollbarWidth+2; } // account for rounding error
+  @action setScrollBarWide(exp) { 
+    // account for rounding error
+    this.props.GridStore.scrollBarWide = exp.scrollbarWidth+2; 
+  } 
 
   // prep the data store
   componentWillReceiveProps(nextProps)
@@ -93,6 +96,9 @@ const GridBody = observer( class GridBody extends React.Component {
         >
           {/* ScrollbarSize gives the code information about how wide the scroll bar is */ }
           <ScrollbarSize onLoad={this.setScrollBarWide} onChange={this.setScrollBarWide} /> 
+
+          {/* put the header in place */}
+          <ReactTooltip id={ui.id+'.rh'} />
 
           {/* put the header in place */}
           <GridHeader uiMath={ui} {...this.props} />

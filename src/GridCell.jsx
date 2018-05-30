@@ -568,32 +568,50 @@ window.reactJsonGridFocusInput = function(elem){
         cellClassName = cellClassName+' '+this.props.GridStore.classSelected;
       }
 
-      renderPlan = <div tabIndex='0'
-                        className={cellClassName}
-                        onClick={this.onClick} 
-                        id={this.props.id} 
-                        style={{...styleByCol,...finalStyleCell}}
-                        ref={div => div && isFocusNeeded && div.focus() }
-                        onKeyDown={this.onKeyDownWhenViewing}>
+      //--- handle row header help text - currently broken!
+      var helpComp;
+      if (this.props.x === -1 && this.props.GridStore.colDefListByKey && 
+        this.props.GridStore.colDefListByKey[rowKey] &&
+        this.props.GridStore.colDefListByKey[rowKey].altText
+      ) {
+        // handle alt text.  Note that the 'text' could be a component.  regular header
+        renderPlan =
+        <div tabIndex='0'
+          className={cellClassName}
+          onClick={this.onClick}
+          id={this.props.id}
+          style={{ ...styleByCol, ...finalStyleCell, position:'relative' }}
+          ref={div => div && isFocusNeeded && div.focus()}
+          onKeyDown={this.onKeyDownWhenViewing}>
+          <a data-tip={this.props.GridStore.colDefListByKey[rowKey].altText} 
+            data-for={this.props.uiMath.id+'.rh'} >
             <div className={dataClassName} style={finalStyleData}>{renderVal}</div>
-      </div>;
-    }
-
-    //--- handle row header help text
-    if(this.props.x===-1){
-      renderPlan = 
-      <a data-tip data-for={'dataTip' + this.props.id} key={'dataTip' + this.props.id}>      
-        {renderPlan}
-        <ReactTooltip id={'dataTip' + this.props.id} >
-          ASDF{altText}
-        </ReactTooltip>
-      </a>
+          </a>
+        </div>
+      }
+      else{
+        renderPlan = <div tabIndex='0'
+          className={cellClassName}
+          onClick={this.onClick}
+          id={this.props.id}
+          style={{ ...styleByCol, ...finalStyleCell }}
+          ref={div => div && isFocusNeeded && div.focus()}
+          onKeyDown={this.onKeyDownWhenViewing}>
+          <div className={dataClassName} style={finalStyleData}>{renderVal}</div>
+        </div>;
+      }
     }
     
     return(renderPlan);
     
   }
 }
+/***
+ *         <ReactTooltip id={'dataTip' + ui.id + '.hr.' + ctr} >
+          ASDF{altText}
+        </ReactTooltip>
+
+ */
 
 
 export default GridCell;

@@ -249,6 +249,20 @@ class GridMath
           autoColCount--;
         }
 
+        // calculate wide row headers, respecting pivots
+        if ((props.pivotOn || props.pivotOn === 0) && props.pivotRowHeaderWide && props.pivotRowHeaderWide !== -1) {
+          result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
+          result.pivotRowHeaderWideTotal = result.pivotRowHeaderWide;
+          result.pivotRowHeaderWideTotal += (result.borderWide);   // each column minus right border amount
+          result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus left pad amount
+          result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus right pad amount
+          availableWide -= result.pivotRowHeaderWideTotal;         // allow a set width pivot header, but still only autocol for pivoted data
+        }
+        else {
+          result.pivotRowHeaderWide = 0;
+          result.pivotRowHeaderWideTotal = 0;
+        }
+        
         //==== now calculate column actual sizes and autocol size
 
         var availableWide = result.rowWide;         // amount of space to allocate evenly
@@ -262,15 +276,15 @@ class GridMath
             if (result.colDefListByKey[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
               if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx) {
                 change = Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx);
-                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change; // do this before considering the pad and border.
-                change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
+                change -= Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
+                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;
                 fixedWide+=change;
                 availableWide -= change;
               }
               else if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) {
-                change = (Number(result.rowWide) * (Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) / 100));
-                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;  // do this before considering the pad and border.
-                change += Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
+                change = ((Number(result.rowWide) - Number(result.pivotRowHeaderWide)) * (Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) / 100));
+                change -= Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
+                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;
                 fixedWide += change;
                 availableWide -= change;
               }
@@ -281,19 +295,6 @@ class GridMath
           }
         }
         
-        // calculate wide row headers, respecting pivots
-        if( (props.pivotOn || props.pivotOn === 0) && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
-          result.pivotRowHeaderWide = Number(props.pivotRowHeaderWide);
-          result.pivotRowHeaderWideTotal = result.pivotRowHeaderWide;
-          result.pivotRowHeaderWideTotal += (result.borderWide);   // each column minus right border amount
-          result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus left pad amount
-          result.pivotRowHeaderWideTotal += (result.padWide);      // each column minus right pad amount
-          availableWide -= result.pivotRowHeaderWideTotal;         // allow a set width pivot header, but still only autocol for pivoted data
-        }
-        else{
-          result.pivotRowHeaderWide = 0;
-          result.pivotRowHeaderWideTotal=0;
-        }
 
         //--- no column width data
         if(autoColCount>0){

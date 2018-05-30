@@ -6,8 +6,10 @@ import  DocUI  from '../src/docTool/DocUI';
 import EasyBool from '../src/easyTools/EasyBool';
 import WrapperEasyBool from './WrapperEasyBool';
 
-import MultiTest from '../src/multiTest/MultiTest';
-import TestNameTool from '../src/multiTest/TestNameTool';
+//import MultiTest from '../src/multiTest/MultiTest';
+//import TestNameTool from '../src/multiTest/TestNameTool';
+import {MultiTest} from 'react-factorial-test';
+import {TestNameTool} from 'react-factorial-test';
 
 import DataNoiseMed from './dataNoiseMedium.js'
 import DataNoiseSmall from './dataNoiseSmall.js'
@@ -77,7 +79,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
   />))
   .addWithJSX('Factorial Test - Pivots', () => (
     <MultiTest
-      target={<Grid />}
+      target={<Grid debugGridMath={true}/>}
       test={[
         [// pivot tests by object array data, plus normal and wide versions
           testData.dataTypesTest.objArrayTest,
