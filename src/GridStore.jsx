@@ -4,6 +4,7 @@ import GridMath from './GridMath';
 class GridStore {           // Just a class.  Nothing fancy here.
   constructor() { 
     this.uiMathInst = new GridMath();
+
   }
 
   @observable cursor = {x:0,y:0,                         // cursor x and y values

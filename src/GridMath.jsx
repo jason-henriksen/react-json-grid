@@ -5,7 +5,7 @@ import autoBind from 'react-autobind';
 class GridMath 
 {           // Just a class.  Used to calculate valudes needed by the UI.
   constructor() { 
-    autoBind(this); 
+    autoBind(this);     
   }
 
     // javascript sucks at math
@@ -41,7 +41,8 @@ class GridMath
         result.colDefListByKey = {};
         // make a map of keys to objects for easy access later.
         for (var clctr = 0; clctr < props.columnList.length; clctr++) {
-          result.colDefListByKey[props.columnList[clctr].key] = props.columnList[clctr];
+          // THIS IS VITAL! Otherwise you risk one grid bleeding into another grid during test or object re-use.
+          result.colDefListByKey[props.columnList[clctr].key] = Object.assign({},props.columnList[clctr]);
         }
       }
       else {
@@ -158,6 +159,7 @@ class GridMath
       // collapsed grid height
       result.collapseAmount=0;
 
+
       result.formatDate = props.formatDate||'YYYY-MM-DD';
       result.formatTime = props.formatTime||'HH:mm';
       var autoColCount=0;
@@ -243,6 +245,8 @@ class GridMath
           result.gridWide = scrollBarWide + 10*result.keyNames.length;
         }
         result.rowWide = result.gridWide - (scrollBarWide||16);   // how wide is each row.
+        var availableWide = result.rowWide;         // amount of space to allocate evenly      
+
         autoColCount = result.colHeaderKeyList.length;        
         if ((props.pivotOn || props.pivotOn === 0) && props.pivotRowHeaderWide && props.pivotRowHeaderWide!==-1){
           // don't autoColCount the rowHeader
@@ -265,34 +269,57 @@ class GridMath
         
         //==== now calculate column actual sizes and autocol size
 
-        var availableWide = result.rowWide;         // amount of space to allocate evenly
+
         var fixedWide = 0;                          // becomes the new rowWide is all columns are specified
+        var pctColCount = 0;                        // how many pct columns do we have.
+        var cellBuffer = Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
         var change = 0;
         if (props.columnList && result.colHeaderKeyList.length && !props.pivotOn && props.pivotOn!==0){ // only autosize allowed on pivoted data
           autoColCount = 0; // number of columns that need auto width, i.e. column defs without a pct or px
+
+          //--- round 1: handle the fixed px width columns
           for (var cctr = 0; cctr < result.colHeaderKeyList.length;cctr++){
             change=0;
             
             if (result.colDefListByKey[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
               if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx) {
-                change = Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx);
-                change -= Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
-                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;
+                change = Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx); // user requested size
+                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;   // goal user area, without buffer
+                change += cellBuffer; // actual cell size = user requested + cell buffer (padding and border)
                 fixedWide+=change;
                 availableWide -= change;
               }
               else if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) {
-                change = ((Number(result.rowWide) - Number(result.pivotRowHeaderWide)) * (Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) / 100));
-                change -= Number(result.borderWide) + Number(result.padWide) + Number(result.padWide);
-                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change;
-                fixedWide += change;
-                availableWide -= change;
+                // wait for later until we know all the fixed widths.
+                pctColCount++;
               }
               else{
-                autoColCount++;
+                autoColCount++; // take away a default amount for each autocol
               }
             }
           }
+          //--  now hold space for autocol columns and cell buffers
+          availableWide -= (autoColCount * (5 + cellBuffer)) + (pctColCount*cellBuffer);
+          //--- round 2: handle the pct width columns
+          for (var cctr = 0; cctr < result.colHeaderKeyList.length; cctr++) {
+            //change = 0;
+
+            if (result.colDefListByKey[result.colHeaderKeyList[cctr]]) { // is there a colDef that uses this key?
+              if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePx) {
+                // already done
+              }
+              else if (result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) {
+                change = (availableWide
+                           * (Number(result.colDefListByKey[result.colHeaderKeyList[cctr]].widePct) / 100));
+                // user area as pct of availble space.  cell buffer was already removed, and so should not be in the user area number
+                result.colDefListByKey[result.colHeaderKeyList[cctr]].forceColWide = change - cellBuffer;
+              }
+              else {
+                // already done
+              }
+            }
+          }
+          
         }
         
 

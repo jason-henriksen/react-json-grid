@@ -79,7 +79,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
   />))
   .addWithJSX('Factorial Test - Pivots', () => (
     <MultiTest
-      target={<Grid debugGridMath={true}/>}
+      target={<Grid />}
       test={[
         [// pivot tests by object array data, plus normal and wide versions
           testData.dataTypesTest.objArrayTest,
@@ -276,7 +276,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
     />))
   .addWithJSX('Factorial Test - Column Sizes', () => (
     <MultiTest
-      target={<Grid />}
+      target={<Grid debugGridMath={true}/>}
       test={[
         [// pivot tests by basic array array data times all selection states
           testData.dataTypesTest.objArrayTest.objListStringTest,
