@@ -62,6 +62,10 @@ const GridBody = observer( class GridBody extends React.Component {
     // do a bunch of math to figure out where things should go.
     var ui = this.props.GridStore.uiMath; 
 
+
+/////////  Add container dimension information from https://github.com/maslianok/react-resize-detector
+
+
     // log what we're doing if asked to
     if(this.props.debugGridMath){
       console.log('render grid');
@@ -90,7 +94,8 @@ const GridBody = observer( class GridBody extends React.Component {
     return(
         <div style={{...this.props.style,
                      height:ui.gridHigh,
-                     width:ui.gridWide}} 
+                     width:ui.gridWide,
+                    overflow:'auto',}} 
                      onKeyPress={this.onKeyPress} onBlur={this.blurControl} key='scrollSize'
           id={ui.id}
         >

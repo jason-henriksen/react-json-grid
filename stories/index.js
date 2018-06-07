@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions';
 import  Grid  from '../src/Grid';
 import  DocUI  from '../src/docTool/DocUI';
 import EasyBool from '../src/easyTools/EasyBool';
+import AnimTest from '../src/animTest/AnimTest';
 import WrapperEasyBool from './WrapperEasyBool';
 
 //import MultiTest from '../src/multiTest/MultiTest';
@@ -28,47 +29,8 @@ setAddon(JSXAddon);
 storiesOf('Grid Explorer', module)
   .addWithJSX('Interactive Documentation', () => (<DocUI/>))
 
-storiesOf('Combinatorial Test Design - Self Check', module)
-  .addWithJSX('Factorial Test1 - List Only', () => (
-    <MultiTest
-      target={<div/>}
-      nameTests={testData}
-      test={
-      [ [ testData.testATest ] ]}
-    />))
-  .addWithJSX('Factorial Test1 - A*B', () => (
-    <MultiTest
-      target={<div />}
-      nameTests={testData}
-      test={
-        [ [ testData.testATest, testData.testBTest ]]}
-    />))
-  .addWithJSX('Factorial Test1 - A*B*C', () => (
-    <MultiTest
-      target={<div />}
-      nameTests={testData}
-      test={
-        [ // three lines of definition, 40 tests generated.
-          [// pivot tests by object array data, plus normal and wide versions
-            testData.testATest, testData.testBTest, testData.testCTest,
-          ],
-        ]}
-    />))
-  .addWithJSX('Factorial Test4 - Specific Name', () => (
-    <MultiTest
-      target={<div />}
-      nameTests={testData}
-      test={
-        [ // three lines of definition, 40 tests generated.
-          [// display only a single test, to show that the name works correctly
-            testData.testATest.a0Test
-          ],
-        ]}
-    />))
-    
-    
-storiesOf('Combinatorial Test Design - Grid Tests', module)
-  .addWithJSX('Factorial Test - Basic Data', () => (
+storiesOf('Factorial Grid Tests', module)
+  .addWithJSX('Basic Data', () => (
     <MultiTest 
     target={ <Grid/> }
     test={[
@@ -77,7 +39,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
       ],  
     ]}
   />))
-  .addWithJSX('Factorial Test - Pivots', () => (
+  .addWithJSX('Pivots', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -98,7 +60,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Borders and Pads', () => (
+  .addWithJSX('Borders and Pads', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -129,7 +91,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           testData.padPlayTest],
       ]}
     />))
-    .addWithJSX('Factorial Test - Selection States', () => (
+    .addWithJSX('Selection States', () => (
       <MultiTest
         target={<Grid />}
         test={[
@@ -150,7 +112,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           ],
         ]}
       />))
-      .addWithJSX('Factorial Test - Tools', () => (
+      .addWithJSX('Tools', () => (
         <MultiTest
           target={<Grid />}
           test={[
@@ -172,7 +134,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
           ]}
         />))
       
-      .addWithJSX('Factorial Test - Grid Wide Style', () => (
+      .addWithJSX('Grid Wide Style', () => (
         <MultiTest
           target={<Grid />}
           test={[
@@ -196,7 +158,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
             ],
           ]}
         />))
-  .addWithJSX('Factorial Test - Grid Wide Class', () => (
+  .addWithJSX('Grid Wide Class', () => (
     <div>
       <div className='testCell'><br/><br/>If background is blue, classes have loaded.</div>
     <MultiTest
@@ -222,7 +184,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     /></div>))
-  .addWithJSX('Factorial Test - Grid Wide Component', () => (
+  .addWithJSX('Grid Wide Component', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -243,7 +205,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Column Headers', () => (
+  .addWithJSX('Column Headers', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -274,7 +236,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Column Sizes', () => (
+  .addWithJSX('Column Sizes', () => (
     <MultiTest
       target={<Grid debugGridMath={true}/>}
       test={[
@@ -295,7 +257,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Column Easy Types', () => (
+  .addWithJSX('Column Easy Types', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -316,7 +278,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Column Style', () => (
+  .addWithJSX('Column Style', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -337,7 +299,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Column Class', () => (
+  .addWithJSX('Column Class', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -358,7 +320,7 @@ storiesOf('Combinatorial Test Design - Grid Tests', module)
         ],
       ]}
     />))
-  .addWithJSX('Factorial Test - Column Component', () => (
+  .addWithJSX('Column Component', () => (
     <MultiTest
       target={<Grid />}
       test={[
@@ -783,6 +745,8 @@ storiesOf('text mode edit', module)
 .addWithJSX('show tools',()=>(<Grid editAsText showToolsAddCut showToolsPage data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 .addWithJSX('sizing',()=>(<Grid editAsText  borderWide={15} padWide={15} data={[{r:5,a:5,b:6,c:8,d:90},{r:4,a:5,b:6,c:8,d:90},{r:3,a:5,b:6,c:8,d:90},{r:2,a:5,b:6,c:8,d:90},{r:1,a:5,b:6,c:8,d:90}]}/>))
 
+storiesOf('fsl css', module)
+  .addWithJSX('animation test', () => (<AnimTest/>))
 
 
 storiesOf('Easy Tools - EasyBool', module)
